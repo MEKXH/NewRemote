@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using Shawn.Utils;
+using Shawn.Utils.Interface;
 using VariableKeywordMatcher.Model;
 using VariableKeywordMatcher.Provider.ChineseZhCnPinYin;
 using VariableKeywordMatcher.Provider.ChineseZhCnPinYinInitials;
@@ -166,13 +167,18 @@ namespace _1RM.Service
         {
             var providerNames = VariableKeywordMatcherIn1.Builder.GetAvailableProviderNames();
             var matchProviderInfos = new List<MatchProviderInfo>(Enumerable.Count<string>(providerNames));
+            var languageService = IoC.Get<ILanguageService>();
+
             foreach (var enumProviderType in providerNames)
             {
+                // Get localized descriptions based on provider name
+                var (title1, title2) = GetLocalizedProviderDescriptions(enumProviderType, languageService);
+
                 matchProviderInfos.Add(new MatchProviderInfo()
                 {
                     Name = enumProviderType,
-                    Title1 = VariableKeywordMatcherIn1.Builder.GetProviderDescription(enumProviderType),
-                    Title2 = VariableKeywordMatcherIn1.Builder.GetProviderDescriptionEn(enumProviderType),
+                    Title1 = title1,
+                    Title2 = title2,
                     Enabled = false,
                 });
             }
@@ -203,6 +209,47 @@ namespace _1RM.Service
                 setEnabled(ChineseZhCnPinYinInitialsMatchProvider.GetName(), true, true);
             }
             return matchProviderInfos;
+        }
+
+        private static (string title1, string title2) GetLocalizedProviderDescriptions(string providerName, ILanguageService languageService)
+        {
+            // Default fallback to library descriptions
+            var title1 = VariableKeywordMatcherIn1.Builder.GetProviderDescription(providerName);
+            var title2 = VariableKeywordMatcherIn1.Builder.GetProviderDescriptionEn(providerName);
+
+            // Check if language service is available
+            if (languageService == null)
+            {
+                return (title1, title2);
+            }
+
+            // Map provider names to localized resource keys
+            // Match against actual provider names from the library
+            switch (providerName)
+            {
+                case "DirectMatch":
+                    title1 = languageService.Translate("keyword_matcher_direct");
+                    title2 = languageService.Translate("keyword_matcher_direct_en");
+                    break;
+                case "DiscreteMatch":
+                    title1 = languageService.Translate("keyword_matcher_discrete");
+                    title2 = languageService.Translate("keyword_matcher_discrete_en");
+                    break;
+                case "InitialsMatch":
+                    title1 = languageService.Translate("keyword_matcher_initials");
+                    title2 = languageService.Translate("keyword_matcher_initials_en");
+                    break;
+                case "ChineseZhCnPinYinMatch":
+                    title1 = languageService.Translate("keyword_matcher_pinyin");
+                    title2 = languageService.Translate("keyword_matcher_pinyin_en");
+                    break;
+                case "ChineseZhCnPinYinInitialsMatch":
+                    title1 = languageService.Translate("keyword_matcher_pinyin_initials");
+                    title2 = languageService.Translate("keyword_matcher_pinyin_initials_en");
+                    break;
+            }
+
+            return (title1, title2);
         }
     }
 }

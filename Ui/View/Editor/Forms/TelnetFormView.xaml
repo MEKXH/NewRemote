@@ -3,50 +3,108 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:_1RM.Controls"
              xmlns:forms="clr-namespace:_1RM.View.Editor.Forms"
              xmlns:s="https://github.com/canton7/Stylet"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance forms:TelnetFormViewModel}"
              d:DesignHeight="1450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <!-- 统一的行头样式，与主页保持一致 -->
+        <Style TargetType="TextBlock" x:Key="ConnectionRowHeader" BasedOn="{StaticResource TextBlockBase}">
+            <Setter Property="Foreground" Value="{DynamicResource BackgroundTextBrush}"></Setter>
+            <Setter Property="MinWidth" Value="140"></Setter>
+            <Setter Property="VerticalAlignment" Value="Center"></Setter>
+            <Setter Property="HorizontalAlignment" Value="Left"></Setter>
+            <Setter Property="TextAlignment" Value="Right"></Setter>
+            <Setter Property="TextWrapping" Value="WrapWithOverflow"></Setter>
+            <Setter Property="FontSize" Value="13"></Setter>
+            <Setter Property="Margin">
+                <Setter.Value>
+                    <Thickness Right="24"></Thickness>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="controls:GridWith4Columns">
+            <Setter Property="Height" Value="Auto"></Setter>
+            <Setter Property="MinHeight" Value="36"></Setter>
+            <Setter Property="Margin">
+                <Setter.Value>
+                    <Thickness Bottom="0" Top="12"></Thickness>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
     <StackPanel>
-        <StackPanel>
+        <!-- 连接信息卡片 (现在包含在HostView中) -->
+        <ContentControl s:View.Model="{Binding HostViewModel}"></ContentControl>
 
-            <TextBlock Style="{StaticResource EditorGroupTextBlockTitle}" Text="{DynamicResource 'Connection'}"></TextBlock>
-            <ContentControl s:View.Model="{Binding HostViewModel}"></ContentControl>
+        <!-- Telnet高级设置卡片 -->
+        <Border Background="{DynamicResource BackgroundBrush}"
+                BorderBrush="{DynamicResource DefaultBorderBrush}"
+                BorderThickness="1"
+                CornerRadius="8"
+                Margin="0 0 0 16">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" Opacity="0.1" ShadowDepth="2" BlurRadius="8"/>
+            </Border.Effect>
+            <StackPanel Margin="20 16">
+                <!-- 卡片标题 -->
+                <Border Background="{DynamicResource PrimaryLightBrush}"
+                        CornerRadius="6"
+                        Padding="12 8 12 8"
+                        Margin="0 0 0 16">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="📟"
+                                   VerticalAlignment="Center"
+                                   Margin="0 0 8 0"
+                                   FontSize="14"/>
+                        <TextBlock Text="Telnet高级设置"
+                                   FontSize="14"
+                                   FontWeight="Medium"
+                                   Foreground="{DynamicResource PrimaryTextBrush}"/>
+                    </StackPanel>
+                </Border>
 
-            <!--<Grid Style="{StaticResource EditorRowGrid}">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Style="{StaticResource EditorRowGridTitle}" Text="{DynamicResource Hostname}"></TextBlock>
-                    <Grid Style="{StaticResource EditorRowGridInput}">
-                        <TextBox Text="{Binding New.Address, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True, ValidatesOnNotifyDataErrors=True}"
-                                                                  Tag="e.g. 192.168.0.101"></TextBox>
-                    </Grid>
-                    <TextBlock Style="{StaticResource EditorRowGridTitleFollowing}" Width="60" Text="{DynamicResource Port}"></TextBlock>
-                    <Grid Style="{StaticResource EditorRowGridInput}">
-                        <TextBox Text="{Binding New.Port, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True, ValidatesOnNotifyDataErrors=True}"
-                                 MinWidth="50" HorizontalAlignment="Left"
-                                 InputMethod.IsInputMethodEnabled="False"
-                                 InputScope="Number"
-                                 ></TextBox>
-                    </Grid>
+                <!-- Telnet高级设置内容 -->
+                <StackPanel>
+                    <!-- 自动启动命令 -->
+                    <controls:GridWith4Columns>
+                        <TextBlock Grid.Column="0"
+                                   Text="{DynamicResource server_editor_advantage_ssh_startup_auto_command}"
+                                   Style="{StaticResource ConnectionRowHeader}"/>
+                        <TextBox Grid.Column="1"
+                                 Text="{Binding New.StartupAutoCommand, UpdateSourceTrigger=PropertyChanged}"
+                                 Tag="e.g. cd /home/user/Desktop/"
+                                 Height="32"
+                                 Padding="8 6"
+                                 VerticalAlignment="Center">
+                            <TextBox.Style>
+                                <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+                                    <Setter Property="BorderBrush" Value="{DynamicResource DefaultBorderBrush}"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Setter Property="Background" Value="Transparent"/>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
+                    </controls:GridWith4Columns>
                 </StackPanel>
-            </Grid>-->
+            </StackPanel>
+        </Border>
 
-            <ContentControl s:View.Model="{Binding AlternativeCredentialListViewModel}"></ContentControl>
+        <!-- 备选认证卡片 -->
+        <ContentControl s:View.Model="{Binding AlternativeCredentialListViewModel}">
+            <ContentControl.Style>
+                <Style TargetType="ContentControl">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding AlternativeCredentialListViewModel.Credentials.Count}" Value="0">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
 
-        </StackPanel>
-
-        <StackPanel>
-            <TextBlock Style="{StaticResource EditorGroupTextBlockTitle}" Text="{DynamicResource server_editor_group_title_advantage}"></TextBlock>
-            <Grid Style="{StaticResource EditorRowGrid}">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Style="{StaticResource EditorRowGridTitle}" Text="{DynamicResource server_editor_advantage_ssh_startup_auto_command}"></TextBlock>
-                    <Grid Style="{StaticResource EditorRowGridInput}">
-                        <TextBox Text="{Binding New.StartupAutoCommand, UpdateSourceTrigger=PropertyChanged}"
-                                                                  Tag="e.g. cd /home/user/Desktop/"></TextBox>
-                    </Grid>
-                </StackPanel>
-            </Grid>
-        </StackPanel>
     </StackPanel>
 </UserControl>

@@ -34,12 +34,12 @@
     </styles:WindowChromeBase.InputBindings>
 
     <Grid Background="{DynamicResource PrimaryMidBrush}">
-        <Grid>
+        <Grid CacheMode="BitmapCache">
             <Grid.Style>
                 <Style TargetType="Grid">
                     <Setter Property="Effect">
                         <Setter.Value>
-                            <BlurEffect Radius="2" KernelType="Box"></BlurEffect>
+                            <BlurEffect Radius="1" KernelType="Box" RenderingBias="Performance"></BlurEffect>
                         </Setter.Value>
                     </Setter>
                     <Style.Triggers>
@@ -69,21 +69,23 @@
             <StackPanel Grid.Row="0"
                         Orientation="Horizontal" HorizontalAlignment="Right">
                 <Grid Height="35" VerticalAlignment="Top" Margin="0 0 4 0">
-                    <TextBox Width="150" Height="25" FontSize="12"
-                             attachProperty:FocusExtension.IsFocused="{Binding MainFilterIsFocused}"
-                             attachProperty:TextBoxAttachProperty.CaretIndex="{Binding MainFilterCaretIndex, UpdateSourceTrigger=PropertyChanged}"
-                             Text="{Binding MainFilterString, UpdateSourceTrigger=PropertyChanged}"
-                             Tag="{DynamicResource 'Search (Ctrl+F)'}"
-                             KeyUp="MainFilter_OnKeyUp" 
-                             VerticalAlignment="Center" HorizontalAlignment="Right" HorizontalContentAlignment="Left">
-                        <TextBox.Style>
-                            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBoxAccentStyle}">
-                                <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"></Setter>
-                                <Setter Property="Background" Value="Transparent"></Setter>
-                                <Setter Property="Opacity" Value="0.5"></Setter>
-                                <Setter Property="CaretBrush" Value="{DynamicResource PrimaryTextBrush}"></Setter>
-                                <Setter Property="IsEnabled" Value="False"></Setter>
-                                <Setter Property="Visibility" Value="Collapsed"></Setter>
+                    <Border Width="150" Height="25" CornerRadius="4" Background="{DynamicResource PrimaryMidBrush}"
+                            VerticalAlignment="Center" HorizontalAlignment="Right" Opacity="0.9">
+                        <TextBox Width="146" Height="21" FontSize="12" Margin="2"
+                                 attachProperty:FocusExtension.IsFocused="{Binding MainFilterIsFocused}"
+                                 attachProperty:TextBoxAttachProperty.CaretIndex="{Binding MainFilterCaretIndex, UpdateSourceTrigger=PropertyChanged}"
+                                 Text="{Binding MainFilterString, UpdateSourceTrigger=PropertyChanged}"
+                                 Tag="{DynamicResource 'Search (Ctrl+F)'}"
+                                 KeyUp="MainFilter_OnKeyUp"
+                                 VerticalAlignment="Center" HorizontalContentAlignment="Left"
+                                 BorderThickness="0"
+                                 Background="Transparent">
+                            <TextBox.Style>
+                                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBoxBaseStyle}">
+                                    <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"></Setter>
+                                    <Setter Property="CaretBrush" Value="{DynamicResource PrimaryTextBrush}"></Setter>
+                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                    <Setter Property="Visibility" Value="Collapsed"></Setter>
                                 <Style.Triggers>
                                     <MultiDataTrigger>
                                         <MultiDataTrigger.Conditions>
@@ -117,14 +119,15 @@
                                 </Style.Triggers>
                             </Style>
                         </TextBox.Style>
-                    </TextBox>
+                        </TextBox>
+                    </Border>
                 </Grid>
 
                 <Grid Width="45" Height="35" Margin="0" VerticalAlignment="Top">
                     <CheckBox Name="CbPopForMenu" Width="45" Height="35" VerticalAlignment="Top" Margin="0">
                         <CheckBox.Template>
                             <ControlTemplate>
-                                <Border Name="BG" Background="{DynamicResource PrimaryMidBrush}">
+                                <Border Name="BG" Background="{DynamicResource PrimaryMidBrush}" CornerRadius="4">
                                     <Grid VerticalAlignment="Center">
                                         <Path Data="F1 M 88.000000 -60.500000 L 0.000000 -60.500000 L 0.000000 -66.000000 L 88.000000 -66.000000 L 88.000000 -60.500000 Z M 88.000000 -16.500000 L 0.000000 -16.500000 L 0.000000                                         -22.000000 L 88.000000 -22.000000 L 88.000000 -16.500000 Z M 88.000000 -38.500000 L 0.000000 -38.500000 L 0.000000 -44.000000 L 88.000000 -44.000000 L 88.000000 -38.500000 Z "
                                               Width="10" Height="10"
@@ -168,7 +171,7 @@
                        IsOpen="{Binding ElementName=CbPopForMenu, Path=IsChecked}"
                        StaysOpen="False"
                        PlacementTarget="{Binding ElementName=CbPopForMenu}">
-                    <Border CornerRadius="5" Background="{DynamicResource PrimaryDarkBrush}">
+                    <Border CornerRadius="6" Background="{DynamicResource PrimaryDarkBrush}">
                         <StackPanel Orientation="Vertical" MinWidth="138">
                             <MenuItem Header="{DynamicResource Options}" Command="{Binding CmdGoSysOptionsPage}">
                                 <MenuItem.Icon>
@@ -521,12 +524,16 @@
 
 
             <!-- Paging Area -->
-            <Grid Grid.Row="1">
+            <Grid Grid.Row="1" CacheMode="BitmapCache">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="281*"/>
+                    <ColumnDefinition Width="619*"/>
+                </Grid.ColumnDefinitions>
                 <Grid.Style>
                     <Style TargetType="Grid">
                         <Setter Property="Effect">
                             <Setter.Value>
-                                <BlurEffect Radius="1" KernelType="Box"></BlurEffect>
+                                <BlurEffect Radius="0.5" KernelType="Box" RenderingBias="Performance"></BlurEffect>
                             </Setter.Value>
                         </Setter>
                         <Style.Triggers>
@@ -537,10 +544,10 @@
                     </Style>
                 </Grid.Style>
 
-                <ContentControl s:View.Model="{Binding ActiveServerViewModel}"/>
+                <ContentControl s:View.Model="{Binding ActiveServerViewModel}" Grid.ColumnSpan="2"/>
 
 
-                <ContentControl s:View.Model="{Binding SettingViewModel}">
+                <ContentControl s:View.Model="{Binding SettingViewModel}" Grid.ColumnSpan="2">
                     <ContentControl.Style>
                         <Style TargetType="ContentControl">
                             <Setter Property="Visibility" Value="Collapsed"></Setter>
@@ -550,18 +557,18 @@
                                         <BeginStoryboard>
                                             <Storyboard>
                                                 <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
-                                                    <DiscreteObjectKeyFrame KeyTime="00:00:0.1" Value="{x:Static Visibility.Visible}"/>
+                                                    <DiscreteObjectKeyFrame KeyTime="00:00:0.0" Value="{x:Static Visibility.Visible}"/>
                                                 </ObjectAnimationUsingKeyFrames>
-                                                <ThicknessAnimation BeginTime="0:0:0.0" Storyboard.TargetProperty="Margin" From="1000 0 0 0" To="0" Duration="0:0:0.5"></ThicknessAnimation>
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.25"></DoubleAnimation>
                                             </Storyboard>
                                         </BeginStoryboard>
                                     </DataTrigger.EnterActions>
                                     <DataTrigger.ExitActions>
                                         <BeginStoryboard>
-                                            <Storyboard >
-                                                <ThicknessAnimation Storyboard.TargetProperty="Margin" From="0 0 0 0" To="1000 0 0 0" Duration="0:0:0.3"></ThicknessAnimation>
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0" Duration="0:0:0.15"></DoubleAnimation>
                                                 <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
-                                                    <DiscreteObjectKeyFrame KeyTime="00:00:0.5" Value="{x:Static Visibility.Collapsed}"/>
+                                                    <DiscreteObjectKeyFrame KeyTime="00:00:0.15" Value="{x:Static Visibility.Collapsed}"/>
                                                 </ObjectAnimationUsingKeyFrames>
                                             </Storyboard>
                                         </BeginStoryboard>
@@ -571,31 +578,32 @@
                         </Style>
                     </ContentControl.Style>
                 </ContentControl>
-                <ContentControl s:View.Model="{Binding EditorViewModel}">
+                <ContentControl s:View.Model="{Binding EditorViewModel}" Grid.ColumnSpan="2">
                     <ContentControl.Style>
                         <Style TargetType="ContentControl">
                             <Setter Property="Visibility" Value="Collapsed"></Setter>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding EditorViewModel}" Value="{x:Null}">
-                                    <DataTrigger.ExitActions>
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
-                                                    <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
-                                                </ObjectAnimationUsingKeyFrames>
-                                                <ThicknessAnimation Storyboard.TargetProperty="Margin" AccelerationRatio="0.9" From="1000 0 0 0" To="0" Duration="0:0:0.5"></ThicknessAnimation>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </DataTrigger.ExitActions>
                                     <DataTrigger.EnterActions>
                                         <BeginStoryboard>
                                             <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0" Duration="0:0:0.15"></DoubleAnimation>
                                                 <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
-                                                    <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
+                                                    <DiscreteObjectKeyFrame KeyTime="00:00:0.15" Value="{x:Static Visibility.Collapsed}"/>
                                                 </ObjectAnimationUsingKeyFrames>
                                             </Storyboard>
                                         </BeginStoryboard>
                                     </DataTrigger.EnterActions>
+                                    <DataTrigger.ExitActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
+                                                    <DiscreteObjectKeyFrame KeyTime="00:00:0.0" Value="{x:Static Visibility.Visible}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.25"></DoubleAnimation>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.ExitActions>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>

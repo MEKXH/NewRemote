@@ -101,10 +101,7 @@
             <StackPanel Orientation="Horizontal">
                 <TextBlock Style="{StaticResource EditorRowGridTitle}" Text="{DynamicResource server_editor_advantage_sounds}"></TextBlock>
                 <Grid Style="{StaticResource EditorRowGridInput}">
-                    <Grid.Resources>
-                        <forms:ConverterEAudioRedirectionMode x:Key="ConverterEAudioRedirectionMode" />
-                    </Grid.Resources>
-                    <ComboBox SelectedIndex="{Binding New.AudioRedirectionMode, Converter={StaticResource ConverterEAudioRedirectionMode}}">
+                    <ComboBox SelectedIndex="{Binding New.AudioRedirectionMode}">
                         <ComboBoxItem Content="{DynamicResource server_editor_advantage_sounds_on_local}" ToolTip="{DynamicResource server_editor_advantage_sounds_on_local}" />
                         <ComboBoxItem Content="{DynamicResource server_editor_advantage_sounds_on_remote}" ToolTip="{DynamicResource server_editor_advantage_sounds_on_remote}" />
                         <ComboBoxItem Content="{DynamicResource server_editor_advantage_sounds_disabled}" ToolTip="{DynamicResource server_editor_advantage_sounds_disabled}" />
@@ -119,10 +116,7 @@
             <StackPanel Orientation="Horizontal">
                 <TextBlock Style="{StaticResource EditorRowGridTitle}" Text="{DynamicResource server_editor_advantage_sound_quality}"></TextBlock>
                 <Grid Style="{StaticResource EditorRowGridInput}">
-                    <Grid.Resources>
-                        <forms:ConverterEAudioQualityMode x:Key="ConverterEAudioQualityMode" />
-                    </Grid.Resources>
-                    <ComboBox SelectedIndex="{Binding New.AudioQualityMode, Converter={StaticResource ConverterEAudioQualityMode}}">
+                    <ComboBox SelectedIndex="{Binding New.AudioQualityMode}">
                         <ComboBoxItem Content="{DynamicResource server_editor_advantage_sound_quality_dynamic}" ToolTip="{DynamicResource server_editor_advantage_sound_quality_dynamic}" />
                         <ComboBoxItem Content="{DynamicResource server_editor_advantage_sound_quality_medium}" ToolTip="{DynamicResource server_editor_advantage_sound_quality_medium}" />
                         <ComboBoxItem Content="{DynamicResource server_editor_advantage_sound_quality_high}" ToolTip="{DynamicResource server_editor_advantage_sound_quality_high}" />

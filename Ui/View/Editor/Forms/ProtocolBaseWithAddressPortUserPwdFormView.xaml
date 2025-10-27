@@ -10,53 +10,53 @@
              d:DataContext="{d:DesignInstance forms:ProtocolBaseWithAddressPortUserPwdFormViewModel}"
              d:DesignHeight="1450" d:DesignWidth="800">
     <StackPanel>
-
-        <TextBlock Style="{StaticResource EditorGroupTextBlockTitle}" Text="{DynamicResource 'Connection'}"></TextBlock>
+        <!-- 连接信息卡片 (现在包含在HostView中) -->
         <ContentControl s:View.Model="{Binding HostViewModel}"></ContentControl>
 
-        <!--<Grid Style="{StaticResource EditorRowGrid}">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Style="{StaticResource EditorRowGridTitle}" Text="{DynamicResource Hostname}"></TextBlock>
-                <Grid Style="{StaticResource EditorRowGridInput}">
-                    <TextBox Text="{Binding New.Address, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True, ValidatesOnNotifyDataErrors=True}"
-                             Tag="e.g. 192.168.0.101"></TextBox>
-                </Grid>
-                <TextBlock Style="{StaticResource EditorRowGridTitleFollowing}" Width="60" Text="{DynamicResource Port}"></TextBlock>
-                <Grid Style="{StaticResource EditorRowGridInput}">
-                    <TextBox MinWidth="50" 
-                             Text="{Binding New.Port, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True, ValidatesOnNotifyDataErrors=True}"
-                             HorizontalAlignment="Left"
-                             InputMethod.IsInputMethodEnabled="False"
-                             InputScope="Number"
-                    ></TextBox>
-                </Grid>
-            </StackPanel>
-        </Grid>-->
+        <!-- 认证信息卡片 -->
+        <Border Background="{DynamicResource BackgroundBrush}"
+                BorderBrush="{DynamicResource DefaultBorderBrush}"
+                BorderThickness="1"
+                CornerRadius="8"
+                Margin="0 0 0 16">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" Opacity="0.1" ShadowDepth="2" BlurRadius="8"/>
+            </Border.Effect>
+            <StackPanel Margin="20 16">
+                <!-- 卡片标题 -->
+                <Border Background="{DynamicResource PrimaryLightBrush}"
+                        CornerRadius="6"
+                        Padding="12 8 12 8"
+                        Margin="0 0 0 16">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="🔐"
+                                   VerticalAlignment="Center"
+                                   Margin="0 0 8 0"
+                                   FontSize="14"/>
+                        <TextBlock Text="认证信息"
+                                   FontSize="14"
+                                   FontWeight="Medium"
+                                   Foreground="{DynamicResource PrimaryTextBrush}"/>
+                    </StackPanel>
+                </Border>
 
-        <!--<Grid Style="{StaticResource EditorRowGrid}">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Style="{StaticResource EditorRowGridTitle}" Text="{DynamicResource User}"></TextBlock>
-                <Grid Style="{StaticResource EditorRowGridInput}">
-                    <TextBox Text="{Binding New.UserName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True, ValidatesOnNotifyDataErrors=True}"
-                             />
-                </Grid>
+                <!-- 认证信息内容 -->
+                <ContentControl s:View.Model="{Binding CredentialViewModel}"></ContentControl>
             </StackPanel>
-        </Grid>
+        </Border>
 
-        <Grid Style="{StaticResource EditorRowGrid}">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Style="{StaticResource EditorRowGridTitle}" Text="{DynamicResource Password}"></TextBlock>
-                <Grid Style="{StaticResource EditorRowGridInput}">
-                    <controls:PasswordInput Height="28" Password="{Binding New.Password, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True, ValidatesOnNotifyDataErrors=True}"
-                                            />
-                </Grid>
-                <CheckBox Margin="5 0 0 0" Content="{DynamicResource 'Ask for password when open connect'}" IsChecked="{Binding New.AskPasswordWhenConnect}"></CheckBox>
-            </StackPanel>
-        </Grid>-->
-
-        <ContentControl s:View.Model="{Binding CredentialViewModel}"></ContentControl>
-        <ContentControl s:View.Model="{Binding AlternativeCredentialListViewModel}"></ContentControl>
-        
+        <!-- 备选认证卡片 -->
+        <ContentControl s:View.Model="{Binding AlternativeCredentialListViewModel}">
+            <ContentControl.Style>
+                <Style TargetType="ContentControl">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding AlternativeCredentialListViewModel.Credentials.Count}" Value="0">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
 
     </StackPanel>
 </UserControl>

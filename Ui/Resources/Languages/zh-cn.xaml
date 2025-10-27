@@ -35,7 +35,7 @@
     <s:String x:Key="Rename">重命名</s:String>
     <s:String x:Key="Connect">连接</s:String>
     <s:String x:Key="Connect (New window)">连接 (新窗口)</s:String>
-    <s:String x:Key="Note">Note</s:String>
+    <s:String x:Key="Note">备注</s:String>
     <s:String x:Key="Share">分享</s:String>
     <s:String x:Key="Copy">复制</s:String>
     <s:String x:Key="Enabled">启用</s:String>
@@ -98,7 +98,27 @@
     <s:String x:Key="Confirm before closing">关闭远程会话前弹窗确认</s:String>
     <s:String x:Key="Show current session icon instead of the app icon when connected">远程桌面开启后显示当前会话的图标</s:String>
     <s:String x:Key="system_options_general_log_file_path">日志文件</s:String>
+    <s:String x:Key="system_options_general_log_level">日志等级</s:String>
+    <s:String x:Key="system_options_general_log_level_debug">调试</s:String>
+    <s:String x:Key="system_options_general_log_level_info">信息</s:String>
+    <s:String x:Key="system_options_general_log_level_warning">警告</s:String>
+    <s:String x:Key="system_options_general_tab">标签页</s:String>
+    <s:String x:Key="system_options_general_updates">更新</s:String>
+    <s:String x:Key="system_options_general_security">安全</s:String>
+    <s:String x:Key="system_options_theme_font_family">字体家族</s:String>
+    <s:String x:Key="system_options_theme_font_size">字体大小</s:String>
     <s:String x:Key="system_options_quick_match_providers">关键词匹配器</s:String>
+    <!-- Keyword matcher provider translations -->
+    <s:String x:Key="keyword_matcher_direct">默认匹配</s:String>
+    <s:String x:Key="keyword_matcher_direct_en">Default match</s:String>
+    <s:String x:Key="keyword_matcher_discrete">分词匹配</s:String>
+    <s:String x:Key="keyword_matcher_discrete_en">Discrete match</s:String>
+    <s:String x:Key="keyword_matcher_initials">首字母匹配</s:String>
+    <s:String x:Key="keyword_matcher_initials_en">Initials match</s:String>
+    <s:String x:Key="keyword_matcher_pinyin">拼音匹配</s:String>
+    <s:String x:Key="keyword_matcher_pinyin_en">Chinese Pinyin match</s:String>
+    <s:String x:Key="keyword_matcher_pinyin_initials">拼音首字母匹配</s:String>
+    <s:String x:Key="keyword_matcher_pinyin_initials_en">Chinese Pinyin initials match</s:String>
     <s:String x:Key="Launcher">启动器</s:String>
     <s:String x:Key="system_options_quick_launcher_enable">启用</s:String>
     <s:String x:Key="system_options_quick_launcher_hotkey">快捷键</s:String>

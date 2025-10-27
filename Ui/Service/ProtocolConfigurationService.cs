@@ -106,15 +106,7 @@ namespace _1RM.Service
                                 er.Arguments = er.Arguments.Replace(ky.Key, ky.Value);
                             }
 
-                            foreach (var p in er.Params.Keys)
-                            {
-                                if (er.Params[p].IndexOf(ky.Key, StringComparison.Ordinal) >= 0)
-                                {
-                                    saveFlag = true;
-                                    er.Params[p] = er.Params[p].Replace(ky.Key, ky.Value);
-                                }
-                            }
-
+  
                             foreach (var t in er.EnvironmentVariables)
                             {
                                 if (t.Value.IndexOf(ky.Key, StringComparison.Ordinal) >= 0)
@@ -190,7 +182,7 @@ namespace _1RM.Service
                         }
                     }
                 }
-                catch (Exception e)
+                catch
                 {
                     // ignored
                 }

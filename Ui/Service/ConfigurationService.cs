@@ -9,6 +9,7 @@ using Shawn.Utils;
 using Shawn.Utils.Wpf;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -39,7 +40,36 @@ namespace _1RM.Service
     public class GeneralConfig
     {
         #region General
-        public string CurrentLanguageCode = "en-us";
+
+        private static string GetDefaultLanguageCode()
+        {
+            var systemLanguage = CultureInfo.CurrentCulture.Name.ToLower();
+
+            // 支持的语言列表
+            var supportedLanguages = new HashSet<string>
+            {
+                "en-us", "zh-cn", "zh-tw", "ja-jp", "ko-kr",
+                "fr-fr", "de-de", "it-it", "es-es", "pt-br", "pt-pt",
+                "ru-ru", "cs-cz", "pl-pl", "gl-es"
+            };
+
+            // 如果系统语言受支持，则使用系统语言
+            if (supportedLanguages.Contains(systemLanguage))
+            {
+                return systemLanguage;
+            }
+
+            // 特殊处理：中文系统优先使用简体中文
+            if (systemLanguage.StartsWith("zh"))
+            {
+                return "zh-cn";
+            }
+
+            // 默认回退到英文
+            return "en-us";
+        }
+
+        public string CurrentLanguageCode = GetDefaultLanguageCode();
         public EnumServerViewStatus ServerViewStatus = EnumServerViewStatus.List;
         public enum EnumCloseButtonBehavior
         {

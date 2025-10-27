@@ -1,0 +1,20 @@
+<UserControl x:Class="_1RM.View.Editor.Forms.Advanced.TelnetAdvancedSettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="200" d:DesignWidth="800">
+    <StackPanel>
+        <!-- 启动自动命令 -->
+        <Grid Style="{StaticResource EditorRowGrid}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Style="{StaticResource EditorRowGridTitle}" Text="{DynamicResource server_editor_advantage_ssh_startup_auto_command}"></TextBlock>
+                <Grid Style="{StaticResource EditorRowGridInput}">
+                    <TextBox Text="{Binding New.StartupAutoCommand, UpdateSourceTrigger=PropertyChanged}"
+                             Tag="e.g. cd /home/user/Desktop/"></TextBox>
+                </Grid>
+            </StackPanel>
+        </Grid>
+    </StackPanel>
+</UserControl>

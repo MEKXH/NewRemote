@@ -25,9 +25,9 @@ namespace _1RM.Utils.PuTTY.Model
             {
                 // verify MD5
                 var md5 = MD5Helper.GetMd5Hash32BitString(File.ReadAllBytes(installPath));
-                byte[] bytes = new byte[stream.Length];
-                stream.Read(bytes, 0, bytes.Length);
-                var md5_2 = MD5Helper.GetMd5Hash32BitString(bytes);
+                using var memoryStream = new MemoryStream();
+                stream.CopyTo(memoryStream);
+                var md5_2 = MD5Helper.GetMd5Hash32BitString(memoryStream.ToArray());
                 if (md5_2 != md5)
                 {
                     foreach (var process in Process.GetProcessesByName(fi!.Name.ToLower().ReplaceLast(".exe", "")))

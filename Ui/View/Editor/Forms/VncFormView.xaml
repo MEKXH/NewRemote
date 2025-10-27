@@ -4,82 +4,171 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:controls="clr-namespace:Shawn.Utils.Wpf.Controls;assembly=Shawn.Utils.Wpf"
-             xmlns:forms="clr-namespace:_1RM.View.Editor.Forms"
              xmlns:controls1="clr-namespace:_1RM.Controls"
+             xmlns:forms="clr-namespace:_1RM.View.Editor.Forms"
+             xmlns:local="clr-namespace:_1RM.View.Editor.Forms"
              xmlns:s="https://github.com/canton7/Stylet"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance forms:VncFormViewModel}"
              d:DesignHeight="1450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <!-- VNC Window Resize Mode Converter -->
+        <local:ConverterEVncWindowResizeMode x:Key="ConverterEVncWindowResizeMode" />
+
+        <!-- 统一的行头样式，与主页保持一致 -->
+        <Style TargetType="TextBlock" x:Key="ConnectionRowHeader" BasedOn="{StaticResource TextBlockBase}">
+            <Setter Property="Foreground" Value="{DynamicResource BackgroundTextBrush}"></Setter>
+            <Setter Property="MinWidth" Value="140"></Setter>
+            <Setter Property="VerticalAlignment" Value="Center"></Setter>
+            <Setter Property="HorizontalAlignment" Value="Left"></Setter>
+            <Setter Property="TextAlignment" Value="Right"></Setter>
+            <Setter Property="TextWrapping" Value="WrapWithOverflow"></Setter>
+            <Setter Property="FontSize" Value="13"></Setter>
+            <Setter Property="Margin">
+                <Setter.Value>
+                    <Thickness Right="24"></Thickness>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="controls1:GridWith4Columns">
+            <Setter Property="Height" Value="Auto"></Setter>
+            <Setter Property="MinHeight" Value="36"></Setter>
+            <Setter Property="Margin">
+                <Setter.Value>
+                    <Thickness Bottom="0" Top="12"></Thickness>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
     <StackPanel>
+        <!-- 连接信息卡片 (现在包含在HostView中) -->
+        <ContentControl s:View.Model="{Binding HostViewModel}"></ContentControl>
 
-        <StackPanel>
+        <!-- 认证信息卡片 -->
+        <Border Background="{DynamicResource BackgroundBrush}"
+                BorderBrush="{DynamicResource DefaultBorderBrush}"
+                BorderThickness="1"
+                CornerRadius="8"
+                Margin="0 0 0 16">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" Opacity="0.1" ShadowDepth="2" BlurRadius="8"/>
+            </Border.Effect>
+            <StackPanel Margin="20 16">
+                <!-- 卡片标题 -->
+                <Border Background="{DynamicResource PrimaryLightBrush}"
+                        CornerRadius="6"
+                        Padding="12 8 12 8"
+                        Margin="0 0 0 16">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="🔐"
+                                   VerticalAlignment="Center"
+                                   Margin="0 0 8 0"
+                                   FontSize="14"/>
+                        <TextBlock Text="认证信息"
+                                   FontSize="14"
+                                   FontWeight="Medium"
+                                   Foreground="{DynamicResource PrimaryTextBrush}"/>
+                    </StackPanel>
+                </Border>
 
-            <TextBlock Style="{StaticResource EditorGroupTextBlockTitle}" Text="{DynamicResource 'Connection'}"></TextBlock>
-            <ContentControl s:View.Model="{Binding HostViewModel}"></ContentControl>
+                <!-- 认证信息内容 -->
+                <ContentControl s:View.Model="{Binding CredentialViewModel}"></ContentControl>
+            </StackPanel>
+        </Border>
 
-            <!--<Grid Style="{StaticResource EditorRowGrid}">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Style="{StaticResource EditorRowGridTitle}" Text="{DynamicResource Hostname}"></TextBlock>
-                    <Grid Style="{StaticResource EditorRowGridInput}">
-                        <TextBox Text="{Binding New.Address, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True, ValidatesOnNotifyDataErrors=True}"
-                                 Tag="e.g. 192.168.0.101"></TextBox>
-                    </Grid>
-                    <TextBlock Style="{StaticResource EditorRowGridTitleFollowing}" Width="60" Text="{DynamicResource Port}"></TextBlock>
-                    <Grid Style="{StaticResource EditorRowGridInput}">
-                        <TextBox MinWidth="50" Text="{Binding New.Port, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True, ValidatesOnNotifyDataErrors=True}"
-                                 HorizontalAlignment="Left"
-                                 InputMethod.IsInputMethodEnabled="False"
-                                 InputScope="Number"
-                        ></TextBox>
-                    </Grid>
-                </StackPanel>
-            </Grid>-->
+        <!-- 备选认证卡片 -->
+        <ContentControl s:View.Model="{Binding AlternativeCredentialListViewModel}">
+            <ContentControl.Style>
+                <Style TargetType="ContentControl">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding AlternativeCredentialListViewModel.Credentials.Count}" Value="0">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
 
-            <!--<Grid Style="{StaticResource EditorRowGrid}">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Style="{StaticResource EditorRowGridTitle}" Text="{DynamicResource Password}"></TextBlock>
-                    <Grid Style="{StaticResource EditorRowGridInput}">
-                        <controls1:PasswordInput Height="28" Password="{Binding New.Password, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True, ValidatesOnNotifyDataErrors=True}"></controls1:PasswordInput>
-                    </Grid>
-                    <CheckBox Margin="5 0 0 0" Content="{DynamicResource 'Ask for password when open connect'}" IsChecked="{Binding New.AskPasswordWhenConnect}"></CheckBox>
-                </StackPanel>
-            </Grid>-->
+        <!-- VNC高级设置卡片 -->
+        <Border Background="{DynamicResource BackgroundBrush}"
+                BorderBrush="{DynamicResource DefaultBorderBrush}"
+                BorderThickness="1"
+                CornerRadius="8"
+                Margin="0 0 0 16">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" Opacity="0.1" ShadowDepth="2" BlurRadius="8"/>
+            </Border.Effect>
+            <StackPanel Margin="20 16">
+                <!-- 卡片标题 -->
+                <Border Background="{DynamicResource PrimaryLightBrush}"
+                        CornerRadius="6"
+                        Padding="12 8 12 8"
+                        Margin="0 0 0 16">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="🖥️"
+                                   VerticalAlignment="Center"
+                                   Margin="0 0 8 0"
+                                   FontSize="14"/>
+                        <TextBlock Text="VNC高级设置"
+                                   FontSize="14"
+                                   FontWeight="Medium"
+                                   Foreground="{DynamicResource PrimaryTextBrush}"/>
+                    </StackPanel>
+                </Border>
 
-            <ContentControl s:View.Model="{Binding CredentialViewModel}"></ContentControl>
-            <ContentControl s:View.Model="{Binding AlternativeCredentialListViewModel}"></ContentControl>
-
-
-            <Grid Style="{StaticResource EditorRowGrid}">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Style="{StaticResource EditorRowGridTitle}" Text="{DynamicResource Resolution}"></TextBlock>
-                    <Grid Style="{StaticResource EditorRowGridInput}">
-                        <Grid.Resources>
-                            <forms:ConverterEVncWindowResizeMode x:Key="ConverterEVncWindowResizeMode" />
-                        </Grid.Resources>
-                        <ComboBox Name="ComboBoxResolution" SelectedIndex="{Binding New.VncWindowResizeMode, Converter={StaticResource ConverterEVncWindowResizeMode}}">
+                <!-- VNC高级设置内容 -->
+                <StackPanel>
+                    <!-- 分辨率设置 -->
+                    <controls1:GridWith4Columns>
+                        <TextBlock Grid.Column="0"
+                                   Text="{DynamicResource Resolution}"
+                                   Style="{StaticResource ConnectionRowHeader}"/>
+                        <ComboBox Grid.Column="1"
+                                  Name="ComboBoxResolution"
+                                  SelectedIndex="{Binding New.VncWindowResizeMode, Converter={StaticResource ConverterEVncWindowResizeMode}}"
+                                  Height="32"
+                                  VerticalAlignment="Center">
+                            <ComboBox.Style>
+                                <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+                                    <Setter Property="BorderBrush" Value="{DynamicResource DefaultBorderBrush}"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Setter Property="Background" Value="Transparent"/>
+                                </Style>
+                            </ComboBox.Style>
                             <ComboBoxItem Content="{DynamicResource 'Custom resolution (stretch)'}" />
                             <ComboBoxItem Content="{DynamicResource 'Custom resolution (fixed)'}" />
                             <ComboBoxItem Visibility="{Binding New.VncWindowResizeMode, Converter={StaticResource ConverterEqual2Visible}, ConverterParameter={x:Null}}" Content="{Binding New.ServerEditorDifferentOptions}" />
                         </ComboBox>
-                    </Grid>
-                </StackPanel>
-            </Grid>
+                    </controls1:GridWith4Columns>
 
-            <Grid Style="{StaticResource EditorRowGrid}">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Style="{StaticResource EditorRowGridTitle}" Text=""></TextBlock>
-                    <Grid Style="{StaticResource EditorRowGridInput}">
-                        <StackPanel>
-                            <TextBlock Style="{StaticResource TextBlockBase}" TextWrapping="WrapWithOverflow" Foreground="{DynamicResource AccentMidBrush}">
-                                <Run>Caution: RFB protocol over 3.8 are proprietary. If you would like using RFB 3.8+, you have to try your own VNC runner:</Run>
-                                <Hyperlink NavigateUri="https://1remote.github.io/usage/protocol/runner/" TextDecorations="{x:Null}" controls:HyperlinkHelper.IsOpenExternal="True">
-                                    [More details]
+                    <!-- 警告信息 -->
+                    <Border Background="{DynamicResource AccentLightBrush}"
+                            CornerRadius="6"
+                            Padding="12 8 12 8"
+                            Margin="0 16 0 0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="⚠️"
+                                       VerticalAlignment="Center"
+                                       Margin="0 0 8 0"
+                                       FontSize="14"/>
+                            <TextBlock TextWrapping="WrapWithOverflow"
+                                       VerticalAlignment="Center"
+                                       FontSize="12"
+                                       Opacity="0.8">
+                                <Run Foreground="{DynamicResource BackgroundTextBrush}" Text="注意：RFB 3.8+ 协议为专有协议。如需使用 RFB 3.8+，请尝试使用自定义 VNC 运行器：" />
+                                <LineBreak/>
+                                <Hyperlink NavigateUri="https://1remote.github.io/usage/protocol/runner/"
+                                            TextDecorations="{x:Null}"
+                                            controls:HyperlinkHelper.IsOpenExternal="True"
+                                            Foreground="{DynamicResource AccentMidBrush}">
+                                    <Run Text="[更多详情]" />
                                 </Hyperlink>
                             </TextBlock>
                         </StackPanel>
-                    </Grid>
+                    </Border>
                 </StackPanel>
-            </Grid>
-        </StackPanel>
+            </StackPanel>
+        </Border>
     </StackPanel>
 </UserControl>

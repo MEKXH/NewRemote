@@ -17,7 +17,6 @@ using _1RM.Model.ProtocolRunner.Default;
 using _1RM.Utils;
 using _1RM.Utils.PuTTY;
 using _1RM.Utils.PuTTY.Model;
-using _1RM.Utils.PuTTY;
 using Shawn.Utils;
 using Stylet;
 using Path = System.IO.Path;

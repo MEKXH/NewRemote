@@ -74,7 +74,7 @@ namespace _1RM.Model.Protocol
 
         public override double GetListOrder()
         {
-            return 0.1;
+            return 7;
         }
 
         /// <summary>

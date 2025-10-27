@@ -11,6 +11,7 @@ using _1RM.Model.Protocol;
 using _1RM.Service;
 using MSTSCLib;
 using Shawn.Utils;
+using Shawn.Utils.Interface;
 
 namespace _1RM.View.Settings.Launcher
 {
@@ -28,7 +29,30 @@ namespace _1RM.View.Settings.Launcher
             _launcherService = launcherService;
         }
 
-        public List<MatchProviderInfo> AvailableMatcherProviders => _configurationService.AvailableMatcherProviders;
+        public List<MatchProviderInfo> AvailableMatcherProviders
+        {
+            get
+            {
+                // 获取原始的匹配器提供者信息
+                var originalProviders = _configurationService.AvailableMatcherProviders;
+
+                // 如果语言服务可用，则使用本地化版本
+                var languageService = IoC.TryGet<ILanguageService>();
+                if (languageService != null)
+                {
+                    var localizedProviders = KeywordMatchService.GetMatchProviderInfos();
+                    // 保持原有的启用状态设置
+                    for (int i = 0; i < originalProviders.Count && i < localizedProviders.Count; i++)
+                    {
+                        localizedProviders[i].Enabled = originalProviders[i].Enabled;
+                        localizedProviders[i].IsEditable = originalProviders[i].IsEditable;
+                    }
+                    return localizedProviders;
+                }
+
+                return originalProviders;
+            }
+        }
 
         public bool LauncherEnabled
         {

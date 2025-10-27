@@ -49,7 +49,7 @@ namespace _1RM.Model.Protocol
 
         public override double GetListOrder()
         {
-            return 1;
+            return 5;
         }
 
         public override bool ShowUserNameInput()

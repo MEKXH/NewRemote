@@ -6,7 +6,6 @@ using _1RM.Utils.PuTTY;
 using Shawn.Utils;
 using System.Collections.Generic;
 using _1RM.Service;
-using _1RM.Utils.PuTTY;
 
 namespace _1RM.Model.Protocol
 {
@@ -44,7 +43,7 @@ namespace _1RM.Model.Protocol
 
         public override double GetListOrder()
         {
-            return 4;
+            return 6;
         }
 
 

@@ -14,6 +14,8 @@
              xmlns:dao="clr-namespace:_1RM.Service.DataSource.DAO"
              xmlns:s="https://github.com/canton7/Stylet"
              xmlns:controls2="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
+             xmlns:converters="clr-namespace:_1RM.View.Editor.Converters"
+             xmlns:forms="clr-namespace:_1RM.View.Editor.Forms"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance editor:ServerEditorPageViewModel}"
              Background="White"
@@ -23,48 +25,182 @@
         <Grid.Resources>
             <system:Double x:Key="TopHeight">20</system:Double>
             <system:Double x:Key="BottomHeight">40</system:Double>
+
+            <!-- 转换器 -->
+            <converters:CategoryToVisibilityConverter x:Key="CategoryToVisibilityConverter"/>
+            <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+            <converters:StringToBooleanConverter x:Key="StringToBooleanConverter"/>
+            <converters:TypeToVisibilityConverter x:Key="TypeToVisibilityConverter"/>
+            <converters:SshFormViewModelToVisibilityConverter x:Key="SshFormViewModelToVisibilityConverter"/>
+            <converters:RdpFormViewModelToVisibilityConverter x:Key="RdpFormViewModelToVisibilityConverter"/>
+            <converters:TelnetFormViewModelToVisibilityConverter x:Key="TelnetFormViewModelToVisibilityConverter"/>
+            <converters:SftpFormViewModelToVisibilityConverter x:Key="SftpFormViewModelToVisibilityConverter"/>
+            <converters:FtpFormViewModelToVisibilityConverter x:Key="FtpFormViewModelToVisibilityConverter"/>
+
+            <!-- 侧边栏RadioButton样式 -->
+            <Style x:Key="SidebarRadioButtonStyle" TargetType="RadioButton">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Padding" Value="10,8"/>
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"/>
+                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="RadioButton">
+                            <Border x:Name="MainBorder"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    CornerRadius="6"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                VerticalAlignment="Center">
+                                    <ContentPresenter.Style>
+                                        <Style TargetType="ContentPresenter">
+                                            <Setter Property="TextElement.Foreground" Value="{DynamicResource PrimaryTextBrush}"/>
+                                            <Setter Property="TextElement.FontWeight" Value="Normal"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}" Value="True">
+                                                    <Setter Property="TextElement.Foreground" Value="White"/>
+                                                    <Setter Property="TextElement.FontWeight" Value="SemiBold"/>
+                                                </DataTrigger>
+                                                <MultiDataTrigger>
+                                                    <MultiDataTrigger.Conditions>
+                                                        <Condition Binding="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}" Value="False"/>
+                                                        <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource TemplatedParent}}" Value="True"/>
+                                                    </MultiDataTrigger.Conditions>
+                                                    <Setter Property="TextElement.Foreground" Value="{DynamicResource AccentTextBrush}"/>
+                                                </MultiDataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ContentPresenter.Style>
+                                </ContentPresenter>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="MainBorder" Property="Background" Value="{DynamicResource AccentLightBrush}"/>
+                                    <Setter TargetName="MainBorder" Property="Cursor" Value="Hand"/>
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter TargetName="MainBorder" Property="Background" Value="{DynamicResource AccentMidBrush}"/>
+                                    <Setter TargetName="MainBorder" Property="BorderBrush" Value="{DynamicResource AccentDarkBrush}"/>
+                                    <Setter TargetName="MainBorder" Property="BorderThickness" Value="1"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
         </Grid.Resources>
-        <Grid>
-            <Grid.Resources>
-                <Style TargetType="TextBlock" x:Key="RowHeader" BasedOn="{StaticResource TextBlockBase}">
-                    <Setter Property="Foreground" Value="{DynamicResource BackgroundTextBrush}"></Setter>
-                    <Setter Property="MinWidth" Value="150"></Setter>
-                    <Setter Property="VerticalAlignment" Value="Center"></Setter>
-                    <Setter Property="HorizontalAlignment" Value="Left"></Setter>
-                    <Setter Property="TextAlignment" Value="Right"></Setter>
-                    <Setter Property="TextWrapping" Value="WrapWithOverflow"></Setter>
-                    <Setter Property="Margin">
-                        <Setter.Value>
-                            <Thickness Right="30"></Thickness>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-                <Style TargetType="controls:GridWith4Columns">
-                    <Setter Property="Height" Value="Auto"></Setter>
-                    <Setter Property="MinHeight" Value="30"></Setter>
-                    <Setter Property="Margin">
-                        <Setter.Value>
-                            <Thickness Bottom="0" Top="15"></Thickness>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </Grid.Resources>
-            <Grid.Margin>
-                <Thickness Top="{StaticResource TopHeight}" Bottom="{StaticResource BottomHeight}"></Thickness>
-            </Grid.Margin>
 
-            <ScrollViewer Grid.IsSharedSizeScope="True"
-                          x:Name="ScrollViewerMain"
-                          Margin="0 3 0 4"
-                          HorizontalScrollBarVisibility="Disabled"
-                          VerticalScrollBarVisibility="Auto">
-                <Grid>
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock Style="{StaticResource EditorGroupTextBlockTitle}" Text="{DynamicResource server_editor_group_title_common}"></TextBlock>
+        <!-- 主要内容区域：左侧边栏 + 右侧主体 -->
+        <Grid Margin="0 20 0 40">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
+            <!-- 左侧边栏 -->
+            <Border Grid.Column="0"
+                    Background="{DynamicResource PrimaryLightBrush}"
+                    BorderBrush="{DynamicResource DefaultBorderBrush}"
+                    BorderThickness="0 0 1 0">
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled"
+                              Padding="10">
+                    <StackPanel>
+                        <!-- 边栏标题 -->
+                        <TextBlock Text="配置"
+                                   Style="{StaticResource TextBlockBase}"
+                                   FontSize="15"
+                                   FontWeight="Bold"
+                                   Margin="0 0 0 15"
+                                   Foreground="{DynamicResource PrimaryTextBrush}"/>
 
-                        <Grid>
-                            <StackPanel Orientation="Vertical">
+                        <!-- 设置分类按钮 -->
+                        <RadioButton Name="BtnGeneralSettings"
+                                     Content="常规设置"
+                                     Style="{StaticResource SidebarRadioButtonStyle}"
+                                     IsChecked="True"
+                                     GroupName="CategoryGroup"
+                                     Margin="0 4"
+                                     Command="{Binding CmdSelectCategory}"
+                                     CommandParameter="General"/>
+
+                        <RadioButton Name="BtnConnectionSettings"
+                                     Content="连接设置"
+                                     Style="{StaticResource SidebarRadioButtonStyle}"
+                                     IsChecked="False"
+                                     GroupName="CategoryGroup"
+                                     Margin="0 4"
+                                     Command="{Binding CmdSelectCategory}"
+                                     CommandParameter="Connection"/>
+
+                        <RadioButton Name="BtnAdvancedSettings"
+                                     Content="高级选项"
+                                     Style="{StaticResource SidebarRadioButtonStyle}"
+                                     IsChecked="False"
+                                     GroupName="CategoryGroup"
+                                     Margin="0 4"
+                                     Command="{Binding CmdSelectCategory}"
+                                     CommandParameter="Advanced"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+
+            <!-- 右侧主体内容 -->
+            <Grid Grid.Column="1" Margin="24 0">
+                <Grid.Resources>
+                    <Style TargetType="TextBlock" x:Key="RowHeader" BasedOn="{StaticResource TextBlockBase}">
+                        <Setter Property="Foreground" Value="{DynamicResource BackgroundTextBrush}"></Setter>
+                        <Setter Property="MinWidth" Value="140"></Setter>
+                        <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                        <Setter Property="HorizontalAlignment" Value="Left"></Setter>
+                        <Setter Property="TextAlignment" Value="Right"></Setter>
+                        <Setter Property="TextWrapping" Value="WrapWithOverflow"></Setter>
+                        <Setter Property="FontSize" Value="13"></Setter>
+                        <Setter Property="Margin">
+                            <Setter.Value>
+                                <Thickness Right="24"></Thickness>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                    <Style TargetType="controls:GridWith4Columns">
+                        <Setter Property="Height" Value="Auto"></Setter>
+                        <Setter Property="MinHeight" Value="36"></Setter>
+                        <Setter Property="Margin">
+                            <Setter.Value>
+                                <Thickness Bottom="0" Top="12"></Thickness>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Grid.Resources>
+
+                <ScrollViewer Grid.IsSharedSizeScope="True"
+                              x:Name="ScrollViewerMain"
+                              Margin="0 8 0 8"
+                              HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Auto"
+                              Padding="0 0 16 0">
+                    <Grid>
+                        <StackPanel Orientation="Vertical">
+                            <!-- 常规设置部分 -->
+                            <StackPanel Name="GeneralSettingsPanel" Orientation="Vertical"
+                                        Visibility="{Binding SelectedCategory, Converter={StaticResource CategoryToVisibilityConverter}, ConverterParameter=General}">
+                                <!-- 分组标题 -->
+                                <Border Background="{DynamicResource AccentLightBrush}"
+                                        CornerRadius="8"
+                                        Padding="16 12 16 12"
+                                        Margin="0 0 0 20">
+                                    <TextBlock Text="常规设置"
+                                               FontSize="16"
+                                               FontWeight="SemiBold"
+                                               Foreground="{DynamicResource AccentTextBrush}"/>
+                                </Border>
+
+                                <Grid>
+                                    <StackPanel Orientation="Vertical">
                                 <controls:GridWith4Columns>
                                     <TextBlock Grid.Column="0" Text="{DynamicResource Name}" Style="{StaticResource RowHeader}"></TextBlock>
                                     <controls:AutoCompleteComboBox Grid.Column="1"
@@ -76,69 +212,98 @@
                                 <controls:GridWith4Columns>
                                     <TextBlock Style="{StaticResource RowHeader}" Grid.Column="0" Text="{DynamicResource Icon}"></TextBlock>
 
-                                    <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                        <Grid Name="GridLogo" Width="64" Height="64"
-                                              Background="Transparent"
-                                              Cursor="Hand"
-                                              Margin="0 0 30 0">
-                                            <Border BorderThickness="1" CornerRadius="{StaticResource DefaultCornerRadius}" 
-                                                    ClipToBounds="True">
-                                                <Border.Style>
-                                                    <Style TargetType="Border">
-                                                        <Setter Property="BorderBrush" Value="{DynamicResource DefaultBorderBrush}"/>
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding ElementName=GridLogo, Path=IsMouseOver}" Value="True">
-                                                                <Setter Property="BorderBrush" Value="{DynamicResource AccentMidBrush}"></Setter>
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Border.Style>
-                                                <Grid>
-                                                    <Image Height="64" Width="64" Source="{Binding Server.IconImg}" ></Image>
+                                    <!-- 图标和颜色选择区域 -->
+                                    <Border Grid.Column="1"
+                                            Background="{DynamicResource BackgroundBrush}"
+                                            BorderBrush="{DynamicResource DefaultBorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="8"
+                                            Padding="16 12">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
 
-                                                    <Button Background="{DynamicResource BackgroundBrush}" Opacity="0.9"
-                                                            Command="{Binding CmdSelectImage}"
-                                                            BorderThickness="0"
-                                                    >
-                                                        <Button.Style>
-                                                            <Style TargetType="Button" BasedOn="{StaticResource ButtonBarBackgroundStyle}">
-                                                                <Setter Property="Visibility" Value="Collapsed"></Setter>
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding ElementName=GridLogo, Path=IsMouseOver}" Value="True">
-                                                                        <Setter Property="Visibility" Value="Visible"></Setter>
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </Button.Style>
-                                                        <Path Data="F1 M 10 18.75 C 11.002604 18.75 11.964518 18.595377 12.885742 18.286133 C 13.806965 17.976889 14.646809 17.540689 15.405273 16.977539 C 16.163736 16.414389 16.824543 15.737305 17.387695 14.946289 C 17.950846 14.155273 18.378906 13.277995 18.671875 12.314453 L 19.863281 12.685547 C 19.53776 13.772787 19.052734 14.763998 18.408203 15.65918 C 17.763672 16.554361 17.006836 17.324219 16.137695 17.96875 C 15.268555 18.613281 14.311523 19.112955 13.266602 19.467773 C 12.22168 19.822592 11.132812 20 10 20 C 9.108072 20 8.238932 19.889322 7.392578 19.667969 C 6.546224 19.446615 5.74707 19.125977 4.995117 18.706055 C 4.243164 18.286133 3.548177 17.775064 2.910156 17.172852 C 2.272135 16.570639 1.71875 15.888672 1.25 15.126953 L 1.25 17.5 L 0 17.5 L 0 12.5 L 5 12.5 L 5 13.75 L 1.914062 13.75 C 2.298177 14.511719 2.775065 15.200195 3.344727 15.81543 C 3.914388 16.430664 4.550781 16.954752 5.253906 17.387695 C 5.957031 17.820639 6.710612 18.155924 7.514648 18.393555 C 8.318685 18.631186 9.147135 18.75 10 18.75 Z M 20 2.5 L 20 7.5 L 15 7.5 L 15 6.25 L 18.085938 6.25 C 17.701822 5.488281 17.224934 4.799805 16.655273 4.18457 C 16.085611 3.569336 15.449219 3.045248 14.746094 2.612305 C 14.042969 2.179363 13.289388 1.844076 12.485352 1.606445 C 11.681314 1.368816 10.852864 1.25 10 1.25 C 8.997396 1.25 8.035481 1.404623 7.114258 1.713867 C 6.193034 2.023113 5.35319 2.459311 4.594727 3.022461 C 3.836263 3.585613 3.175456 4.262695 2.612305 5.053711 C 2.049154 5.844727 1.621094 6.722006 1.328125 7.685547 L 0.136719 7.314453 C 0.46224 6.233725 0.947266 5.244141 1.591797 4.345703 C 2.236328 3.447266 2.993164 2.675781 3.862305 2.03125 C 4.731445 1.386719 5.688477 0.887045 6.733398 0.532227 C 7.77832 0.17741 8.867188 0 10 0 C 10.891927 0 11.761067 0.110678 12.607422 0.332031 C 13.453775 0.553387 14.25293 0.874023 15.004883 1.293945 C 15.756836 1.713867 16.451822 2.224936 17.089844 2.827148 C 17.727863 3.429363 18.28125 4.111328 18.75 4.873047 L 18.75 2.5 Z " 
-                                                              StrokeThickness="1"
-                                                              Stroke="{DynamicResource BackgroundTextBrush}"
-                                                              Fill="{DynamicResource BackgroundTextBrush}" 
-                                                              Stretch="Uniform" 
-                                                              Width="30"
-                                                        />
-                                                    </Button>
-                                                </Grid>
-                                            </Border>
+                                            <!-- 图标选择 -->
+                                            <Grid Name="GridLogo"
+                                                  Width="56" Height="56"
+                                                  Background="Transparent"
+                                                  Cursor="Hand"
+                                                  VerticalAlignment="Center"
+                                                  Margin="0 0 20 0">
+                                                <Border BorderThickness="1"
+                                                        CornerRadius="6"
+                                                        ClipToBounds="True"
+                                                        Background="{DynamicResource PrimaryLightBrush}">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="BorderBrush" Value="{DynamicResource DefaultBorderBrush}"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding ElementName=GridLogo, Path=IsMouseOver}" Value="True">
+                                                                    <Setter Property="BorderBrush" Value="{DynamicResource AccentMidBrush}"/>
+                                                                    <Setter Property="Background" Value="{DynamicResource AccentLightBrush}"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Border.Style>
+                                                    <Grid>
+                                                        <Image Height="56" Width="56" Source="{Binding Server.IconImg}" ></Image>
+                                                        <Button Background="Transparent" Opacity="0.8"
+                                                                Command="{Binding CmdSelectImage}"
+                                                                BorderThickness="0">
+                                                            <Button.Style>
+                                                                <Style TargetType="Button" BasedOn="{StaticResource ButtonBarBackgroundStyle}">
+                                                                    <Setter Property="Visibility" Value="Collapsed"></Setter>
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding ElementName=GridLogo, Path=IsMouseOver}" Value="True">
+                                                                            <Setter Property="Visibility" Value="Visible"></Setter>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Button.Style>
+                                                            <Path Data="F1 M 10 18.75 C 11.002604 18.75 11.964518 18.595377 12.885742 18.286133 C 13.806965 17.976889 14.646809 17.540689 15.405273 16.977539 C 16.163736 16.414389 16.824543 15.737305 17.387695 14.946289 C 17.950846 14.155273 18.378906 13.277995 18.671875 12.314453 L 19.863281 12.685547 C 19.53776 13.772787 19.052734 14.763998 18.408203 15.65918 C 17.763672 16.554361 17.006836 17.324219 16.137695 17.96875 C 15.268555 18.613281 14.311523 19.112955 13.266602 19.467773 C 12.22168 19.822592 11.132812 20 10 20 C 9.108072 20 8.238932 19.889322 7.392578 19.667969 C 6.546224 19.446615 5.74707 19.125977 4.995117 18.706055 C 4.243164 18.286133 3.548177 17.775064 2.910156 17.172852 C 2.272135 16.570639 1.71875 15.888672 1.25 15.126953 L 1.25 17.5 L 0 17.5 L 0 12.5 L 5 12.5 L 5 13.75 L 1.914062 13.75 C 2.298177 14.511719 2.775065 15.200195 3.344727 15.81543 C 3.914388 16.430664 4.550781 16.954752 5.253906 17.387695 C 5.957031 17.820639 6.710612 18.155924 7.514648 18.393555 C 8.318685 18.631186 9.147135 18.75 10 18.75 Z M 20 2.5 L 20 7.5 L 15 7.5 L 15 6.25 L 18.085938 6.25 C 17.701822 5.488281 17.224934 4.799805 16.655273 4.18457 C 16.085611 3.569336 15.449219 3.045248 14.746094 2.612305 C 14.042969 2.179363 13.289388 1.844076 12.485352 1.606445 C 11.681314 1.368816 10.852864 1.25 10 1.25 C 8.997396 1.25 8.035481 1.404623 7.114258 1.713867 C 6.193034 2.023113 5.35319 2.459311 4.594727 3.022461 C 3.836263 3.585613 3.175456 4.262695 2.612305 5.053711 C 2.049154 5.844727 1.621094 6.722006 1.328125 7.685547 L 0.136719 7.314453 C 0.46224 6.233725 0.947266 5.244141 1.591797 4.345703 C 2.236328 3.447266 2.993164 2.675781 3.862305 2.03125 C 4.731445 1.386719 5.688477 0.887045 6.733398 0.532227 C 7.77832 0.17741 8.867188 0 10 0 C 10.891927 0 11.761067 0.110678 12.607422 0.332031 C 13.453775 0.553387 14.25293 0.874023 15.004883 1.293945 C 15.756836 1.713867 16.451822 2.224936 17.089844 2.827148 C 17.727863 3.429363 18.28125 4.111328 18.75 4.873047 L 18.75 2.5 Z "
+                                                                  StrokeThickness="1"
+                                                                  Stroke="{DynamicResource BackgroundTextBrush}"
+                                                                  Fill="{DynamicResource BackgroundTextBrush}"
+                                                                  Stretch="Uniform"
+                                                                  Width="26"
+                                                            />
+                                                        </Button>
+                                                    </Grid>
+                                                </Border>
+                                            </Grid>
+
+                                            <!-- 颜色选择 -->
+                                            <StackPanel Grid.Column="1"
+                                                        VerticalAlignment="Center"
+                                                        Orientation="Horizontal">
+                                                <TextBlock Text="颜色"
+                                                           Style="{StaticResource EditorRowGridTitle}"
+                                                           VerticalAlignment="Center"
+                                                           Margin="0 0 12 0"/>
+                                                <colorPickerWpf:ColorPickRowPopup HexColor="{Binding Server.ColorHex}"
+                                                                                  Foreground="{DynamicResource BackgroundTextBrush}"
+                                                                                  HexVisible="Collapsed"
+                                                                                  Name="ColorPick"
+                                                                                  HorizontalAlignment="Left"
+                                                                                  VerticalAlignment="Center" />
+                                                <TextBlock Text="{Binding Server.ColorHex}"
+                                                           VerticalAlignment="Center"
+                                                           Margin="12 0 0 0"
+                                                           FontSize="13"
+                                                           FontWeight="Medium"
+                                                           Foreground="{DynamicResource BackgroundTextBrush}"/>
+                                            </StackPanel>
                                         </Grid>
-                                        <TextBlock Style="{StaticResource EditorRowGridTitle}" Width="50" Text="{DynamicResource Color}"></TextBlock>
-                                        <colorPickerWpf:ColorPickRowPopup HexColor="{Binding Server.ColorHex}"
-                                                                          Foreground="{DynamicResource BackgroundTextBrush}" 
-                                                                          HexVisible="Collapsed"
-                                                                          Name="ColorPick" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                                        <TextBlock Style="{StaticResource EditorRowGridTitle}" Width="Auto" HorizontalAlignment="Left" 
-                                                   Text="{Binding Server.ColorHex}"></TextBlock>
-                                    </StackPanel>
+                                    </Border>
                                 </controls:GridWith4Columns>
 
 
 
 
 
-                                <controls:GridWith4Columns>
-                                    <CheckBox IsChecked="{Binding Server.AlwaysOpenInNewTabWindow}" Grid.Column="1" Content="{DynamicResource 'Always open in new window'}"></CheckBox>
-                                </controls:GridWith4Columns>
-
+                
 
 
                                 <controls:GridWith4Columns>
@@ -148,157 +313,356 @@
                                                          TagsForSelect="{Binding TagSelections, Mode=OneTime}"></controls:TagsEditor>
                                 </controls:GridWith4Columns>
 
-                                <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
-                                    <TextBlock Text="" Style="{StaticResource RowHeader}"></TextBlock>
-                                    <TextBlock MaxWidth="600"
-                                               Style="{StaticResource TextBlockBase}"
-                                               Text="{DynamicResource 'Press Enter to add a tag, which is used for grouping servers. By right-clicking on the tags on the homepage, you can filter or pin a specific tag.'}"
-                                               TextWrapping="WrapWithOverflow" 
-                                               Opacity="0.5"></TextBlock>
-                                </StackPanel>
-
-
-
-                                <controls:GridWith4Columns>
-                                    <TextBlock Style="{StaticResource RowHeader}" Grid.Column="0" Text="{DynamicResource 'Script before connect'}"></TextBlock>
-                                    <TextBox Grid.Column="1"
-                                             Text="{Binding Server.CommandBeforeConnected, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}"
-                                             ToolTip="{DynamicResource 'Run bat before connect'}"
-                                             Tag="{DynamicResource 'Run bat before connect'}"/>
-                                    <StackPanel Grid.Column="2" Orientation="Horizontal">
-                                        <Button Margin="5 0 0 0" 
-                                                VerticalAlignment="Stretch"
-                                                Command="{Binding CmdSelectScript}" CommandParameter="before"
-                                                Style="{StaticResource ButtonPrimaryStyle}" 
-                                                Content="{DynamicResource Select}"></Button>
-
-                                        <Button Margin="5 0 0 0" 
-                                                VerticalAlignment="Stretch"
-                                                Command="{Binding CmdTestScript}" CommandParameter="before"
-                                                Style="{StaticResource ButtonPrimaryStyle}" 
-                                                Content="{DynamicResource Test}"></Button>
+                                <Border Background="{DynamicResource PrimaryLightBrush}"
+                            CornerRadius="6"
+                            Padding="12 8 12 8"
+                            Margin="0 8 0 0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="💡"
+                                       VerticalAlignment="Center"
+                                       Margin="0 0 8 0"/>
+                            <TextBlock MaxWidth="600"
+                                       Style="{StaticResource TextBlockBase}"
+                                       Text="{DynamicResource 'Press Enter to add a tag, which is used for grouping servers. By right-clicking on the tags on the homepage, you can filter or pin a specific tag.'}"
+                                       TextWrapping="WrapWithOverflow"
+                                       Opacity="0.7"
+                                       FontSize="12"/>
+                        </StackPanel>
+                    </Border>
                                     </StackPanel>
-                                </controls:GridWith4Columns>
+                                </Grid>
+                            </StackPanel>
 
-                                <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
-                                    <TextBlock Text="" Style="{StaticResource RowHeader}"></TextBlock>
-                                    <CheckBox VerticalContentAlignment="Top"
-                                              MaxWidth="600"
-                                              IsChecked="{Binding Server.HideCommandBeforeConnectedWindow}" 
-                                              ToolTip="{DynamicResource 'Hide script window'}">
-                                        <TextBlock Text="{DynamicResource 'Hide script window'}"
-                                                   TextWrapping="WrapWithOverflow" 
-                                                   Opacity="0.5"></TextBlock>
-                                    </CheckBox>
-                                </StackPanel>
-
-
-
-                                <controls:GridWith4Columns>
-                                    <TextBlock Style="{StaticResource RowHeader}" Grid.Column="0" Text="{DynamicResource 'Script after disconnected'}"></TextBlock>
-                                    <TextBox Grid.Column="1"
-                                             Text="{Binding Server.CommandAfterDisconnected, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}"
-                                             ToolTip="{DynamicResource 'Run bat after disconnected'}"
-                                             Tag="{DynamicResource 'Run bat after disconnected'}"></TextBox>
-                                    <StackPanel Grid.Column="2" Orientation="Horizontal">
-                                        <Button Margin="5 0 0 0" 
-                                                VerticalAlignment="Stretch"
-                                                Command="{Binding CmdSelectScript}" CommandParameter="after"
-                                                Style="{StaticResource ButtonPrimaryStyle}" 
-                                                Content="{DynamicResource Select}"></Button>
-
-                                        <Button Margin="5 0 0 0" 
-                                                VerticalAlignment="Stretch"
-                                                Command="{Binding CmdTestScript}" CommandParameter="after"
-                                                Style="{StaticResource ButtonPrimaryStyle}" 
-                                                Content="{DynamicResource Test}"></Button>
-                                    </StackPanel>
-                                </controls:GridWith4Columns>
-
-                                <controls:GridWith4Columns>
-                                    <controls:GridWith4Columns.Style>
-                                        <Style TargetType="controls:GridWith4Columns" BasedOn="{StaticResource {x:Type controls:GridWith4Columns}}">
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Runners.Count}" Value="0">
-                                                    <Setter Property="Visibility" Value="Collapsed"></Setter>
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding Runners.Count}" Value="1">
-                                                    <Setter Property="Visibility" Value="Collapsed"></Setter>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </controls:GridWith4Columns.Style>
-                                    <TextBlock Style="{StaticResource RowHeader}" Grid.Column="0" Text="{DynamicResource 'Selected runner'}"></TextBlock>
-
-                                    <ComboBox Grid.Column="1" 
-                                              ItemsSource="{Binding Runners, UpdateSourceTrigger=PropertyChanged}"
-                                              SelectedItem="{Binding Server.SelectedRunnerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                                    </ComboBox>
-                                </controls:GridWith4Columns>
-
-                                <!--<ContentControl Content="{Binding ProtocolEditControl}"></ContentControl>-->
+                            <!-- 连接设置部分 -->
+                            <StackPanel Name="ConnectionSettingsPanel" Orientation="Vertical"
+                                        Visibility="{Binding SelectedCategory, Converter={StaticResource CategoryToVisibilityConverter}, ConverterParameter=Connection}">
+                                <!-- 分组标题 -->
+                                <Border Background="{DynamicResource AccentLightBrush}"
+                                        CornerRadius="8"
+                                        Padding="16 12 16 12"
+                                        Margin="0 0 0 20">
+                                    <TextBlock Text="连接设置"
+                                               FontSize="16"
+                                               FontWeight="SemiBold"
+                                               Foreground="{DynamicResource AccentTextBrush}"/>
+                                </Border>
+                                <!-- 协议特定的配置内容 -->
                                 <ContentControl s:View.Model="{Binding EditorViewModel}"></ContentControl>
                             </StackPanel>
-                        </Grid>
-                    </StackPanel>
 
+                            <!-- 高级选项部分 -->
+                            <StackPanel Name="AdvancedSettingsPanel" Orientation="Vertical"
+                                        Visibility="{Binding SelectedCategory, Converter={StaticResource CategoryToVisibilityConverter}, ConverterParameter=Advanced}">
+                                <!-- 分组标题 -->
+                                <Border Background="{DynamicResource AccentLightBrush}"
+                                        CornerRadius="8"
+                                        Padding="16 12 16 12"
+                                        Margin="0 0 0 20">
+                                    <TextBlock Text="高级选项"
+                                               FontSize="16"
+                                               FontWeight="SemiBold"
+                                               Foreground="{DynamicResource AccentTextBrush}"/>
+                                </Border>
 
-                    <controls:GridWith4Columns VerticalAlignment="Top" MinHeight="60">
-                        <Grid Margin="40 32" Grid.Column="2" Grid.ColumnSpan="2">
-                            <StackPanel>
-                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                    <TextBlock Style="{StaticResource RowHeader}" Text="{DynamicResource Note}" TextAlignment="Center"></TextBlock>
+                                <!-- 连接行为设置 -->
+                                <Border Background="{DynamicResource PrimaryLightBrush}"
+                                        CornerRadius="6"
+                                        Padding="12 8 12 8"
+                                        Margin="0 16 0 16">
+                                    <TextBlock Text="连接行为"
+                                               FontSize="14"
+                                               FontWeight="Medium"
+                                               Foreground="{DynamicResource PrimaryTextBrush}"/>
+                                </Border>
+                                <Grid>
+                                    <StackPanel Orientation="Vertical">
+                                        <controls:GridWith4Columns>
+                                            <CheckBox IsChecked="{Binding Server.AlwaysOpenInNewTabWindow}" Grid.Column="1"
+                                                      Content="{DynamicResource 'Always open in new window'}"></CheckBox>
+                                        </controls:GridWith4Columns>
+                                    </StackPanel>
+                                </Grid>
 
-                                    <!--icon button show note-->
-                                    <Button Name="ButtonShowNote"
-                                            Width="16" Height="16"
-                                            Background="Transparent"
-                                            attachProperty:VisionElement.BackgroundAccent="Transparent"
-                                            attachProperty:VisionElement.BackgroundOnMouseDown="Transparent"
-                                            Foreground="{DynamicResource BackgroundTextBrush}"
-                                            attachProperty:VisionElement.ForegroundAccent="{DynamicResource BackgroundTextBrush}"
-                                            attachProperty:VisionElement.ForegroundOnMouseDown="{DynamicResource BackgroundTextBrush}"
-                                            HorizontalAlignment="Right" VerticalAlignment="Center"
-                                            Opacity="0.7"
-                                            ToolTip="{DynamicResource Preview}"
-                                            attachProperty:VisionElement.Opacity="0.8"
-                                            attachProperty:VisionElement.OpacityAccent="0.9"
-                                            MouseEnter="ButtonShowNote_OnMouseEnter"
-                                            Style="{StaticResource ButtonBarPrimaryStyle}"
-                                            Visibility="{Binding Server.Note, Converter={StaticResource ConverterNoteToVisibility}}"
-                                            >
-                                        <Path Data="{StaticResource NoteGeometry}"
-                                              Width="13"
-                                              Stroke="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=Button}}"
-                                              Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=Button}}"
-                                              StrokeThickness="0" Stretch="Uniform" />
-                                    </Button>
+                                <!-- 协议特定高级设置 -->
+                                <StackPanel Name="ProtocolAdvancedSettingsPanel"
+                                            Visibility="{Binding EditorViewModel, Converter={StaticResource NullToVisibilityConverter}}">
+                                    <Border Background="{DynamicResource PrimaryLightBrush}"
+                                CornerRadius="6"
+                                Padding="12 8 12 8"
+                                Margin="0 16 0 16">
+                            <TextBlock Text="协议高级设置"
+                                       FontSize="14"
+                                       FontWeight="Medium"
+                                       Foreground="{DynamicResource PrimaryTextBrush}"/>
+                        </Border>
+                                    <!-- SSH高级设置 -->
+                                    <ContentControl Name="SshAdvancedSettingsContent"
+                                                    s:View.Model="{Binding EditorViewModel.AdvancedSettingsViewModel}"
+                                                    Visibility="{Binding EditorViewModel, Converter={StaticResource SshFormViewModelToVisibilityConverter}}"/>
 
-                                    <Popup Name="PopupNote" 
-                                           AllowsTransparency="True"
-                                           PlacementTarget="{Binding ElementName=ButtonShowNote}" StaysOpen="False">
-                                        <noteDisplay:NoteDisplayAndEditor x:Name="PopupNoteGrid" Width="400" Height="300"
-                                                                          Server="{Binding Server, Mode=OneWay}"
-                                                                          EditEnable="False"
-                                                                          EditButtonVisibility="Collapsed"
-                                                                          CloseButtonVisibility="Collapsed"/>
-                                    </Popup>
+                                    <!-- RDP高级设置 -->
+                                    <ContentControl Name="RdpAdvancedSettingsContent"
+                                                    s:View.Model="{Binding EditorViewModel.AdvancedSettingsViewModel}"
+                                                    Visibility="{Binding EditorViewModel, Converter={StaticResource RdpFormViewModelToVisibilityConverter}}"/>
+
+                                    <!-- Telnet高级设置 -->
+                                    <ContentControl Name="TelnetAdvancedSettingsContent"
+                                                    s:View.Model="{Binding EditorViewModel.AdvancedSettingsViewModel}"
+                                                    Visibility="{Binding EditorViewModel, Converter={StaticResource TelnetFormViewModelToVisibilityConverter}}"/>
+
+                                    <!-- SFTP高级设置 -->
+                                    <ContentControl Name="SftpAdvancedSettingsContent"
+                                                    s:View.Model="{Binding EditorViewModel.AdvancedSettingsViewModel}"
+                                                    Visibility="{Binding EditorViewModel, Converter={StaticResource SftpFormViewModelToVisibilityConverter}}"/>
+
+                                    <!-- FTP高级设置 -->
+                                    <ContentControl Name="FtpAdvancedSettingsContent"
+                                                    s:View.Model="{Binding EditorViewModel.AdvancedSettingsViewModel}"
+                                                    Visibility="{Binding EditorViewModel, Converter={StaticResource FtpFormViewModelToVisibilityConverter}}"/>
                                 </StackPanel>
 
+                                <!-- 脚本设置 -->
+                                <Border Background="{DynamicResource PrimaryLightBrush}"
+                                        CornerRadius="6"
+                                        Padding="12 8 12 8"
+                                        Margin="0 16 0 16">
+                                    <TextBlock Text="脚本设置"
+                                               FontSize="14"
+                                               FontWeight="Medium"
+                                               Foreground="{DynamicResource PrimaryTextBrush}"/>
+                                </Border>
+                                <Grid>
+                                    <StackPanel Orientation="Vertical">
+                                        <controls:GridWith4Columns>
+                                            <TextBlock Style="{StaticResource RowHeader}" Grid.Column="0" Text="{DynamicResource 'Script before connect'}"></TextBlock>
+                                            <TextBox Grid.Column="1"
+                                                     Text="{Binding Server.CommandBeforeConnected, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}"
+                                                     ToolTip="{DynamicResource 'Run bat before connect'}"
+                                                     Tag="{DynamicResource 'Run bat before connect'}"/>
+                                            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                                <Button Margin="5 0 0 0"
+                                                        VerticalAlignment="Stretch"
+                                                        Command="{Binding CmdSelectScript}" CommandParameter="before"
+                                                        Style="{StaticResource ButtonPrimaryStyle}"
+                                                        Content="{DynamicResource Select}"></Button>
+                                                <Button Margin="5 0 0 0"
+                                                        VerticalAlignment="Stretch"
+                                                        Command="{Binding CmdTestScript}" CommandParameter="before"
+                                                        Style="{StaticResource ButtonPrimaryStyle}"
+                                                        Content="{DynamicResource Test}"></Button>
+                                            </StackPanel>
+                                        </controls:GridWith4Columns>
 
-                                <TextBox TextWrapping="Wrap" Width="Auto"
-                                         TextAlignment="Left" Height="150" Margin="0 5"
-                                         MouseWheel="TextBoxMarkdown_OnMouseWheel"
-                                         VerticalContentAlignment="Top"
-                                         AcceptsReturn="True"
-                                         AcceptsTab="True"
-                                         Tag="&#13;# Markdown support&#13;&#13;- write your note here&#13;- foo&#13;&#13;![pic](http://x/structure.png)&#13;&#13;[link](http://x/readme.md)" xml:space="preserve"
-                                         Text="{Binding Server.Note, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                                        <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
+                                            <TextBlock Text="" Style="{StaticResource RowHeader}"></TextBlock>
+                                            <CheckBox VerticalContentAlignment="Top"
+                                                      MaxWidth="600"
+                                                      IsChecked="{Binding Server.HideCommandBeforeConnectedWindow}"
+                                                      ToolTip="{DynamicResource 'Hide script window'}">
+                                                <TextBlock Text="{DynamicResource 'Hide script window'}"
+                                                           TextWrapping="WrapWithOverflow"
+                                                           Opacity="0.5"></TextBlock>
+                                            </CheckBox>
+                                        </StackPanel>
+
+                                        <controls:GridWith4Columns>
+                                            <TextBlock Style="{StaticResource RowHeader}" Grid.Column="0" Text="{DynamicResource 'Script after disconnected'}"></TextBlock>
+                                            <TextBox Grid.Column="1"
+                                                     Text="{Binding Server.CommandAfterDisconnected, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}"
+                                                     ToolTip="{DynamicResource 'Run bat after disconnected'}"
+                                                     Tag="{DynamicResource 'Run bat after disconnected'}"></TextBox>
+                                            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                                <Button Margin="5 0 0 0"
+                                                        VerticalAlignment="Stretch"
+                                                        Command="{Binding CmdSelectScript}" CommandParameter="after"
+                                                        Style="{StaticResource ButtonPrimaryStyle}"
+                                                        Content="{DynamicResource Select}"></Button>
+                                                <Button Margin="5 0 0 0"
+                                                        VerticalAlignment="Stretch"
+                                                        Command="{Binding CmdTestScript}" CommandParameter="after"
+                                                        Style="{StaticResource ButtonPrimaryStyle}"
+                                                        Content="{DynamicResource Test}"></Button>
+                                            </StackPanel>
+                                        </controls:GridWith4Columns>
+                                    </StackPanel>
+                                </Grid>
+
+                                <!-- 运行器设置 -->
+                                <Border Background="{DynamicResource PrimaryLightBrush}"
+                                        CornerRadius="6"
+                                        Padding="12 8 12 8"
+                                        Margin="0 16 0 16">
+                                    <TextBlock Text="运行器设置"
+                                               FontSize="14"
+                                               FontWeight="Medium"
+                                               Foreground="{DynamicResource PrimaryTextBrush}"/>
+                                </Border>
+                                <Grid>
+                                    <StackPanel Orientation="Vertical">
+                                        <controls:GridWith4Columns>
+                                            <controls:GridWith4Columns.Style>
+                                                <Style TargetType="controls:GridWith4Columns" BasedOn="{StaticResource {x:Type controls:GridWith4Columns}}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Runners.Count}" Value="0">
+                                                            <Setter Property="Visibility" Value="Collapsed"></Setter>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Runners.Count}" Value="1">
+                                                            <Setter Property="Visibility" Value="Collapsed"></Setter>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </controls:GridWith4Columns.Style>
+                                            <TextBlock Style="{StaticResource RowHeader}" Grid.Column="0" Text="{DynamicResource 'Selected runner'}"></TextBlock>
+                                            <ComboBox Grid.Column="1"
+                                                      ItemsSource="{Binding Runners, UpdateSourceTrigger=PropertyChanged}"
+                                                      SelectedItem="{Binding Server.SelectedRunnerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                            </ComboBox>
+                                        </controls:GridWith4Columns>
+
+                                        <!-- 当没有多个运行器时显示提示 -->
+                                        <Border Background="{DynamicResource AccentLightBrush}"
+                                                CornerRadius="6"
+                                                Padding="12 8 12 8"
+                                                Margin="0 12 0 0">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="Visibility" Value="Collapsed"></Setter>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Runners.Count}" Value="1">
+                                                            <Setter Property="Visibility" Value="Visible"></Setter>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="ℹ️"
+                                                           VerticalAlignment="Center"
+                                                           Margin="0 0 8 0"/>
+                                                <TextBlock TextWrapping="WrapWithOverflow"
+                                                           Style="{StaticResource TextBlockBase}"
+                                                           FontSize="12"
+                                                           Opacity="0.8">
+                                                    <TextBlock Text="当前协议使用默认运行器设置。如需选择特定运行器，请在全局设置中配置多个运行器选项。"/>
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </Border>
+                                    </StackPanel>
+                                </Grid>
                             </StackPanel>
-                        </Grid>
-                    </controls:GridWith4Columns>
-                </Grid>
-            </ScrollViewer>
+
+                            <!-- 备注部分 - 在常规设置中显示 -->
+                            <StackPanel Name="NoteSettingsPanel" Orientation="Vertical"
+                                        Visibility="{Binding SelectedCategory, Converter={StaticResource CategoryToVisibilityConverter}, ConverterParameter=General}">
+                                <controls:GridWith4Columns VerticalAlignment="Top" MinHeight="60">
+                                    <Grid Margin="0 20 0 0" Grid.Column="0" Grid.ColumnSpan="4">
+                                        <StackPanel>
+                                            <Border Background="{DynamicResource PrimaryLightBrush}"
+                                CornerRadius="6"
+                                Padding="12 8 12 8"
+                                Margin="0 0 0 12">
+                            <TextBlock Text="{DynamicResource Note}"
+                                       FontSize="14"
+                                       FontWeight="Medium"
+                                       Foreground="{DynamicResource PrimaryTextBrush}"/>
+                        </Border>
+
+                                            <!-- 备注编辑区域 -->
+                                            <Border Background="{DynamicResource BackgroundBrush}"
+                                                    BorderBrush="{DynamicResource DefaultBorderBrush}"
+                                                    BorderThickness="1"
+                                                    CornerRadius="8"
+                                                    Margin="0 12 0 0">
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="*"/>
+                                                    </Grid.RowDefinitions>
+                                                    <!-- 备注工具栏 -->
+                                                    <Border Grid.Row="0"
+                                                            Background="{DynamicResource PrimaryLightBrush}"
+                                                            CornerRadius="8 8 0 0"
+                                                            BorderBrush="{DynamicResource DefaultBorderBrush}"
+                                                            BorderThickness="0 0 0 1"
+                                                            Padding="12 8 12 8">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <!-- 预览按钮 -->
+                                                            <Button Name="ButtonShowNote"
+                                                                    Background="Transparent"
+                                                                    Foreground="{DynamicResource BackgroundTextBrush}"
+                                                                    BorderThickness="0"
+                                                                    Padding="8 4"
+                                                                    HorizontalAlignment="Left"
+                                                                    VerticalAlignment="Center"
+                                                                    ToolTip="{DynamicResource Preview}"
+                                                                    MouseEnter="ButtonShowNote_OnMouseEnter"
+                                                                    Style="{StaticResource ButtonBarPrimaryStyle}"
+                                                                    Visibility="{Binding Server.Note, Converter={StaticResource ConverterNoteToVisibility}}"
+                                                                    Margin="0 0 8 0">
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <Path Data="{StaticResource NoteGeometry}"
+                                                                          Width="12"
+                                                                          Height="12"
+                                                                          Stroke="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=Button}}"
+                                                                          Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=Button}}"
+                                                                          StrokeThickness="0" Stretch="Uniform" />
+                                                                    <TextBlock Text=" 预览"
+                                                                               VerticalAlignment="Center"
+                                                                               FontSize="12"/>
+                                                                </StackPanel>
+                                                            </Button>
+
+                                                            <!-- Markdown提示 -->
+                                                            <TextBlock Grid.Column="1"
+                                                                       Text="支持 Markdown 格式 (# 标题, **粗体**, [链接](url))"
+                                                                       FontSize="11"
+                                                                       Foreground="{DynamicResource BackgroundTextBrush}"
+                                                                       Opacity="0.6"
+                                                                       VerticalAlignment="Center"/>
+                                                        </Grid>
+                                                    </Border>
+
+                                                    <!-- 备注输入框 -->
+                                                    <TextBox Grid.Row="1"
+                                                             TextWrapping="Wrap" Width="Auto"
+                                                             TextAlignment="Left" Height="140"
+                                                             MouseWheel="TextBoxMarkdown_OnMouseWheel"
+                                                             VerticalContentAlignment="Top"
+                                                             AcceptsReturn="True"
+                                                             AcceptsTab="True"
+                                                             BorderThickness="0"
+                                                             Background="Transparent"
+                                                             Padding="12 8 12 8"
+                                                             VerticalScrollBarVisibility="Auto"
+                                                             HorizontalScrollBarVisibility="Disabled"
+                                                             Tag="&#13;# Markdown support&#13;&#13;- write your note here&#13;- foo&#13;&#13;![pic](http://x/structure.png)&#13;&#13;[link](http://x/readme.md)" xml:space="preserve"
+                                                             Text="{Binding Server.Note, UpdateSourceTrigger=PropertyChanged}"
+                                                             Margin="0 36 0 0"/>
+                                                </Grid>
+                                            </Border>
+
+                                            <Popup Name="PopupNote"
+                                                   AllowsTransparency="True"
+                                                   PlacementTarget="{Binding ElementName=ButtonShowNote}" StaysOpen="False">
+                                                <noteDisplay:NoteDisplayAndEditor x:Name="PopupNoteGrid" Width="400" Height="300"
+                                                                                  Server="{Binding Server, Mode=OneWay}"
+                                                                                  EditEnable="False"
+                                                                                  EditButtonVisibility="Collapsed"
+                                                                                  CloseButtonVisibility="Collapsed"/>
+                                            </Popup>
+                                        </StackPanel>
+                                    </Grid>
+                                </controls:GridWith4Columns>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </ScrollViewer>
+            </Grid>
         </Grid>
 
 

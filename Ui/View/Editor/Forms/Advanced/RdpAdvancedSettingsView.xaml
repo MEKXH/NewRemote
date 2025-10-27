@@ -1,0 +1,74 @@
+<UserControl x:Class="_1RM.View.Editor.Forms.Advanced.RdpAdvancedSettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:protocol="clr-namespace:_1RM.Model.Protocol"
+             xmlns:forms="clr-namespace:_1RM.View.Editor.Forms"
+             mc:Ignorable="d"
+             d:DesignHeight="1000" d:DesignWidth="800">
+    <StackPanel>
+        <!-- 管理员模式 -->
+        <Grid Style="{StaticResource EditorRowGrid}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Style="{StaticResource EditorRowGridTitle}" Text="/admin"></TextBlock>
+                <CheckBox HorizontalAlignment="Right" Margin="0 0 10 0"
+                          Content="{DynamicResource server_editor_advantage_admin}"
+                          IsChecked="{Binding New.IsAdministrativePurposes}"></CheckBox>
+            </StackPanel>
+        </Grid>
+
+        <!-- 声音重定向 -->
+        <Grid Style="{StaticResource EditorRowGrid}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Style="{StaticResource EditorRowGridTitle}" Text="{DynamicResource server_editor_advantage_sounds}"></TextBlock>
+                <Grid Style="{StaticResource EditorRowGridInput}">
+                    <ComboBox SelectedIndex="{Binding New.AudioRedirectionMode}">
+                        <ComboBoxItem Content="{DynamicResource server_editor_advantage_sounds_on_local}" ToolTip="{DynamicResource server_editor_advantage_sounds_on_local}" />
+                        <ComboBoxItem Content="{DynamicResource server_editor_advantage_sounds_on_remote}" ToolTip="{DynamicResource server_editor_advantage_sounds_on_remote}" />
+                        <ComboBoxItem Content="{DynamicResource server_editor_advantage_sounds_disabled}" ToolTip="{DynamicResource server_editor_advantage_sounds_disabled}" />
+                        <ComboBoxItem Visibility="{Binding New.AudioRedirectionMode, Converter={StaticResource ConverterEqual2Visible}, ConverterParameter={x:Null}}" Content="{Binding New.ServerEditorDifferentOptions}" />
+                    </ComboBox>
+                </Grid>
+            </StackPanel>
+        </Grid>
+
+        <!-- 音频质量 -->
+        <Grid Style="{StaticResource EditorRowGrid}" Visibility="{Binding New.AudioRedirectionMode, Converter={StaticResource ConverterEqual2Visible}, ConverterParameter={x:Static protocol:EAudioRedirectionMode.RedirectToLocal}}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Style="{StaticResource EditorRowGridTitle}" Text="{DynamicResource server_editor_advantage_sound_quality}"></TextBlock>
+                <Grid Style="{StaticResource EditorRowGridInput}">
+                    <ComboBox SelectedIndex="{Binding New.AudioQualityMode}">
+                        <ComboBoxItem Content="{DynamicResource server_editor_advantage_sound_quality_dynamic}" ToolTip="{DynamicResource server_editor_advantage_sound_quality_dynamic}" />
+                        <ComboBoxItem Content="{DynamicResource server_editor_advantage_sound_quality_medium}" ToolTip="{DynamicResource server_editor_advantage_sound_quality_medium}" />
+                        <ComboBoxItem Content="{DynamicResource server_editor_advantage_sound_quality_high}" ToolTip="{DynamicResource server_editor_advantage_sound_quality_high}" />
+                        <ComboBoxItem Visibility="{Binding New.AudioQualityMode, Converter={StaticResource ConverterEqual2Visible}, ConverterParameter={x:Null}}" Content="{Binding New.ServerEditorDifferentOptions}" />
+                    </ComboBox>
+                </Grid>
+            </StackPanel>
+        </Grid>
+
+        <!-- 资源重定向 -->
+        <Grid Style="{StaticResource EditorRowGrid}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Style="{StaticResource EditorRowGridTitle}" Text="{DynamicResource server_editor_advantage_resources}"></TextBlock>
+                <UniformGrid Columns="3" Rows="3" Width="500" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <UniformGrid.Resources>
+                        <Style TargetType="CheckBox" BasedOn="{StaticResource CheckBoxAccentStyle}">
+                            <Setter Property="Margin" Value="0 5"></Setter>
+                        </Style>
+                    </UniformGrid.Resources>
+                    <CheckBox Content="{DynamicResource server_editor_advantage_clipboard}" IsChecked="{Binding New.EnableClipboard}"></CheckBox>
+                    <CheckBox Content="{DynamicResource server_editor_advantage_key_combinations}" IsChecked="{Binding New.EnableKeyCombinations}"></CheckBox>
+                    <CheckBox Content="{DynamicResource server_editor_advantage_audio_capture}" IsChecked="{Binding New.EnableAudioCapture}"></CheckBox>
+                    <CheckBox Content="{DynamicResource server_editor_advantage_ports}" IsChecked="{Binding New.EnablePorts}"></CheckBox>
+                    <CheckBox Content="{DynamicResource server_editor_advantage_printers}" IsChecked="{Binding New.EnablePrinters}"></CheckBox>
+                    <CheckBox Content="{DynamicResource server_editor_advantage_smart_cards}" IsChecked="{Binding New.EnableSmartCardsAndWinHello}"></CheckBox>
+                    <CheckBox Content="{DynamicResource server_editor_advantage_disk_drives}" IsChecked="{Binding New.EnableDiskDrives}"></CheckBox>
+                    <CheckBox Content="{DynamicResource 'Drives plug in later'}" IsChecked="{Binding New.EnableRedirectDrivesPlugIn}"></CheckBox>
+                    <CheckBox Content="{DynamicResource Cameras}" IsChecked="{Binding New.EnableRedirectCameras}"></CheckBox>
+                </UniformGrid>
+            </StackPanel>
+        </Grid>
+    </StackPanel>
+</UserControl>

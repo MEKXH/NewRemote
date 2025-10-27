@@ -29,7 +29,7 @@ namespace _1RM.Model.Protocol
 
         public override double GetListOrder()
         {
-            return -1;
+            return 8;
         }
     }
 }

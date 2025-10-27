@@ -18,7 +18,6 @@ using _1RM.View.Settings.General;
 using _1RM.View.Utils;
 using System.Collections.Generic;
 using _1RM.Utils.PuTTY.Model;
-using _1RM.Utils.PuTTY.Model;
 using _1RM.Utils.Tracing;
 
 namespace _1RM
@@ -47,7 +46,7 @@ namespace _1RM
                         File.WriteAllText(txt, txt);
                         File.Delete(txt);
                     }
-                    catch (Exception e)
+                    catch
                     {
                         flag = false;
                     }

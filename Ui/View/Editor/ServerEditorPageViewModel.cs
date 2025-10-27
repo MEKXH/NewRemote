@@ -38,6 +38,14 @@ namespace _1RM.View.Editor
 
         private readonly GlobalData _globalData;
 
+        // 分类切换相关属性
+        private string _selectedCategory = "General";
+        public string SelectedCategory
+        {
+            get => _selectedCategory;
+            set => SetAndNotifyIfChanged(ref _selectedCategory, value);
+        }
+
         public bool IsBuckEdit => _serversInBuckEdit?.Count() > 1;
         private readonly ProtocolBase _orgServer; // to remember original protocol's options, for restore data when switching protocols
 
@@ -847,6 +855,21 @@ namespace _1RM.View.Editor
                         }
                     }
                 }, o => Server is ProtocolBaseWithAddressPort);
+            }
+        }
+
+        private RelayCommand? _cmdSelectCategory;
+        public RelayCommand CmdSelectCategory
+        {
+            get
+            {
+                return _cmdSelectCategory ??= new RelayCommand((category) =>
+                {
+                    if (category is string categoryName)
+                    {
+                        SelectedCategory = categoryName;
+                    }
+                });
             }
         }
     }

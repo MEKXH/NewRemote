@@ -161,9 +161,13 @@ namespace _1RM.View
                 {
                     //SimpleLogHelper.Debug($"Current FocusedElement is " + textBox.Name);
                 }
-                else if (e.Key == Key.Escape && vm.IsShownList == false)
+                else if (e.Key == Key.Escape)
                 {
-                    vm.ShowList(false);
+                    // ESC key should always return to main list
+                    if (!vm.IsShownList)
+                    {
+                        vm.ShowList(false);
+                    }
                 }
                 else if (e.Key != Key.LeftCtrl && e.Key != Key.RightCtrl && vm.IsShownList)
                 {

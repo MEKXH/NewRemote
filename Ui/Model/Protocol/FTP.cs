@@ -44,7 +44,7 @@ namespace _1RM.Model.Protocol
 
         public override double GetListOrder()
         {
-            return 6;
+            return 3;
         }
 
         public ITransmitter GeTransmitter()
