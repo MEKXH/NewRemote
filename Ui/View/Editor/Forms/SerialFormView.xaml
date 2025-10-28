@@ -8,296 +8,233 @@
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance forms:SerialFormViewModel}"
              d:DesignHeight="1450" d:DesignWidth="800">
-    <UserControl.Resources>
-        <!-- 统一的行头样式，与主页保持一致 -->
-        <Style TargetType="TextBlock" x:Key="ConnectionRowHeader" BasedOn="{StaticResource TextBlockBase}">
-            <Setter Property="Foreground" Value="{DynamicResource BackgroundTextBrush}"></Setter>
-            <Setter Property="MinWidth" Value="140"></Setter>
-            <Setter Property="VerticalAlignment" Value="Center"></Setter>
-            <Setter Property="HorizontalAlignment" Value="Left"></Setter>
-            <Setter Property="TextAlignment" Value="Right"></Setter>
-            <Setter Property="TextWrapping" Value="WrapWithOverflow"></Setter>
-            <Setter Property="FontSize" Value="13"></Setter>
-            <Setter Property="Margin">
-                <Setter.Value>
-                    <Thickness Right="24"></Thickness>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style TargetType="controls:GridWith4Columns">
-            <Setter Property="Height" Value="Auto"></Setter>
-            <Setter Property="MinHeight" Value="36"></Setter>
-            <Setter Property="Margin">
-                <Setter.Value>
-                    <Thickness Bottom="0" Top="12"></Thickness>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </UserControl.Resources>
     <StackPanel>
-        <!-- 紧凑型Serial连接设置卡片 -->
-        <Border Background="{DynamicResource BackgroundBrush}"
-                BorderBrush="{DynamicResource DefaultBorderBrush}"
-                BorderThickness="1"
-                CornerRadius="8"
-                Margin="0 0 0 12"
-                Padding="0">
-            <Border.Effect>
-                <DropShadowEffect Color="Black" Opacity="0.08" ShadowDepth="1" BlurRadius="4"/>
-            </Border.Effect>
-            <StackPanel Margin="0 0">
-                <!-- 紧凑型卡片标题 -->
-                <Border Background="{DynamicResource AccentMidBrush}"
-                        CornerRadius="8 8 0 0"
-                        Padding="16 10 16 10">
-                    <StackPanel Orientation="Horizontal">
-                        <Border Width="20" Height="20"
-                                Background="{DynamicResource AccentTextBrush}"
-                                CornerRadius="4"
-                                Margin="0 0 10 0">
-                            <Path Data="M8,2V4H16V2H8M18,6V20A2,2 0 0,1 16,22H8A2,2 0 0,1 6,20V6H8V20H16V6H18M14,8V12H10V8H14M10,14V18H14V14H10Z"
-                                  Fill="{DynamicResource AccentMidBrush}"
-                                  Stretch="Uniform"
-                                  Margin="5"/>
-                        </Border>
-                        <StackPanel VerticalAlignment="Center">
-                            <TextBlock Text="Serial连接设置"
-                                       FontSize="13"
-                                       FontWeight="SemiBold"
-                                       Foreground="{DynamicResource AccentTextBrush}"/>
-                            <TextBlock Text="串口参数配置"
-                                       FontSize="10"
-                                       Opacity="0.8"
-                                       Foreground="{DynamicResource AccentTextBrush}"
-                                       Margin="0 1 0 0"/>
-                        </StackPanel>
-                    </StackPanel>
-                </Border>
+        <!-- Serial连接设置 -->
+        <StackPanel>
+            <!-- 端口和波特率 -->
+            <Border Margin="0,0,0,12">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" MinWidth="120"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                <!-- Serial连接设置内容 -->
-                <Border Background="{DynamicResource BackgroundBrush}"
-                        CornerRadius="0 0 8 8"
-                        Padding="16 12 16 14">
-                    <StackPanel>
-                    <!-- 端口和波特率 -->
-                    <controls:GridWith4Columns>
-                        <TextBlock Grid.Column="0"
-                                   Text="Serial port"
-                                   Style="{StaticResource ConnectionRowHeader}"/>
-                        <Grid Grid.Column="1">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="100"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <controls:AutoCompleteComboBox Grid.Column="0"
-                                                           Text="{Binding New.SerialPort, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True, ValidatesOnNotifyDataErrors=True}"
-                                                           Tag="e.g. COM1"
-                                                           Selections="{Binding New.SerialPorts, Mode=OneTime}"
-                                                           Height="32"
-                                                           VerticalAlignment="Center">
-                                <controls:AutoCompleteComboBox.Style>
-                                    <Style TargetType="controls:AutoCompleteComboBox">
-                                        <Setter Property="BorderBrush" Value="{DynamicResource DefaultBorderBrush}"/>
-                                        <Setter Property="BorderThickness" Value="1"/>
-                                        <Setter Property="Background" Value="Transparent"/>
-                                        <Setter Property="Margin" Value="0 0 12 0"/>
-                                    </Style>
-                                </controls:AutoCompleteComboBox.Style>
-                            </controls:AutoCompleteComboBox>
+                    <TextBlock Grid.Column="0" Text="Serial port"
+                               VerticalAlignment="Center"
+                               FontSize="13" FontWeight="Medium"
+                               Foreground="{DynamicResource PrimaryTextBrush}"/>
 
-                            <TextBlock Grid.Column="1"
-                                       Text="Speed(bps)"
-                                       VerticalAlignment="Center"
-                                       Margin="0 0 12 0"
-                                       FontSize="13"
-                                       FontWeight="Medium"/>
-                            <controls:AutoCompleteComboBox Grid.Column="2"
-                                                           Text="{Binding New.BitRate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True, ValidatesOnNotifyDataErrors=True}"
-                                                           Tag="e.g. 9600"
-                                                           Selections="{Binding New.BitRates, Mode=OneTime}"
-                                                           MinWidth="120"
-                                                           HorizontalAlignment="Left"
-                                                           Height="32"
-                                                           VerticalAlignment="Center">
-                                <controls:AutoCompleteComboBox.Style>
-                                    <Style TargetType="controls:AutoCompleteComboBox">
-                                        <Setter Property="BorderBrush" Value="{DynamicResource DefaultBorderBrush}"/>
-                                        <Setter Property="BorderThickness" Value="1"/>
-                                        <Setter Property="Background" Value="Transparent"/>
-                                    </Style>
-                                </controls:AutoCompleteComboBox.Style>
-                            </controls:AutoCompleteComboBox>
-                        </Grid>
-                    </controls:GridWith4Columns>
-                    </StackPanel>
-                </Border>
-            </StackPanel>
-        </Border>
+                    <Grid Grid.Column="1" Margin="15,0,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <controls:AutoCompleteComboBox Grid.Column="0"
+                                                       Text="{Binding New.SerialPort, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True, ValidatesOnNotifyDataErrors=True}"
+                                                       Tag="e.g. COM1"
+                                                       Selections="{Binding New.SerialPorts, Mode=OneTime}"
+                                                       Height="28"
+                                                       VerticalAlignment="Center"
+                                                       Margin="0,0,12,0"
+                                                       FontSize="12"/>
 
-        <!-- 紧凑型Serial高级设置卡片 -->
-        <Border Background="{DynamicResource BackgroundBrush}"
-                BorderBrush="{DynamicResource DefaultBorderBrush}"
-                BorderThickness="1"
-                CornerRadius="8"
-                Margin="0 0 0 12"
-                Padding="0">
-            <Border.Effect>
-                <DropShadowEffect Color="Black" Opacity="0.08" ShadowDepth="1" BlurRadius="4"/>
-            </Border.Effect>
-            <StackPanel Margin="0 0">
-                <!-- 紧凑型卡片标题 -->
-                <Border Background="{DynamicResource AccentMidBrush}"
-                        CornerRadius="8 8 0 0"
-                        Padding="16 10 16 10">
-                    <StackPanel Orientation="Horizontal">
-                        <Border Width="20" Height="20"
-                                Background="{DynamicResource AccentTextBrush}"
-                                CornerRadius="4"
-                                Margin="0 0 10 0">
-                            <Path Data="M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M10,22C9.75,22 9.54,21.82 9.5,21.58L9.13,18.93C8.5,18.68 7.96,18.34 7.44,17.94L4.95,18.95C4.73,19.03 4.46,18.95 4.34,18.73L2.34,15.27C2.21,15.05 2.27,14.78 2.46,14.63L4.57,12.97L4.5,12L4.57,11L2.46,9.37C2.27,9.22 2.21,8.95 2.34,8.73L4.34,5.27C4.46,5.05 4.73,4.96 4.95,5.05L7.44,6.05C7.96,5.66 8.5,5.32 9.13,5.07L9.5,2.42C9.54,2.18 9.75,2 10,2H14C14.25,2 14.46,2.18 14.5,2.42L14.87,5.07C15.5,5.32 16.04,5.66 16.56,6.05L19.05,5.05C19.27,4.96 19.54,5.05 19.66,5.27L21.66,8.73C21.79,8.95 21.73,9.22 21.54,9.37L19.43,11L19.5,12L19.43,13L21.54,14.63C21.73,14.78 21.79,15.05 21.66,15.27L19.66,18.73C19.54,18.95 19.27,19.04 19.05,18.95L16.56,17.95C16.04,18.34 15.5,18.68 14.87,18.93L14.5,21.58C14.46,21.82 14.25,22 14,22H10M11.25,4L10.88,6.61C9.68,6.86 8.62,7.5 7.85,8.39L5.44,7.35L4.69,8.65L6.8,10.2C6.4,11.37 6.4,12.64 6.8,13.8L4.68,15.36L5.43,16.66L7.86,15.62C8.63,16.5 9.68,17.14 10.87,18.38L11.24,22H12.76L13.13,18.39C14.32,17.14 15.37,16.5 16.14,15.62L18.57,16.66L19.32,15.36L17.2,13.81C17.6,12.64 17.6,11.37 17.2,10.2L19.31,8.65L18.56,7.35L16.15,8.39C15.38,7.5 14.32,6.86 13.12,6.62L12.75,4H11.25Z"
-                                  Fill="{DynamicResource AccentMidBrush}"
-                                  Stretch="Uniform"
-                                  Margin="5"/>
-                        </Border>
-                        <StackPanel VerticalAlignment="Center">
-                            <TextBlock Text="Serial高级设置"
-                                       FontSize="13"
-                                       FontWeight="SemiBold"
-                                       Foreground="{DynamicResource AccentTextBrush}"/>
-                            <TextBlock Text="高级参数配置"
-                                       FontSize="10"
-                                       Opacity="0.8"
-                                       Foreground="{DynamicResource AccentTextBrush}"
-                                       Margin="0 1 0 0"/>
-                        </StackPanel>
-                    </StackPanel>
-                </Border>
+                        <TextBlock Grid.Column="1"
+                                   Text="Speed(bps)"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,12,0"
+                                   FontSize="13"
+                                   FontWeight="Medium"/>
+                        <controls:AutoCompleteComboBox Grid.Column="2"
+                                                       Text="{Binding New.BitRate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True, ValidatesOnNotifyDataErrors=True}"
+                                                       Tag="e.g. 9600"
+                                                       Selections="{Binding New.BitRates, Mode=OneTime}"
+                                                       MinWidth="120"
+                                                       HorizontalAlignment="Left"
+                                                       Height="28"
+                                                       VerticalAlignment="Center"
+                                                       FontSize="12"/>
+                    </Grid>
+                </Grid>
+            </Border>
 
-                <!-- Serial高级设置内容 -->
-                <Border Background="{DynamicResource BackgroundBrush}"
-                        CornerRadius="0 0 8 8"
-                        Padding="16 12 16 14">
-                    <StackPanel>
-                    <!-- 数据位 -->
-                    <controls:GridWith4Columns>
-                        <TextBlock Grid.Column="0"
-                                   Text="Data bits"
-                                   Style="{StaticResource ConnectionRowHeader}"/>
-                        <ComboBox Grid.Column="1"
-                                  SelectedItem="{Binding New.DataBits}"
-                                  ItemsSource="{Binding New.DataBitsCollection}"
-                                  Height="32"
-                                  VerticalAlignment="Center">
-                            <ComboBox.Style>
-                                <Style TargetType="ComboBox">
-                                    <Setter Property="BorderBrush" Value="{DynamicResource DefaultBorderBrush}"/>
+            <!-- Separator -->
+            <Border Height="1" Background="{DynamicResource PrimaryMidBrush}" Opacity="0.3" Margin="0,0,0,12"/>
+        </StackPanel>
+
+        <!-- Serial高级设置 -->
+        <StackPanel>
+            <!-- 数据位 -->
+            <Border Margin="0,0,0,12">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" MinWidth="120"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="Data bits"
+                               VerticalAlignment="Center"
+                               FontSize="13" FontWeight="Medium"
+                               Foreground="{DynamicResource PrimaryTextBrush}"/>
+
+                    <ComboBox Grid.Column="1"
+                              SelectedItem="{Binding New.DataBits}"
+                              ItemsSource="{Binding New.DataBitsCollection}"
+                              Height="28"
+                              VerticalAlignment="Center"
+                              Margin="15,0,0,0">
+                        <ComboBox.Style>
+                            <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+                                <Setter Property="BorderBrush" Value="{DynamicResource PrimaryMidBrush}"/>
+                                <Setter Property="BorderThickness" Value="1"/>
+                                <Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
+                                <Setter Property="FontSize" Value="12"/>
+                            </Style>
+                        </ComboBox.Style>
+                    </ComboBox>
+                </Grid>
+            </Border>
+
+            <!-- 停止位 -->
+            <Border Margin="0,0,0,12">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" MinWidth="120"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="Stop bits"
+                               VerticalAlignment="Center"
+                               FontSize="13" FontWeight="Medium"
+                               Foreground="{DynamicResource PrimaryTextBrush}"/>
+
+                    <ComboBox Grid.Column="1"
+                              SelectedItem="{Binding New.StopBits}"
+                              ItemsSource="{Binding New.StopBitsCollection}"
+                              Height="28"
+                              VerticalAlignment="Center"
+                              Margin="15,0,0,0">
+                        <ComboBox.Style>
+                            <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+                                <Setter Property="BorderBrush" Value="{DynamicResource PrimaryMidBrush}"/>
+                                <Setter Property="BorderThickness" Value="1"/>
+                                <Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
+                                <Setter Property="FontSize" Value="12"/>
+                            </Style>
+                        </ComboBox.Style>
+                    </ComboBox>
+                </Grid>
+            </Border>
+
+            <!-- 校验位 -->
+            <Border Margin="0,0,0,12">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" MinWidth="120"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="Parity"
+                               VerticalAlignment="Center"
+                               FontSize="13" FontWeight="Medium"
+                               Foreground="{DynamicResource PrimaryTextBrush}"/>
+
+                    <ComboBox Grid.Column="1"
+                              SelectedItem="{Binding New.Parity}"
+                              ItemsSource="{Binding New.ParityCollection}"
+                              Height="28"
+                              VerticalAlignment="Center"
+                              Margin="15,0,0,0">
+                        <ComboBox.Style>
+                            <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+                                <Setter Property="BorderBrush" Value="{DynamicResource PrimaryMidBrush}"/>
+                                <Setter Property="BorderThickness" Value="1"/>
+                                <Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
+                                <Setter Property="FontSize" Value="12"/>
+                            </Style>
+                        </ComboBox.Style>
+                    </ComboBox>
+                </Grid>
+            </Border>
+
+            <!-- 流控制 -->
+            <Border Margin="0,0,0,12">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" MinWidth="120"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="Flow control"
+                               VerticalAlignment="Center"
+                               FontSize="13" FontWeight="Medium"
+                               Foreground="{DynamicResource PrimaryTextBrush}"/>
+
+                    <ComboBox Grid.Column="1"
+                              SelectedItem="{Binding New.FlowControl}"
+                              ItemsSource="{Binding New.FlowControlCollection}"
+                              Height="28"
+                              VerticalAlignment="Center"
+                              Margin="15,0,0,0">
+                        <ComboBox.Style>
+                            <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+                                <Setter Property="BorderBrush" Value="{DynamicResource PrimaryMidBrush}"/>
+                                <Setter Property="BorderThickness" Value="1"/>
+                                <Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
+                                <Setter Property="FontSize" Value="12"/>
+                            </Style>
+                        </ComboBox.Style>
+                    </ComboBox>
+                </Grid>
+            </Border>
+
+            <!-- KiTTY会话 -->
+            <Border Margin="0,0,0,12">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" MinWidth="120"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="KiTTY Session"
+                               VerticalAlignment="Center"
+                               FontSize="13" FontWeight="Medium"
+                               Foreground="{DynamicResource PrimaryTextBrush}"/>
+
+                    <Grid Grid.Column="1" Margin="15,0,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0"
+                                 Text="{Binding New.ExternalKittySessionConfigPath, UpdateSourceTrigger=PropertyChanged}"
+                                 ToolTip="{DynamicResource server_editor_advantage_ssh_startup_auto_kitty_session_tip}"
+                                 Tag="{DynamicResource server_editor_advantage_ssh_startup_auto_kitty_session_tip}"
+                                 Height="28"
+                                 VerticalAlignment="Center"
+                                 Margin="0,0,8,0">
+                            <TextBox.Style>
+                                <Style TargetType="TextBox">
+                                    <Setter Property="BorderBrush" Value="{DynamicResource PrimaryMidBrush}"/>
                                     <Setter Property="BorderThickness" Value="1"/>
-                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
+                                    <Setter Property="FontSize" Value="12"/>
                                 </Style>
-                            </ComboBox.Style>
-                        </ComboBox>
-                    </controls:GridWith4Columns>
+                            </TextBox.Style>
+                        </TextBox>
+                        <Button Grid.Column="1"
+                                VerticalAlignment="Center"
+                                Height="28"
+                                Padding="16,4"
+                                Style="{StaticResource ButtonPrimaryStyle}"
+                                Content="{DynamicResource Select}"
+                                Click="ButtonSelectSessionConfigFile_OnClick"/>
+                    </Grid>
+                </Grid>
+            </Border>
 
-                    <!-- 停止位 -->
-                    <controls:GridWith4Columns>
-                        <TextBlock Grid.Column="0"
-                                   Text="Stop bits"
-                                   Style="{StaticResource ConnectionRowHeader}"/>
-                        <ComboBox Grid.Column="1"
-                                  SelectedItem="{Binding New.StopBits}"
-                                  ItemsSource="{Binding New.StopBitsCollection}"
-                                  Height="32"
-                                  VerticalAlignment="Center">
-                            <ComboBox.Style>
-                                <Style TargetType="ComboBox">
-                                    <Setter Property="BorderBrush" Value="{DynamicResource DefaultBorderBrush}"/>
-                                    <Setter Property="BorderThickness" Value="1"/>
-                                    <Setter Property="Background" Value="Transparent"/>
-                                </Style>
-                            </ComboBox.Style>
-                        </ComboBox>
-                    </controls:GridWith4Columns>
-
-                    <!-- 校验位 -->
-                    <controls:GridWith4Columns>
-                        <TextBlock Grid.Column="0"
-                                   Text="Parity"
-                                   Style="{StaticResource ConnectionRowHeader}"/>
-                        <ComboBox Grid.Column="1"
-                                  SelectedItem="{Binding New.Parity}"
-                                  ItemsSource="{Binding New.ParityCollection}"
-                                  Height="32"
-                                  VerticalAlignment="Center">
-                            <ComboBox.Style>
-                                <Style TargetType="ComboBox">
-                                    <Setter Property="BorderBrush" Value="{DynamicResource DefaultBorderBrush}"/>
-                                    <Setter Property="BorderThickness" Value="1"/>
-                                    <Setter Property="Background" Value="Transparent"/>
-                                </Style>
-                            </ComboBox.Style>
-                        </ComboBox>
-                    </controls:GridWith4Columns>
-
-                    <!-- 流控制 -->
-                    <controls:GridWith4Columns>
-                        <TextBlock Grid.Column="0"
-                                   Text="Flow control"
-                                   Style="{StaticResource ConnectionRowHeader}"/>
-                        <ComboBox Grid.Column="1"
-                                  SelectedItem="{Binding New.FlowControl}"
-                                  ItemsSource="{Binding New.FlowControlCollection}"
-                                  Height="32"
-                                  VerticalAlignment="Center">
-                            <ComboBox.Style>
-                                <Style TargetType="ComboBox">
-                                    <Setter Property="BorderBrush" Value="{DynamicResource DefaultBorderBrush}"/>
-                                    <Setter Property="BorderThickness" Value="1"/>
-                                    <Setter Property="Background" Value="Transparent"/>
-                                </Style>
-                            </ComboBox.Style>
-                        </ComboBox>
-                    </controls:GridWith4Columns>
-
-                    <!-- KiTTY会话 -->
-                    <controls:GridWith4Columns>
-                        <TextBlock Grid.Column="0"
-                                   Text="KiTTY Session"
-                                   Style="{StaticResource ConnectionRowHeader}"/>
-                        <Grid Grid.Column="1">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBox Grid.Column="0"
-                                     Text="{Binding New.ExternalKittySessionConfigPath, UpdateSourceTrigger=PropertyChanged}"
-                                     ToolTip="{DynamicResource server_editor_advantage_ssh_startup_auto_kitty_session_tip}"
-                                     Tag="{DynamicResource server_editor_advantage_ssh_startup_auto_kitty_session_tip}"
-                                     Height="32"
-                                     Padding="8 6"
-                                     VerticalAlignment="Center"
-                                     Margin="0 0 8 0">
-                                <TextBox.Style>
-                                    <Style TargetType="TextBox">
-                                        <Setter Property="BorderBrush" Value="{DynamicResource DefaultBorderBrush}"/>
-                                        <Setter Property="BorderThickness" Value="1"/>
-                                        <Setter Property="Background" Value="Transparent"/>
-                                    </Style>
-                                </TextBox.Style>
-                            </TextBox>
-                            <Button Grid.Column="1"
-                                    VerticalAlignment="Center"
-                                    Height="32"
-                                    Padding="16 8"
-                                    Style="{StaticResource ButtonPrimaryStyle}"
-                                    Content="{DynamicResource Select}"
-                                    Click="ButtonSelectSessionConfigFile_OnClick"/>
-                        </Grid>
-                    </controls:GridWith4Columns>
-                    </StackPanel>
-                </Border>
-            </StackPanel>
-        </Border>
+            <!-- Separator -->
+            <Border Height="1" Background="{DynamicResource PrimaryMidBrush}" Opacity="0.3" Margin="0,0,0,12"/>
+        </StackPanel>
     </StackPanel>
 </UserControl>

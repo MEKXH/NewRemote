@@ -160,20 +160,20 @@ namespace _1RM.Service
 
     public class ThemeConfig
     {
-        public string ThemeName = "Dark";
+        public string ThemeName = "Dracula";
 
-        public string PrimaryMidColor = "#323233";
-        public string PrimaryLightColor = "#474748";
-        public string PrimaryDarkColor = "#2d2d2d";
-        public string PrimaryTextColor = "#cccccc";
+        public string PrimaryMidColor = "#282a36";
+        public string PrimaryLightColor = "#44475a";
+        public string PrimaryDarkColor = "#21222c";
+        public string PrimaryTextColor = "#f8f8f2";
 
-        public string AccentMidColor = "#FF007ACC";
-        public string AccentLightColor = "#FF32A7F4";
-        public string AccentDarkColor = "#FF0061A3";
-        public string AccentTextColor = "#FFFFFFFF";
+        public string AccentMidColor = "#bd93f9";
+        public string AccentLightColor = "#d6acff";
+        public string AccentDarkColor = "#9f7aea";
+        public string AccentTextColor = "#ffffff";
 
-        public string BackgroundColor = "#1e1e1e";
-        public string BackgroundTextColor = "#cccccc";
+        public string BackgroundColor = "#1e1f29";
+        public string BackgroundTextColor = "#f8f8f2";
 
         public string FontFamily = "Microsoft YaHei";
         public int FontSize = 12;
@@ -222,7 +222,7 @@ namespace _1RM.Service
         private void RegulateTheme()
         {
             if (string.IsNullOrEmpty(Theme.ThemeName))
-                Theme.ThemeName = "Dark";
+                Theme.ThemeName = "Dracula";
 
             if (Theme.FontSize < 10)
                 Theme.FontSize = 10;

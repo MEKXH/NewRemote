@@ -10,29 +10,30 @@
              d:DataContext="{d:DesignInstance forms:SshFormViewModel}"
              d:DesignHeight="1450" d:DesignWidth="800">
     <UserControl.Resources>
-        <!-- 统一的行头样式，与设置页保持一致 -->
-        <Style TargetType="TextBlock" x:Key="RowHeader">
-            <Setter Property="FontSize" Value="13"/>
-            <Setter Property="FontWeight" Value="Medium"/>
-            <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
+        <!-- 统一的行头样式，与主页保持一致 -->
+        <Style TargetType="TextBlock" x:Key="ConnectionRowHeader" BasedOn="{StaticResource TextBlockBase}">
+            <Setter Property="Foreground" Value="{DynamicResource BackgroundTextBrush}"></Setter>
+            <Setter Property="MinWidth" Value="140"></Setter>
+            <Setter Property="VerticalAlignment" Value="Center"></Setter>
+            <Setter Property="HorizontalAlignment" Value="Left"></Setter>
+            <Setter Property="TextAlignment" Value="Right"></Setter>
+            <Setter Property="TextWrapping" Value="WrapWithOverflow"></Setter>
+            <Setter Property="FontSize" Value="13"></Setter>
+            <Setter Property="Margin">
+                <Setter.Value>
+                    <Thickness Right="24"></Thickness>
+                </Setter.Value>
+            </Setter>
         </Style>
 
-        <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
-            <Setter Property="Height" Value="28"/>
-            <Setter Property="Padding" Value="6 4"/>
-            <Setter Property="FontSize" Value="12"/>
-        </Style>
-
-        <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"/>
-        </Style>
-
-        <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
-            <Setter Property="Height" Value="28"/>
-            <Setter Property="Padding" Value="6 4"/>
-            <Setter Property="FontSize" Value="12"/>
+        <Style TargetType="controls:GridWith4Columns">
+            <Setter Property="Height" Value="Auto"></Setter>
+            <Setter Property="MinHeight" Value="36"></Setter>
+            <Setter Property="Margin">
+                <Setter.Value>
+                    <Thickness Bottom="0" Top="12"></Thickness>
+                </Setter.Value>
+            </Setter>
         </Style>
     </UserControl.Resources>
 
@@ -40,236 +41,199 @@
         <!-- 连接信息卡片 (现在包含在HostView中) -->
         <ContentControl s:View.Model="{Binding HostViewModel}"></ContentControl>
 
-        <!-- SSH认证设置卡片 -->
-        <Border Background="{DynamicResource BackgroundBrush}"
-                BorderBrush="{DynamicResource DefaultBorderBrush}"
-                BorderThickness="1"
-                CornerRadius="8"
-                Margin="0 0 0 12"
-                Padding="0">
-            <Border.Effect>
-                <DropShadowEffect Color="Black" Opacity="0.08" ShadowDepth="1" BlurRadius="4"/>
-            </Border.Effect>
-            <StackPanel Margin="0 0">
-                <!-- 紧凑型卡片标题 -->
-                <Border Background="{DynamicResource AccentMidBrush}"
-                        CornerRadius="8 8 0 0"
-                        Padding="16 10 16 10">
-                    <StackPanel Orientation="Horizontal">
-                        <Border Width="20" Height="20"
-                                Background="{DynamicResource AccentTextBrush}"
-                                CornerRadius="4"
-                                Margin="0 0 10 0">
-                            <Path Data="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"
-                                  Fill="{DynamicResource AccentMidBrush}"
-                                  Stretch="Uniform"
-                                  Margin="5"/>
-                        </Border>
-                        <StackPanel VerticalAlignment="Center">
-                            <TextBlock Text="SSH认证设置"
-                                       FontSize="13"
-                                       FontWeight="SemiBold"
-                                       Foreground="{DynamicResource AccentTextBrush}"/>
-                            <TextBlock Text="密码或私钥认证方式"
-                                       FontSize="10"
-                                       Opacity="0.8"
-                                       Foreground="{DynamicResource AccentTextBrush}"
-                                       Margin="0 1 0 0"/>
-                        </StackPanel>
-                    </StackPanel>
-                </Border>
+        <!-- SSH认证设置 -->
+        <StackPanel>
+            <!-- 认证方式选择 -->
+            <Border Margin="0,0,0,12">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" MinWidth="120"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                <!-- SSH认证设置内容 -->
-                <Border Background="{DynamicResource BackgroundBrush}"
-                        CornerRadius="0 0 8 8"
-                        Padding="16 12 16 14">
-                    <StackPanel>
-                        <!-- 使用私钥选项 -->
-                        <Border Margin="0 0 0 12">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" MinWidth="120"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <CheckBox Grid.Column="1"
-                                          Name="CbUsePrivateKey"
-                                          IsChecked="{Binding New.UsePrivateKeyForConnect}"
-                                          Content="{DynamicResource 'Use private key'}"
-                                          Checked="CbUsePrivateKey_OnChecked"
-                                          Unchecked="CbUsePrivateKey_OnChecked"
-                                          VerticalAlignment="Center"/>
-                            </Grid>
-                        </Border>
+                    <TextBlock Grid.Column="0" Text="认证方式"
+                               VerticalAlignment="Center"
+                               FontSize="13" FontWeight="Medium"
+                               Foreground="{DynamicResource PrimaryTextBrush}"/>
 
-                        <!-- 密码输入区域 -->
-                        <Border Name="GridPwd" Margin="0 0 0 12">
-                            <Border.Style>
-                                <Style TargetType="Border">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding ElementName=CbUsePrivateKey,Path= IsChecked}" Value="True">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
+                    <CheckBox Grid.Column="1"
+                              Name="CbUsePrivateKey"
+                              IsChecked="{Binding New.UsePrivateKeyForConnect}"
+                              Content="{DynamicResource 'Use private key'}"
+                              Checked="CbUsePrivateKey_OnChecked"
+                              Unchecked="CbUsePrivateKey_OnChecked"
+                              VerticalAlignment="Center"
+                              FontSize="12"
+                              Margin="15,0,0,0">
+                        <CheckBox.Style>
+                            <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
+                                <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"/>
+                            </Style>
+                        </CheckBox.Style>
+                    </CheckBox>
+                </Grid>
+            </Border>
+
+            <!-- 密码输入区域 -->
+            <Border Name="GridPwd" Margin="0,0,0,12">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=CbUsePrivateKey,Path= IsChecked}" Value="True">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" MinWidth="120"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="{DynamicResource Password}"
+                               VerticalAlignment="Center"
+                               FontSize="13" FontWeight="Medium"
+                               Foreground="{DynamicResource PrimaryTextBrush}"/>
+
+                    <controls:PasswordInput Grid.Column="1"
+                                           Password="{Binding New.Password, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True, ValidatesOnNotifyDataErrors=True}"
+                                           Height="28"
+                                           Margin="15,0,0,0"/>
+                </Grid>
+            </Border>
+
+            <!-- 私钥设置区域 -->
+            <Border Name="GridPrivateKey" Margin="0,0,0,12">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=CbUsePrivateKey,Path= IsChecked}" Value="False">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" MinWidth="120"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="{DynamicResource 'Private key'}"
+                               VerticalAlignment="Center"
+                               FontSize="13" FontWeight="Medium"
+                               Foreground="{DynamicResource PrimaryTextBrush}"/>
+
+                    <Grid Grid.Column="1" Margin="15,0,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0"
+                                 Name="TbPrivateKey"
+                                 Text="{Binding New.PrivateKey}"
+                                 Height="28"
+                                 VerticalAlignment="Center"
+                                 Margin="0,0,8,0">
+                            <TextBox.Style>
+                                <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+                                    <Setter Property="BorderBrush" Value="{DynamicResource PrimaryMidBrush}"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
+                                    <Setter Property="FontSize" Value="12"/>
                                 </Style>
-                            </Border.Style>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" MinWidth="120"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="{DynamicResource Password}" Style="{StaticResource RowHeader}"/>
-                                <controls:PasswordInput Grid.Column="1"
-                                                       Password="{Binding New.Password, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True, ValidatesOnNotifyDataErrors=True}"
-                                                       Height="28"/>
-                            </Grid>
-                        </Border>
+                            </TextBox.Style>
+                        </TextBox>
+                        <Button Grid.Column="1"
+                                VerticalAlignment="Center"
+                                Height="28"
+                                Padding="16,4"
+                                Style="{StaticResource ButtonPrimaryStyle}"
+                                Content="{DynamicResource Select}"
+                                Click="ButtonOpenPrivateKey_OnClick"/>
+                    </Grid>
+                </Grid>
+            </Border>
 
-                        <!-- 私钥设置区域 -->
-                        <Border Name="GridPrivateKey" Margin="0 0 0 12">
-                            <Border.Style>
-                                <Style TargetType="Border">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding ElementName=CbUsePrivateKey,Path= IsChecked}" Value="False">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Border.Style>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" MinWidth="120"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="{DynamicResource 'Private key'}" Style="{StaticResource RowHeader}"/>
-                                <TextBox Grid.Column="1"
-                                         Name="TbPrivateKey"
-                                         Text="{Binding New.PrivateKey}"
-                                         Height="28"
-                                         Padding="6 4"
-                                         VerticalAlignment="Center"
-                                         Margin="0 0 12 0"/>
-                                <Button Grid.Column="2"
-                                        Content="{DynamicResource Select}"
-                                        Click="ButtonOpenPrivateKey_OnClick"
-                                        Style="{StaticResource ButtonPrimaryStyle}"
-                                        Height="28"
-                                        Padding="16 4"
-                                        VerticalAlignment="Center"/>
-                            </Grid>
-                        </Border>
+            <!-- 连接时询问密码 -->
+            <Border Margin="0,0,0,12">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" MinWidth="120"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                        <!-- 私钥格式提示 -->
-                        <Border Background="{DynamicResource AccentLightBrush}"
-                                CornerRadius="4"
-                                Padding="12 8"
-                                Margin="0 0 0 12">
-                            <StackPanel>
-                                <TextBlock FontSize="11" Opacity="0.9" Foreground="{DynamicResource BackgroundTextBrush}"
-                                           Margin="0 0 0 4">
-                                    <Run Text="• "/>
-                                    <Run Text="{DynamicResource 'Internal SSH client: OpenSSH format key only'}"/>
-                                </TextBlock>
-                                <TextBlock FontSize="11" Opacity="0.9" Foreground="{DynamicResource BackgroundTextBrush}">
-                                    <Run Text="• "/>
-                                    <Run Text="{DynamicResource 'PuTTY/WinSCP: OpenSSH and PuTTY formats supported'}"/>
-                                </TextBlock>
-                            </StackPanel>
-                        </Border>
+                    <TextBlock Grid.Column="0" Text=""
+                               VerticalAlignment="Center"
+                               FontSize="13" FontWeight="Medium"
+                               Foreground="{DynamicResource PrimaryTextBrush}"/>
 
-                        <!-- 连接时询问密码 -->
-                        <Border>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" MinWidth="120"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <CheckBox Grid.Column="1"
-                                          Content="{DynamicResource 'Ask for password when open connect'}"
-                                          IsChecked="{Binding New.AskPasswordWhenConnect}"
-                                          VerticalAlignment="Center"/>
-                            </Grid>
-                        </Border>
-                    </StackPanel>
-                </Border>
-            </StackPanel>
-        </Border>
+                    <CheckBox Grid.Column="1"
+                              Content="{DynamicResource 'Ask for password when open connect'}"
+                              IsChecked="{Binding New.AskPasswordWhenConnect}"
+                              VerticalAlignment="Center"
+                              FontSize="12"
+                              Margin="15,0,0,0">
+                        <CheckBox.Style>
+                            <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
+                                <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"/>
+                            </Style>
+                        </CheckBox.Style>
+                    </CheckBox>
+                </Grid>
+            </Border>
 
-        <!-- SSH启动设置卡片 -->
-        <Border Background="{DynamicResource BackgroundBrush}"
-                BorderBrush="{DynamicResource DefaultBorderBrush}"
-                BorderThickness="1"
-                CornerRadius="8"
-                Margin="0 0 0 12"
-                Padding="0"
-                Visibility="{Binding New.SelectedRunnerIsInternalRunner, Converter={StaticResource ConverterBool2Visible}}">
-            <Border.Effect>
-                <DropShadowEffect Color="Black" Opacity="0.08" ShadowDepth="1" BlurRadius="4"/>
-            </Border.Effect>
-            <StackPanel Margin="0 0">
-                <!-- 紧凑型卡片标题 -->
-                <Border Background="{DynamicResource AccentMidBrush}"
-                        CornerRadius="8 8 0 0"
-                        Padding="16 10 16 10">
-                    <StackPanel Orientation="Horizontal">
-                        <Border Width="20" Height="20"
-                                Background="{DynamicResource AccentTextBrush}"
-                                CornerRadius="4"
-                                Margin="0 0 10 0">
-                            <Path Data="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"
-                                  Fill="{DynamicResource AccentMidBrush}"
-                                  Stretch="Uniform"
-                                  Margin="5"/>
-                        </Border>
-                        <StackPanel VerticalAlignment="Center">
-                            <TextBlock Text="启动路径设置"
-                                       FontSize="13"
-                                       FontWeight="SemiBold"
-                                       Foreground="{DynamicResource AccentTextBrush}"/>
-                            <TextBlock Text="连接后自动进入的目录"
-                                       FontSize="10"
-                                       Opacity="0.8"
-                                       Foreground="{DynamicResource AccentTextBrush}"
-                                       Margin="0 1 0 0"/>
-                        </StackPanel>
-                    </StackPanel>
-                </Border>
+            <!-- Separator -->
+            <Border Height="1" Background="{DynamicResource PrimaryMidBrush}" Opacity="0.3" Margin="0,0,0,12"/>
+        </StackPanel>
 
-                <!-- 启动路径设置内容 -->
-                <Border Background="{DynamicResource BackgroundBrush}"
-                        CornerRadius="0 0 8 8"
-                        Padding="16 12 16 14">
+            <!-- SSH启动设置 -->
+            <StackPanel Visibility="{Binding New.SelectedRunnerIsInternalRunner, Converter={StaticResource ConverterBool2Visible}}">
+                <!-- 启动路径设置 -->
+                <Border Margin="0,0,0,12">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" MinWidth="120"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0"
-                                   Text="{DynamicResource server_editor_advantage_sftp_startup_path}"
-                                   Style="{StaticResource RowHeader}"/>
+
+                        <TextBlock Grid.Column="0" Text="{DynamicResource server_editor_advantage_sftp_startup_path}"
+                                   VerticalAlignment="Center"
+                                   FontSize="13" FontWeight="Medium"
+                                   Foreground="{DynamicResource PrimaryTextBrush}"/>
+
                         <TextBox Grid.Column="1"
                                  Text="{Binding New.StartupPath, UpdateSourceTrigger=PropertyChanged}"
                                  Tag="e.g. /home/user/Desktop"
                                  Height="28"
-                                 Padding="6 4"
-                                 VerticalAlignment="Center"/>
+                                 VerticalAlignment="Center"
+                                 Margin="15,0,0,0">
+                            <TextBox.Style>
+                                <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+                                    <Setter Property="BorderBrush" Value="{DynamicResource PrimaryMidBrush}"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
+                                    <Setter Property="FontSize" Value="12"/>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
                     </Grid>
                 </Border>
             </StackPanel>
-        </Border>
 
-        <!-- 备选认证卡片 -->
-        <ContentControl s:View.Model="{Binding AlternativeCredentialListViewModel}">
-            <ContentControl.Style>
-                <Style TargetType="ContentControl">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding AlternativeCredentialListViewModel.Credentials.Count}" Value="0">
-                            <Setter Property="Visibility" Value="Collapsed"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ContentControl.Style>
-        </ContentControl>
+            <!-- 备选认证 -->
+            <ContentControl s:View.Model="{Binding AlternativeCredentialListViewModel}">
+                <ContentControl.Style>
+                    <Style TargetType="ContentControl">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding AlternativeCredentialListViewModel.Credentials.Count}" Value="0">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+            </ContentControl>
 
-    </StackPanel>
+        </StackPanel>
 </UserControl>

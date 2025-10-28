@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="_1RM.View.Editor.Forms.VncFormView"
+<UserControl x:Class="_1RM.View.Editor.Forms.VncFormView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -14,86 +14,37 @@
     <UserControl.Resources>
         <!-- VNC Window Resize Mode Converter -->
         <local:ConverterEVncWindowResizeMode x:Key="ConverterEVncWindowResizeMode" />
-
-        <!-- 统一的行头样式，与主页保持一致 -->
-        <Style TargetType="TextBlock" x:Key="ConnectionRowHeader" BasedOn="{StaticResource TextBlockBase}">
-            <Setter Property="Foreground" Value="{DynamicResource BackgroundTextBrush}"></Setter>
-            <Setter Property="MinWidth" Value="140"></Setter>
-            <Setter Property="VerticalAlignment" Value="Center"></Setter>
-            <Setter Property="HorizontalAlignment" Value="Left"></Setter>
-            <Setter Property="TextAlignment" Value="Right"></Setter>
-            <Setter Property="TextWrapping" Value="WrapWithOverflow"></Setter>
-            <Setter Property="FontSize" Value="13"></Setter>
-            <Setter Property="Margin">
-                <Setter.Value>
-                    <Thickness Right="24"></Thickness>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style TargetType="controls1:GridWith4Columns">
-            <Setter Property="Height" Value="Auto"></Setter>
-            <Setter Property="MinHeight" Value="36"></Setter>
-            <Setter Property="Margin">
-                <Setter.Value>
-                    <Thickness Bottom="0" Top="12"></Thickness>
-                </Setter.Value>
-            </Setter>
-        </Style>
     </UserControl.Resources>
     <StackPanel>
         <!-- 连接信息卡片 (现在包含在HostView中) -->
         <ContentControl s:View.Model="{Binding HostViewModel}"></ContentControl>
 
-        <!-- 紧凑型认证信息卡片 -->
-        <Border Background="{DynamicResource BackgroundBrush}"
-                BorderBrush="{DynamicResource DefaultBorderBrush}"
-                BorderThickness="1"
-                CornerRadius="8"
-                Margin="0 0 0 12"
-                Padding="0">
-            <Border.Effect>
-                <DropShadowEffect Color="Black" Opacity="0.08" ShadowDepth="1" BlurRadius="4"/>
-            </Border.Effect>
-            <StackPanel Margin="0 0">
-                <!-- 紧凑型卡片标题 -->
-                <Border Background="{DynamicResource AccentMidBrush}"
-                        CornerRadius="8 8 0 0"
-                        Padding="16 10 16 10">
-                    <StackPanel Orientation="Horizontal">
-                        <Border Width="20" Height="20"
-                                Background="{DynamicResource AccentTextBrush}"
-                                CornerRadius="4"
-                                Margin="0 0 10 0">
-                            <Path Data="M12,17C10.9,17 10,16.1 10,15C10,13.9 10.9,13 12,13C13.1,13 14,13.9 14,15C14,16.1 13.1,17 12,17M12,20C7.6,20 4,16.4 4,12C4,7.6 7.6,4 12,4C16.4,4 20,7.6 20,12C20,16.4 16.4,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M9,12A6,6 0 0,1 15,6A6,6 0 0,1 21,12A6,6 0 0,1 15,18A6,6 0 0,1 9,12Z"
-                                  Fill="{DynamicResource AccentMidBrush}"
-                                  Stretch="Uniform"
-                                  Margin="5"/>
-                        </Border>
-                        <StackPanel VerticalAlignment="Center">
-                            <TextBlock Text="认证信息"
-                                       FontSize="13"
-                                       FontWeight="SemiBold"
-                                       Foreground="{DynamicResource AccentTextBrush}"/>
-                            <TextBlock Text="VNC密码验证"
-                                       FontSize="10"
-                                       Opacity="0.8"
-                                       Foreground="{DynamicResource AccentTextBrush}"
-                                       Margin="0 1 0 0"/>
-                        </StackPanel>
-                    </StackPanel>
-                </Border>
+        <!-- VNC认证设置 -->
+        <StackPanel>
+            <!-- 认证信息内容 -->
+            <Border Margin="0,0,0,12">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" MinWidth="120"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                <!-- 认证信息内容 -->
-                <Border Background="{DynamicResource BackgroundBrush}"
-                        CornerRadius="0 0 8 8"
-                        Padding="16 12 16 14">
-                    <ContentControl s:View.Model="{Binding CredentialViewModel}"></ContentControl>
-                </Border>
-            </StackPanel>
-        </Border>
+                    <TextBlock Grid.Column="0" Text="认证信息"
+                               VerticalAlignment="Center"
+                               FontSize="13" FontWeight="Medium"
+                               Foreground="{DynamicResource PrimaryTextBrush}"/>
 
-        <!-- 备选认证卡片 -->
+                    <ContentControl Grid.Column="1"
+                                    s:View.Model="{Binding CredentialViewModel}"
+                                    Margin="15,0,0,0"/>
+                </Grid>
+            </Border>
+
+            <!-- Separator -->
+            <Border Height="1" Background="{DynamicResource PrimaryMidBrush}" Opacity="0.3" Margin="0,0,0,12"/>
+        </StackPanel>
+
+        <!-- 备选认证 -->
         <ContentControl s:View.Model="{Binding AlternativeCredentialListViewModel}">
             <ContentControl.Style>
                 <Style TargetType="ContentControl">
@@ -106,85 +57,66 @@
             </ContentControl.Style>
         </ContentControl>
 
-        <!-- VNC高级设置卡片 -->
-        <Border Background="{DynamicResource BackgroundBrush}"
-                BorderBrush="{DynamicResource DefaultBorderBrush}"
-                BorderThickness="1"
-                CornerRadius="8"
-                Margin="0 0 0 16">
-            <Border.Effect>
-                <DropShadowEffect Color="Black" Opacity="0.1" ShadowDepth="2" BlurRadius="8"/>
-            </Border.Effect>
-            <StackPanel Margin="20 16">
-                <!-- 卡片标题 -->
-                <Border Background="{DynamicResource PrimaryLightBrush}"
-                        CornerRadius="6"
-                        Padding="12 8 12 8"
-                        Margin="0 0 0 16">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="🖥️"
-                                   VerticalAlignment="Center"
-                                   Margin="0 0 8 0"
-                                   FontSize="14"/>
-                        <TextBlock Text="VNC高级设置"
-                                   FontSize="14"
-                                   FontWeight="Medium"
-                                   Foreground="{DynamicResource PrimaryTextBrush}"/>
-                    </StackPanel>
-                </Border>
+        <!-- VNC高级设置 -->
+        <StackPanel>
+            <!-- 分辨率设置 -->
+            <Border Margin="0,0,0,12">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" MinWidth="120"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                <!-- VNC高级设置内容 -->
+                    <TextBlock Grid.Column="0" Text="{DynamicResource Resolution}"
+                               VerticalAlignment="Center"
+                               FontSize="13" FontWeight="Medium"
+                               Foreground="{DynamicResource PrimaryTextBrush}"/>
+
+                    <ComboBox Grid.Column="1"
+                              Name="ComboBoxResolution"
+                              SelectedIndex="{Binding New.VncWindowResizeMode, Converter={StaticResource ConverterEVncWindowResizeMode}}"
+                              Height="28"
+                              VerticalAlignment="Center"
+                              Margin="15,0,0,0">
+                        <ComboBox.Style>
+                            <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+                                <Setter Property="Height" Value="28"/>
+                                <Setter Property="Padding" Value="8,6"/>
+                                <Setter Property="FontSize" Value="12"/>
+                                <Setter Property="BorderBrush" Value="{DynamicResource PrimaryMidBrush}"/>
+                                <Setter Property="BorderThickness" Value="1"/>
+                                <Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
+                            </Style>
+                        </ComboBox.Style>
+                        <ComboBoxItem Content="{DynamicResource 'Custom resolution (stretch)'}" />
+                        <ComboBoxItem Content="{DynamicResource 'Custom resolution (fixed)'}" />
+                        <ComboBoxItem Visibility="{Binding New.VncWindowResizeMode, Converter={StaticResource ConverterEqual2Visible}, ConverterParameter={x:Null}}" Content="{Binding New.ServerEditorDifferentOptions}" />
+                    </ComboBox>
+                </Grid>
+            </Border>
+
+            <!-- 警告信息 -->
+            <Border Margin="0,0,0,12"
+                    Background="{DynamicResource AccentLightBrush}"
+                    CornerRadius="4"
+                    Padding="12,8"
+                    BorderThickness="1"
+                    BorderBrush="{DynamicResource AccentMidBrush}">
                 <StackPanel>
-                    <!-- 分辨率设置 -->
-                    <controls1:GridWith4Columns>
-                        <TextBlock Grid.Column="0"
-                                   Text="{DynamicResource Resolution}"
-                                   Style="{StaticResource ConnectionRowHeader}"/>
-                        <ComboBox Grid.Column="1"
-                                  Name="ComboBoxResolution"
-                                  SelectedIndex="{Binding New.VncWindowResizeMode, Converter={StaticResource ConverterEVncWindowResizeMode}}"
-                                  Height="32"
-                                  VerticalAlignment="Center">
-                            <ComboBox.Style>
-                                <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
-                                    <Setter Property="BorderBrush" Value="{DynamicResource DefaultBorderBrush}"/>
-                                    <Setter Property="BorderThickness" Value="1"/>
-                                    <Setter Property="Background" Value="Transparent"/>
-                                </Style>
-                            </ComboBox.Style>
-                            <ComboBoxItem Content="{DynamicResource 'Custom resolution (stretch)'}" />
-                            <ComboBoxItem Content="{DynamicResource 'Custom resolution (fixed)'}" />
-                            <ComboBoxItem Visibility="{Binding New.VncWindowResizeMode, Converter={StaticResource ConverterEqual2Visible}, ConverterParameter={x:Null}}" Content="{Binding New.ServerEditorDifferentOptions}" />
-                        </ComboBox>
-                    </controls1:GridWith4Columns>
-
-                    <!-- 警告信息 -->
-                    <Border Background="{DynamicResource AccentLightBrush}"
-                            CornerRadius="6"
-                            Padding="12 8 12 8"
-                            Margin="0 16 0 0">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="⚠️"
-                                       VerticalAlignment="Center"
-                                       Margin="0 0 8 0"
-                                       FontSize="14"/>
-                            <TextBlock TextWrapping="WrapWithOverflow"
-                                       VerticalAlignment="Center"
-                                       FontSize="12"
-                                       Opacity="0.8">
-                                <Run Foreground="{DynamicResource BackgroundTextBrush}" Text="注意：RFB 3.8+ 协议为专有协议。如需使用 RFB 3.8+，请尝试使用自定义 VNC 运行器：" />
-                                <LineBreak/>
-                                <Hyperlink NavigateUri="https://1remote.github.io/usage/protocol/runner/"
-                                            TextDecorations="{x:Null}"
-                                            controls:HyperlinkHelper.IsOpenExternal="True"
-                                            Foreground="{DynamicResource AccentMidBrush}">
-                                    <Run Text="[更多详情]" />
-                                </Hyperlink>
-                            </TextBlock>
-                        </StackPanel>
-                    </Border>
+                    <TextBlock TextWrapping="Wrap"
+                               FontSize="12"
+                               Foreground="{DynamicResource BackgroundTextBrush}">
+                        <Run Text="⚠️ 注意：RFB 3.8+ 协议为专有协议。如需使用 RFB 3.8+，请尝试使用自定义 VNC 运行器：" />
+                        <LineBreak/>
+                        <Hyperlink NavigateUri="https://1remote.github.io/usage/protocol/runner/"
+                                    TextDecorations="{x:Null}"
+                                    controls:HyperlinkHelper.IsOpenExternal="True"
+                                    Foreground="{DynamicResource AccentMidBrush}">
+                            <Run Text="[更多详情]" />
+                        </Hyperlink>
+                    </TextBlock>
                 </StackPanel>
-            </StackPanel>
-        </Border>
+            </Border>
+        </StackPanel>
     </StackPanel>
 </UserControl>

@@ -37,10 +37,11 @@ namespace _1RM.View.Editor
             e.Handled = true;
         }
 
-        private void ButtonShowNote_OnMouseEnter(object sender, MouseEventArgs e)
-        {
-            PopupNote.IsOpen = false;
-            PopupNote.IsOpen = true;
-        }
+        // 移除了备注预览功能，简化界面布局
+        // private void ButtonShowNote_OnMouseEnter(object sender, MouseEventArgs e)
+        // {
+        //     PopupNote.IsOpen = false;
+        //     PopupNote.IsOpen = true;
+        // }
     }
 }

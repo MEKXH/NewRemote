@@ -44,6 +44,162 @@ namespace _1RM.Service
                 BackgroundColor = "#1e1e1e",
                 BackgroundTextColor = "#cccccc",
             });
+            // 新增的主题放在这里
+            Themes.Add("Dracula", new ThemeConfig()
+            {
+                ThemeName = "Dracula",
+                PrimaryMidColor = "#282a36",
+                PrimaryLightColor = "#44475a",
+                PrimaryDarkColor = "#21222c",
+                PrimaryTextColor = "#f8f8f2",
+                AccentMidColor = "#bd93f9",
+                AccentLightColor = "#d6acff",
+                AccentDarkColor = "#9f7aea",
+                AccentTextColor = "#ffffff",
+                BackgroundColor = "#1e1f29",
+                BackgroundTextColor = "#f8f8f2",
+            });
+            Themes.Add("OneDarkPro", new ThemeConfig()
+            {
+                ThemeName = "OneDarkPro",
+                PrimaryMidColor = "#2c313c",
+                PrimaryLightColor = "#3e4451",
+                PrimaryDarkColor = "#21252b",
+                PrimaryTextColor = "#abb2bf",
+                AccentMidColor = "#61afef",
+                AccentLightColor = "#8fc6f5",
+                AccentDarkColor = "#4d8fcc",
+                AccentTextColor = "#ffffff",
+                BackgroundColor = "#1e1f23",
+                BackgroundTextColor = "#abb2bf",
+            });
+            Themes.Add("VSCode", new ThemeConfig()
+            {
+                ThemeName = "VSCode",
+                PrimaryMidColor = "#252526",
+                PrimaryLightColor = "#2d2d30",
+                PrimaryDarkColor = "#1e1e1e",
+                PrimaryTextColor = "#cccccc",
+                AccentMidColor = "#0078d4",
+                AccentLightColor = "#409cff",
+                AccentDarkColor = "#005a9e",
+                AccentTextColor = "#ffffff",
+                BackgroundColor = "#1e1e1e",
+                BackgroundTextColor = "#cccccc",
+            });
+            Themes.Add("MaterialDark", new ThemeConfig()
+            {
+                ThemeName = "MaterialDark",
+                PrimaryMidColor = "#2d3748",
+                PrimaryLightColor = "#4a5568",
+                PrimaryDarkColor = "#1a202c",
+                PrimaryTextColor = "#e2e8f0",
+                AccentMidColor = "#805ad5",
+                AccentLightColor = "#9f7aea",
+                AccentDarkColor = "#6b46c1",
+                AccentTextColor = "#ffffff",
+                BackgroundColor = "#171923",
+                BackgroundTextColor = "#e2e8f0",
+            });
+            Themes.Add("GitHub", new ThemeConfig()
+            {
+                ThemeName = "GitHub",
+                PrimaryMidColor = "#f6f8fa",
+                PrimaryLightColor = "#ffffff",
+                PrimaryDarkColor = "#d1d9e0",
+                PrimaryTextColor = "#24292e",
+                AccentMidColor = "#0366d6",
+                AccentLightColor = "#54a3ff",
+                AccentDarkColor = "#0256cc",
+                AccentTextColor = "#ffffff",
+                BackgroundColor = "#ffffff",
+                BackgroundTextColor = "#24292e",
+            });
+            Themes.Add("SolarizedLight", new ThemeConfig()
+            {
+                ThemeName = "SolarizedLight",
+                PrimaryMidColor = "#fdf6e3",
+                PrimaryLightColor = "#ffffff",
+                PrimaryDarkColor = "#eee8d5",
+                PrimaryTextColor = "#657b83",
+                AccentMidColor = "#b58900",
+                AccentLightColor = "#d7a740",
+                AccentDarkColor = "#8b6f00",
+                AccentTextColor = "#ffffff",
+                BackgroundColor = "#fdf6e3",
+                BackgroundTextColor = "#657b83",
+            });
+            Themes.Add("Nord", new ThemeConfig()
+            {
+                ThemeName = "Nord",
+                PrimaryMidColor = "#3b4252",
+                PrimaryLightColor = "#434c5e",
+                PrimaryDarkColor = "#2e3440",
+                PrimaryTextColor = "#d8dee9",
+                AccentMidColor = "#88c0d0",
+                AccentLightColor = "#a3c8d8",
+                AccentDarkColor = "#6ba3b3",
+                AccentTextColor = "#ffffff",
+                BackgroundColor = "#242933",
+                BackgroundTextColor = "#d8dee9",
+            });
+            Themes.Add("Monokai", new ThemeConfig()
+            {
+                ThemeName = "Monokai",
+                PrimaryMidColor = "#272822",
+                PrimaryLightColor = "#3e3d32",
+                PrimaryDarkColor = "#1e1f1c",
+                PrimaryTextColor = "#f8f8f2",
+                AccentMidColor = "#f92672",
+                AccentLightColor = "#fc5fb6",
+                AccentDarkColor = "#c71e5a",
+                AccentTextColor = "#ffffff",
+                BackgroundColor = "#1e1f1c",
+                BackgroundTextColor = "#f8f8f2",
+            });
+            Themes.Add("AtomOneLight", new ThemeConfig()
+            {
+                ThemeName = "AtomOneLight",
+                PrimaryMidColor = "#fafafa",
+                PrimaryLightColor = "#ffffff",
+                PrimaryDarkColor = "#e0e0e0",
+                PrimaryTextColor = "#2d3142",
+                AccentMidColor = "#0184ff",
+                AccentLightColor = "#4ca2ff",
+                AccentDarkColor = "#0066cc",
+                AccentTextColor = "#ffffff",
+                BackgroundColor = "#ffffff",
+                BackgroundTextColor = "#2d3142",
+            });
+            Themes.Add("Gruvbox", new ThemeConfig()
+            {
+                ThemeName = "Gruvbox",
+                PrimaryMidColor = "#3c3836",
+                PrimaryLightColor = "#504945",
+                PrimaryDarkColor = "#282828",
+                PrimaryTextColor = "#ebdbb2",
+                AccentMidColor = "#d79921",
+                AccentLightColor = "#fabd2f",
+                AccentDarkColor = "#b58900",
+                AccentTextColor = "#000000",
+                BackgroundColor = "#1d2021",
+                BackgroundTextColor = "#ebdbb2",
+            });
+            Themes.Add("Catppuccin", new ThemeConfig()
+            {
+                ThemeName = "Catppuccin",
+                PrimaryMidColor = "#302d41",
+                PrimaryLightColor = "#413f58",
+                PrimaryDarkColor = "#1e1e2e",
+                PrimaryTextColor = "#cdd6f4",
+                AccentMidColor = "#cba6f7",
+                AccentLightColor = "#dcbdf7",
+                AccentDarkColor = "#a687d4",
+                AccentTextColor = "#ffffff",
+                BackgroundColor = "#1e1e2e",
+                BackgroundTextColor = "#cdd6f4",
+            });
+            // 原有的主题
             Themes.Add("PRemoteM", new ThemeConfig()
             {
                 ThemeName = "PRemoteM",
@@ -99,48 +255,6 @@ namespace _1RM.Service
                 AccentTextColor = "#FFFFFFFF",
                 BackgroundColor = "#FFF5F5F5",
                 BackgroundTextColor = "#000000",
-            });
-            Themes.Add("Wine", new ThemeConfig()
-            {
-                ThemeName = "Wine",
-                PrimaryMidColor = "#FF57112D",
-                PrimaryLightColor = "#893E55",
-                PrimaryDarkColor = "#450D24",
-                PrimaryTextColor = "#FFFFFFFF",
-                AccentMidColor = "#FFA82159",
-                AccentLightColor = "#DA4E81",
-                AccentDarkColor = "#861A47",
-                AccentTextColor = "#FFFFFFFF",
-                BackgroundColor = "#FFFDEAD9",
-                BackgroundTextColor = "#FF450D24",
-            });
-            Themes.Add("Forest", new ThemeConfig()
-            {
-                ThemeName = "Forest",
-                PrimaryMidColor = "#FF253938",
-                PrimaryLightColor = "#576660",
-                PrimaryDarkColor = "#1D2D2C",
-                PrimaryTextColor = "#FFFFFFFF",
-                AccentMidColor = "#FF5FA291",
-                AccentLightColor = "#91CFB9",
-                AccentDarkColor = "#4C8174",
-                AccentTextColor = "#FFFFFFFF",
-                BackgroundColor = "#FFF5F5F5",
-                BackgroundTextColor = "#FF303030",
-            });
-            Themes.Add("Soil", new ThemeConfig()
-            {
-                ThemeName = "Soil",
-                PrimaryMidColor = "#FF776245",
-                PrimaryLightColor = "#A98F6D",
-                PrimaryDarkColor = "#FF735E41",
-                PrimaryTextColor = "#FFFFFFFF",
-                AccentMidColor = "#FF0193B8",
-                AccentLightColor = "#33C0E0",
-                AccentDarkColor = "#007593",
-                AccentTextColor = "#FFFFFFFF",
-                BackgroundColor = "#FFCFC3B5",
-                BackgroundTextColor = "#FF080000",
             });
 
             CurrentTheme = defaultTheme;

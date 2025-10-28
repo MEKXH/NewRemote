@@ -44,155 +44,110 @@
         <!-- 连接信息卡片 (现在包含在HostView中) -->
         <ContentControl s:View.Model="{Binding HostViewModel}"></ContentControl>
 
-        <!-- 紧凑型RDP特定连接设置卡片 -->
-        <Border Background="{DynamicResource BackgroundBrush}"
-                BorderBrush="{DynamicResource DefaultBorderBrush}"
-                BorderThickness="1"
-                CornerRadius="8"
-                Margin="0 0 0 12"
-                Padding="0">
-            <Border.Effect>
-                <DropShadowEffect Color="Black" Opacity="0.08" ShadowDepth="1" BlurRadius="4"/>
-            </Border.Effect>
-            <StackPanel Margin="0 0">
-                <!-- 紧凑型卡片标题 -->
-                <Border Background="{DynamicResource AccentMidBrush}"
-                        CornerRadius="8 8 0 0"
-                        Padding="16 10 16 10">
-                    <StackPanel Orientation="Horizontal">
-                        <Border Width="20" Height="20"
-                                Background="{DynamicResource AccentTextBrush}"
-                                CornerRadius="4"
-                                Margin="0 0 10 0">
-                            <Path Data="M4,6H20V16H4M20,18A2,2 0 0,0 22,16V6C22,4.89 21.1,4 20,4H4C2.89,4 2,4.89 2,6V16A2,2 0 0,0 4,18H0V20A2,2 0 0,0 2,22H22A2,2 0 0,0 24,20V18H20Z"
-                                  Fill="{DynamicResource AccentMidBrush}"
-                                  Stretch="Uniform"
-                                  Margin="5"/>
-                        </Border>
-                        <StackPanel VerticalAlignment="Center">
-                            <TextBlock Text="RDP连接设置"
-                                       FontSize="13"
-                                       FontWeight="SemiBold"
-                                       Foreground="{DynamicResource AccentTextBrush}"/>
-                            <TextBlock Text="远程桌面连接参数"
-                                       FontSize="10"
-                                       Opacity="0.8"
-                                       Foreground="{DynamicResource AccentTextBrush}"
-                                       Margin="0 1 0 0"/>
-                        </StackPanel>
-                    </StackPanel>
-                </Border>
+        <!-- RDP连接设置 -->
+        <StackPanel>
+            <!-- 域设置 -->
+            <Border Margin="0,0,0,12">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" MinWidth="120"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                <!-- RDP特定设置内容 -->
-                <Border Background="{DynamicResource BackgroundBrush}"
-                        CornerRadius="0 0 8 8"
-                        Padding="16 12 16 14">
-                    <StackPanel>
-                        <!-- 域设置 -->
-                    <controls:GridWith4Columns>
-                        <TextBlock Grid.Column="0"
-                                   Text="Domain"
-                                   Style="{StaticResource ConnectionRowHeader}"/>
-                        <TextBox Grid.Column="1"
-                                 Text="{Binding New.Domain, UpdateSourceTrigger=PropertyChanged}"
-                                 Height="32"
-                                 Padding="8 6"
-                                 VerticalAlignment="Center">
-                            <TextBox.Style>
-                                <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
-                                    <Setter Property="BorderBrush" Value="{DynamicResource DefaultBorderBrush}"/>
-                                    <Setter Property="BorderThickness" Value="1"/>
-                                    <Setter Property="Background" Value="Transparent"/>
-                                </Style>
-                            </TextBox.Style>
-                        </TextBox>
-                    </controls:GridWith4Columns>
+                    <TextBlock Grid.Column="0" Text="Domain"
+                               VerticalAlignment="Center"
+                               FontSize="13" FontWeight="Medium"
+                               Foreground="{DynamicResource PrimaryTextBrush}"/>
 
-                    <!-- 负载均衡信息 -->
-                    <controls:GridWith4Columns>
-                        <TextBlock Grid.Column="0"
-                                   Text="LoadBalanceInfo"
-                                   Style="{StaticResource ConnectionRowHeader}"/>
-                        <TextBox Grid.Column="1"
-                                 Text="{Binding New.LoadBalanceInfo, UpdateSourceTrigger=PropertyChanged}"
-                                 Tag="tsv://MS Terminal Services Plugin.1.Wortell_sLab_Ses"
-                                 Height="32"
-                                 Padding="8 6"
-                                 VerticalAlignment="Center">
-                            <TextBox.Style>
-                                <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
-                                    <Setter Property="BorderBrush" Value="{DynamicResource DefaultBorderBrush}"/>
-                                    <Setter Property="BorderThickness" Value="1"/>
-                                    <Setter Property="Background" Value="Transparent"/>
-                                </Style>
-                            </TextBox.Style>
-                        </TextBox>
-                    </controls:GridWith4Columns>
-                    </StackPanel>
-                </Border>
-            </StackPanel>
-        </Border>
+                    <TextBox Grid.Column="1"
+                             Text="{Binding New.Domain, UpdateSourceTrigger=PropertyChanged}"
+                             Height="28"
+                             VerticalAlignment="Center"
+                             Margin="15,0,0,0">
+                        <TextBox.Style>
+                            <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+                                <Setter Property="BorderBrush" Value="{DynamicResource PrimaryMidBrush}"/>
+                                <Setter Property="BorderThickness" Value="1"/>
+                                <Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
+                                <Setter Property="FontSize" Value="12"/>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
+                </Grid>
+            </Border>
 
-        <!-- 紧凑型认证信息卡片 -->
-        <Border Background="{DynamicResource BackgroundBrush}"
-                BorderBrush="{DynamicResource DefaultBorderBrush}"
-                BorderThickness="1"
-                CornerRadius="8"
-                Margin="0 0 0 12"
-                Padding="0">
-            <Border.Effect>
-                <DropShadowEffect Color="Black" Opacity="0.08" ShadowDepth="1" BlurRadius="4"/>
-            </Border.Effect>
-            <StackPanel Margin="0 0">
-                <!-- 紧凑型卡片标题 -->
-                <Border Background="{DynamicResource AccentMidBrush}"
-                        CornerRadius="8 8 0 0"
-                        Padding="16 10 16 10">
-                    <StackPanel Orientation="Horizontal">
-                        <Border Width="20" Height="20"
-                                Background="{DynamicResource AccentTextBrush}"
-                                CornerRadius="4"
-                                Margin="0 0 10 0">
-                            <Path Data="M12,17C10.9,17 10,16.1 10,15C10,13.9 10.9,13 12,13C13.1,13 14,13.9 14,15C14,16.1 13.1,17 12,17M12,20C7.6,20 4,16.4 4,12C4,7.6 7.6,4 12,4C16.4,4 20,7.6 20,12C20,16.4 16.4,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M9,12A6,6 0 0,1 15,6A6,6 0 0,1 21,12A6,6 0 0,1 15,18A6,6 0 0,1 9,12Z"
-                                  Fill="{DynamicResource AccentMidBrush}"
-                                  Stretch="Uniform"
-                                  Margin="5"/>
-                        </Border>
-                        <StackPanel VerticalAlignment="Center">
-                            <TextBlock Text="认证信息"
-                                       FontSize="13"
-                                       FontWeight="SemiBold"
-                                       Foreground="{DynamicResource AccentTextBrush}"/>
-                            <TextBlock Text="RDP用户名和密码"
-                                       FontSize="10"
-                                       Opacity="0.8"
-                                       Foreground="{DynamicResource AccentTextBrush}"
-                                       Margin="0 1 0 0"/>
-                        </StackPanel>
-                    </StackPanel>
-                </Border>
+            <!-- 负载均衡信息 -->
+            <Border Margin="0,0,0,12">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" MinWidth="120"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                <!-- 认证信息内容 -->
-                <Border Background="{DynamicResource BackgroundBrush}"
-                        CornerRadius="0 0 8 8"
-                        Padding="16 12 16 14">
-                    <ContentControl s:View.Model="{Binding CredentialViewModel}"></ContentControl>
-                </Border>
-            </StackPanel>
-        </Border>
+                    <TextBlock Grid.Column="0" Text="LoadBalanceInfo"
+                               VerticalAlignment="Center"
+                               FontSize="13" FontWeight="Medium"
+                               Foreground="{DynamicResource PrimaryTextBrush}"/>
 
-        <!-- 备选认证卡片 -->
-        <ContentControl s:View.Model="{Binding AlternativeCredentialListViewModel}">
-            <ContentControl.Style>
-                <Style TargetType="ContentControl">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding AlternativeCredentialListViewModel.Credentials.Count}" Value="0">
-                            <Setter Property="Visibility" Value="Collapsed"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ContentControl.Style>
-        </ContentControl>
+                    <TextBox Grid.Column="1"
+                             Text="{Binding New.LoadBalanceInfo, UpdateSourceTrigger=PropertyChanged}"
+                             Tag="tsv://MS Terminal Services Plugin.1.Wortell_sLab_Ses"
+                             Height="28"
+                             VerticalAlignment="Center"
+                             Margin="15,0,0,0">
+                        <TextBox.Style>
+                            <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+                                <Setter Property="BorderBrush" Value="{DynamicResource PrimaryMidBrush}"/>
+                                <Setter Property="BorderThickness" Value="1"/>
+                                <Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
+                                <Setter Property="FontSize" Value="12"/>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
+                </Grid>
+            </Border>
 
-    </StackPanel>
+            <!-- Separator -->
+            <Border Height="1" Background="{DynamicResource PrimaryMidBrush}" Opacity="0.3" Margin="0,0,0,12"/>
+        </StackPanel>
+
+        <!-- RDP认证设置 -->
+        <StackPanel>
+            <!-- 认证信息内容 -->
+            <Border Margin="0,0,0,12">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" MinWidth="120"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="认证信息"
+                               VerticalAlignment="Center"
+                               FontSize="13" FontWeight="Medium"
+                               Foreground="{DynamicResource PrimaryTextBrush}"/>
+
+                    <ContentControl Grid.Column="1"
+                                    s:View.Model="{Binding CredentialViewModel}"
+                                    Margin="15,0,0,0"/>
+                </Grid>
+            </Border>
+
+            <!-- Separator -->
+            <Border Height="1" Background="{DynamicResource PrimaryMidBrush}" Opacity="0.3" Margin="0,0,0,12"/>
+        </StackPanel>
+
+            <!-- 备选认证 -->
+            <ContentControl s:View.Model="{Binding AlternativeCredentialListViewModel}">
+                <ContentControl.Style>
+                    <Style TargetType="ContentControl">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding AlternativeCredentialListViewModel.Credentials.Count}" Value="0">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+            </ContentControl>
+
+        </StackPanel>
 </UserControl>
