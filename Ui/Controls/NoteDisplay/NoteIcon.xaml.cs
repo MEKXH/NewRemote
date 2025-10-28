@@ -20,24 +20,6 @@ namespace _1RM.Controls.NoteDisplay
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        private bool _isBriefNoteShown = false;
-        public bool IsBriefNoteShown
-        {
-            get => _isBriefNoteShown;
-            set
-            {
-                _isBriefNoteShown = value;
-                if (value)
-                {
-                    GridBriefNote.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    GridBriefNote.Visibility = Visibility.Collapsed;
-                }
-            }
-        }
-
         public ProtocolBase Server { get; }
 
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
@@ -50,7 +32,6 @@ namespace _1RM.Controls.NoteDisplay
         {
             Server = server;
             InitializeComponent();
-            IsBriefNoteShown = false;
             Execute.OnUIThreadSync(() =>
             {
                 _noteDisplayAndEditor = new NoteDisplayAndEditor()

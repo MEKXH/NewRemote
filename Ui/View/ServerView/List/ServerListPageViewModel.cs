@@ -39,30 +39,13 @@ namespace _1RM.View.ServerView
 
 
 
-        private Visibility _briefNoteVisibility;
-        public Visibility BriefNoteVisibility
-        {
-            get => _briefNoteVisibility;
-            set
-            {
-                if (SetAndNotifyIfChanged(ref this._briefNoteVisibility, value))
-                {
-                    UpdateNote();
-                }
-            }
-        }
-
+        
         private void UpdateNote()
         {
             Execute.OnUIThread(() =>
             {
-                foreach (var item in VmServerList.Where(x => x.HoverNoteDisplayControl != null))
-                {
-                    if (item.HoverNoteDisplayControl != null)
-                    {
-                        item.HoverNoteDisplayControl.IsBriefNoteShown = BriefNoteVisibility == Visibility.Visible;
-                    }
-                }
+                // Brief note display functionality has been removed
+                // Notes are now only shown on hover via the popup
             });
         }
 
@@ -70,8 +53,7 @@ namespace _1RM.View.ServerView
 
         public ServerListPageViewModel(DataSourceService sourceService, GlobalData appData) : base(sourceService, appData)
         {
-            // Make sure the update do triggered the first time assign a value 
-            BriefNoteVisibility = IoC.Get<ConfigurationService>().General.ShowNoteFieldInListView ? Visibility.Visible : Visibility.Collapsed;
+            // Brief note functionality has been removed
         }
 
         public double NameWidth
@@ -400,35 +382,7 @@ namespace _1RM.View.ServerView
 
         #region NoteField
 
-        private RelayCommand? _cmdHideNoteField;
-        public RelayCommand CmdHideNoteField
-        {
-            get
-            {
-                return _cmdHideNoteField ??= new RelayCommand((o) =>
-                {
-                    IoC.Get<ConfigurationService>().General.ShowNoteFieldInListView = false;
-                    IoC.Get<ConfigurationService>().Save();
-                    BriefNoteVisibility = Visibility.Collapsed;
-                });
-            }
-        }
-
-        private RelayCommand? _cmdShowNoteField;
-
-        public RelayCommand CmdShowNoteField
-        {
-            get
-            {
-                return _cmdShowNoteField ??= new RelayCommand((o) =>
-                {
-                    IoC.Get<ConfigurationService>().General.ShowNoteFieldInListView = true;
-                    IoC.Get<ConfigurationService>().Save();
-                    BriefNoteVisibility = Visibility.Visible;
-                });
-            }
-        }
-
+        
         #endregion
 
 

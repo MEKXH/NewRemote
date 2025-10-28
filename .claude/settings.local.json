@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "WebSearch",
+      "Bash(dotnet build:*)"
     ],
     "deny": [],
     "ask": []

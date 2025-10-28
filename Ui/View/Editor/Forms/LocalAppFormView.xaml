@@ -38,35 +38,50 @@
         </Style>
     </UserControl.Resources>
     <StackPanel>
-        <!-- 应用程序路径卡片 -->
+        <!-- 紧凑型应用程序路径卡片 -->
         <Border Background="{DynamicResource BackgroundBrush}"
                 BorderBrush="{DynamicResource DefaultBorderBrush}"
                 BorderThickness="1"
                 CornerRadius="8"
-                Margin="0 0 0 16">
+                Margin="0 0 0 12"
+                Padding="0">
             <Border.Effect>
-                <DropShadowEffect Color="Black" Opacity="0.1" ShadowDepth="2" BlurRadius="8"/>
+                <DropShadowEffect Color="Black" Opacity="0.08" ShadowDepth="1" BlurRadius="4"/>
             </Border.Effect>
-            <StackPanel Margin="20 16">
-                <!-- 卡片标题 -->
-                <Border Background="{DynamicResource PrimaryLightBrush}"
-                        CornerRadius="6"
-                        Padding="12 8 12 8"
-                        Margin="0 0 0 16">
+            <StackPanel Margin="0 0">
+                <!-- 紧凑型卡片标题 -->
+                <Border Background="{DynamicResource AccentMidBrush}"
+                        CornerRadius="8 8 0 0"
+                        Padding="16 10 16 10">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="📱"
-                                   VerticalAlignment="Center"
-                                   Margin="0 0 8 0"
-                                   FontSize="14"/>
-                        <TextBlock Text="应用程序路径"
-                                   FontSize="14"
-                                   FontWeight="Medium"
-                                   Foreground="{DynamicResource PrimaryTextBrush}"/>
+                        <Border Width="20" Height="20"
+                                Background="{DynamicResource AccentTextBrush}"
+                                CornerRadius="4"
+                                Margin="0 0 10 0">
+                            <Path Data="M12,3L1,9L12,15L21,10.09V17H23V9M5,13.18V17.18L12,21L19,17.18V13.18L12,17L5,13.18Z"
+                                  Fill="{DynamicResource AccentMidBrush}"
+                                  Stretch="Uniform"
+                                  Margin="5"/>
+                        </Border>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="应用程序路径"
+                                       FontSize="13"
+                                       FontWeight="SemiBold"
+                                       Foreground="{DynamicResource AccentTextBrush}"/>
+                            <TextBlock Text="可执行文件配置"
+                                       FontSize="10"
+                                       Opacity="0.8"
+                                       Foreground="{DynamicResource AccentTextBrush}"
+                                       Margin="0 1 0 0"/>
+                        </StackPanel>
                     </StackPanel>
                 </Border>
 
                 <!-- 应用程序路径内容 -->
-                <StackPanel>
+                <Border Background="{DynamicResource BackgroundBrush}"
+                        CornerRadius="0 0 8 8"
+                        Padding="16 12 16 14">
+                    <StackPanel>
                     <!-- 可执行文件路径 -->
                     <controls:GridWith4Columns>
                         <TextBlock Grid.Column="0"
@@ -130,39 +145,55 @@
                             </CheckBox.Style>
                         </CheckBox>
                     </controls:GridWith4Columns>
-                </StackPanel>
+                    </StackPanel>
+                </Border>
             </StackPanel>
         </Border>
 
-        <!-- 连接参数卡片 -->
+        <!-- 紧凑型连接参数卡片 -->
         <Border Background="{DynamicResource BackgroundBrush}"
                 BorderBrush="{DynamicResource DefaultBorderBrush}"
                 BorderThickness="1"
                 CornerRadius="8"
-                Margin="0 0 0 16">
+                Margin="0 0 0 12"
+                Padding="0">
             <Border.Effect>
-                <DropShadowEffect Color="Black" Opacity="0.1" ShadowDepth="2" BlurRadius="8"/>
+                <DropShadowEffect Color="Black" Opacity="0.08" ShadowDepth="1" BlurRadius="4"/>
             </Border.Effect>
-            <StackPanel Margin="20 16">
-                <!-- 卡片标题 -->
-                <Border Background="{DynamicResource PrimaryLightBrush}"
-                        CornerRadius="6"
-                        Padding="12 8 12 8"
-                        Margin="0 0 0 16">
+            <StackPanel Margin="0 0">
+                <!-- 紧凑型卡片标题 -->
+                <Border Background="{DynamicResource AccentMidBrush}"
+                        CornerRadius="8 8 0 0"
+                        Padding="16 10 16 10">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="🔗"
-                                   VerticalAlignment="Center"
-                                   Margin="0 0 8 0"
-                                   FontSize="14"/>
-                        <TextBlock Text="连接参数"
-                                   FontSize="14"
-                                   FontWeight="Medium"
-                                   Foreground="{DynamicResource PrimaryTextBrush}"/>
+                        <Border Width="20" Height="20"
+                                Background="{DynamicResource AccentTextBrush}"
+                                CornerRadius="4"
+                                Margin="0 0 10 0">
+                            <Path Data="M3.9,12C5.22,10.43 8.54,7.17 9.5,6.31C9.5,6.31 10.06,5.46 11,5C11.5,4.75 12,4.5 12.5,4.5C12.5,4.5 12.47,5.5 12.5,6C12.5,6 13,6.25 13.5,6.5C14.55,7.18 15.32,7.95 16,8.84C16,8.84 16.5,9.75 16.04,10.5L16.5,11C16.5,11 16,11.5 15.5,12C15.5,12 14.5,12.5 13.5,12.75C12.75,12.88 11.91,13.06 11,13.25V13.5L11.5,14.5C11.5,14.5 10.5,15 9.5,15C5.91,15 3.9,12 3.9,12M14.5,8C14.5,9.66 13.16,11 11.5,11C9.84,11 8.5,9.66 8.5,8C8.5,6.34 9.84,5 11.5,5C13.16,5 14.5,6.34 14.5,8Z"
+                                  Fill="{DynamicResource AccentMidBrush}"
+                                  Stretch="Uniform"
+                                  Margin="5"/>
+                        </Border>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="连接参数"
+                                       FontSize="13"
+                                       FontWeight="SemiBold"
+                                       Foreground="{DynamicResource AccentTextBrush}"/>
+                            <TextBlock Text="协议和参数设置"
+                                       FontSize="10"
+                                       Opacity="0.8"
+                                       Foreground="{DynamicResource AccentTextBrush}"
+                                       Margin="0 1 0 0"/>
+                        </StackPanel>
                     </StackPanel>
                 </Border>
 
                 <!-- 连接参数内容 -->
-                <StackPanel>
+                <Border Background="{DynamicResource BackgroundBrush}"
+                        CornerRadius="0 0 8 8"
+                        Padding="16 12 16 14">
+                    <StackPanel>
                     <!-- 协议名称 -->
                     <controls:GridWith4Columns>
                         <TextBlock Grid.Column="0"
@@ -212,12 +243,13 @@
                             </TextBlock>
                         </StackPanel>
                     </Border>
-                </StackPanel>
+                    </StackPanel>
+                </Border>
             </StackPanel>
         </Border>
 
         <!-- 命令行参数卡片 -->
-        <argument:ArgumentListControl Margin="0 0 0 16"/>
+        <argument:ArgumentListControl Margin="0 0 0 12"/>
 
     </StackPanel>
 </UserControl>

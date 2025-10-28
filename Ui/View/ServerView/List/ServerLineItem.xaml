@@ -53,18 +53,21 @@
         </ItemsPanelTemplate>
 
         <Style x:Key="TagBorderStyle" TargetType="Border">
-            <Setter Property="BorderThickness" Value="1"></Setter>
+            <Setter Property="BorderThickness" Value="0"></Setter>
+            <Setter Property="Background" Value="{DynamicResource PrimaryMidBrush}"></Setter>
+            <Setter Property="CornerRadius" Value="2"></Setter>
+            <Setter Property="Opacity" Value="0.7"></Setter>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="BorderBrush" Value="{DynamicResource AccentTextBrush}"></Setter>
+                    <Setter Property="Background" Value="{DynamicResource AccentMidBrush}"></Setter>
+                    <Setter Property="Opacity" Value="0.9"></Setter>
                 </Trigger>
             </Style.Triggers>
         </Style>
 
         <DataTemplate x:Key="LineItemDataTemplateTag" DataType="model:Tag">
-            <Border Margin="3" Padding="5"
-                    Background="{DynamicResource AccentMidBrush}" 
-                    CornerRadius="5" 
+            <Border Margin="2,1" Padding="4,2"
+                    CornerRadius="2"
                     VerticalAlignment="Center"
                     Tag="{Binding DataContext.TagsPanelViewModel, RelativeSource={RelativeSource AncestorType=serverList:ServerListPageView}}"
                     PreviewMouseDown="UIElement_OnPreviewMouseDown"
@@ -104,31 +107,39 @@
                     <MouseBinding Gesture="Ctrl+LeftClick" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=serverList:ServerListPageView}, Path=DataContext.CmdTagAddIncluded}" CommandParameter="{Binding}" />
                     <MouseBinding Gesture="Alt+LeftClick" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=serverList:ServerListPageView}, Path=DataContext.CmdTagAddExcluded}" CommandParameter="{Binding}" />
                 </Border.InputBindings>
-                <TextBlock Style="{StaticResource TextBlockBase}" Text="{Binding Name}" Foreground="{DynamicResource AccentTextBrush}"></TextBlock>
+                <TextBlock Style="{StaticResource TextBlockBase}"
+                   Text="{Binding Name}"
+                   FontSize="{DynamicResource GlobalFontSizeSmall}"
+                   FontWeight="Medium"
+                   Foreground="{DynamicResource BackgroundTextBrush}">
+        </TextBlock>
             </Border>
         </DataTemplate>
 
 
         <Style x:Key="SelectedCheckBoxStyle" TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
-            <Setter Property="Visibility" Value="Collapsed"></Setter>
+            <Setter Property="Opacity" Value="0"></Setter>
+            <Setter Property="IsHitTestVisible" Value="False"></Setter>
             <Style.Triggers>
                 <DataTrigger Binding="{Binding ElementName=Grid,Path=IsMouseOver}" Value="True">
-                    <Setter Property="Visibility" Value="Visible"></Setter>
+                    <Setter Property="Opacity" Value="1"></Setter>
+                    <Setter Property="IsHitTestVisible" Value="True"></Setter>
                 </DataTrigger>
                 <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Visibility" Value="Visible"></Setter>
+                    <Setter Property="Opacity" Value="1"></Setter>
+                    <Setter Property="IsHitTestVisible" Value="True"></Setter>
                 </Trigger>
             </Style.Triggers>
         </Style>
 
         <Style x:Key="LineItemSettingMenuStyle" TargetType="Button" BasedOn="{StaticResource ButtonAccentStyle}">
-            <Setter Property="Visibility" Value="Hidden"></Setter>
+            <Setter Property="Visibility" Value="Visible"></Setter>
+            <Setter Property="Opacity" Value="0.6"></Setter>
             <Style.Triggers>
-                <DataTrigger Binding="{Binding ElementName=Grid,Path=IsMouseOver}" Value="True">
-                    <Setter Property="Visibility" Value="Visible"></Setter>
-                </DataTrigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="1"></Setter>
+                </Trigger>
                 <DataTrigger Binding="{Binding ElementName=PopupCardSettingMenu, Path=IsOpen}" Value="True">
-                    <Setter Property="Visibility" Value="Visible"></Setter>
                     <Setter Property="Background" Value="{StaticResource PrimaryMidBrush}"></Setter>
                     <Setter Property="Foreground" Value="{StaticResource PrimaryTextBrush}"></Setter>
                     <Setter Property="Padding" Value="4"></Setter>
@@ -138,7 +149,15 @@
     </UserControl.Resources>
 
     <Grid Name="Grid" Background="Transparent">
-        <Grid Opacity="0.4" Background="{Binding Server.ColorHex,Converter={StaticResource ConverterColorHexString2Brush}, Mode=OneWay}"></Grid>
+        <!-- Terminus-style subtle background with border -->
+        <Border Background="{DynamicResource BackgroundBrush}"
+                BorderBrush="{DynamicResource PrimaryMidBrush}"
+                BorderThickness="0,0,0,1"
+                Margin="0,0,0,1"/>
+
+        <!-- Subtle color indicator -->
+        <Grid Opacity="0.15" Background="{Binding Server.ColorHex,Converter={StaticResource ConverterColorHexString2Brush}, Mode=OneWay}"
+              Margin="0,0,0,1"/>
 
         <Grid>
             <Grid.Margin>
@@ -148,9 +167,10 @@
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Selector"></ColumnDefinition>
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Protocol"></ColumnDefinition>
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Span"></ColumnDefinition>
-                <ColumnDefinition Width="Auto" SharedSizeGroup="Name"></ColumnDefinition>
-                <ColumnDefinition Width="Auto" SharedSizeGroup="BriefNote"></ColumnDefinition>
+                <ColumnDefinition Width="*" SharedSizeGroup="Name"></ColumnDefinition>
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Address"></ColumnDefinition>
+                <ColumnDefinition Width="Auto" SharedSizeGroup="BriefNote"></ColumnDefinition>
+                <ColumnDefinition Width="Auto" SharedSizeGroup="Actions"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
 
@@ -169,83 +189,101 @@
                 </Path.Style>
             </Path>
 
-            <CheckBox Name="CbSelected" 
-                      Grid.Column="0" Margin="10 0" 
-                      Width="20" Height="20" 
-                      HorizontalAlignment="Left" 
+            <CheckBox Name="CbSelected"
+                      Grid.Column="0" Margin="12 0"
+                      Width="18" Height="18"
+                      HorizontalAlignment="Left"
                       Style="{StaticResource SelectedCheckBoxStyle}"
                       Click="ItemsCheckBox_OnClick"
                       IsChecked="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}">
             </CheckBox>
 
-            <!--protocol name-->
-            <TextBlock Grid.Column="1" Margin="5 0 10 0" 
+            <!--protocol name - Terminus style with monospace-friendly formatting-->
+            <TextBlock Grid.Column="1" Margin="8 0 12 0"
                        Style="{StaticResource TextBlockBase}"
                        Text="{Binding Server.ProtocolDisplayName}"
-                       FontSize="{DynamicResource GlobalFontSizeSubtitle}" FontWeight="Bold"
-                       Opacity="0.6"
+                       FontFamily="{DynamicResource GlobalFontMono}"
+                       FontSize="{DynamicResource GlobalFontSizeBody}"
+                       FontWeight="SemiBold"
+                       Opacity="0.8"
+                       Foreground="{DynamicResource AccentTextBrush}"
                        HorizontalAlignment="Left"
                        VerticalAlignment="Center">
             </TextBlock>
 
 
-            <!-- setting menu button -->
-            <Button Grid.Column="1" 
+            <!-- Action button column - modern menu button -->
+            <Button Grid.Column="6"
                     x:Name="BtnSettingMenu"
-                    Margin="0 0 10 0"
-                    Width="20" Height="20" HorizontalAlignment="Right"
+                    Margin="8 0 12 0"
+                    Width="24" Height="24"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
                     Style="{StaticResource LineItemSettingMenuStyle}"
-                    Click="BtnSettingMenu_OnClick">
+                    Click="BtnSettingMenu_OnClick" Opacity="1">
                 <Path Name="Symbol" Margin="2"
-                      Data="F1 M 20 6.25 L 0 6.25 L 0 5 L 20 5 L 20 6.25 Z M 20 16.25 L 0 16.25 L 0 15 L 20 15 L 20 16.25 Z M 20 11.25 L 0 11.25 L 0 10 L 20 10 L 20 11.25 Z "
-                      Fill="{DynamicResource AccentTextBrush}"
+                      Data="M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z"
+                      Fill="{DynamicResource PrimaryTextBrush}"
                       Stretch="Uniform" />
             </Button>
 
-            <!--icon-->
-            <Image Grid.Column="2" 
-                   Width="30" HorizontalAlignment="Center" Margin="5 0"
-                   Source="{Binding Server.IconImg}" 
-                   RenderOptions.BitmapScalingMode="LowQuality"
-                   ></Image>
+            <!--icon - Terminus style compact and clean -->
+            <Image Grid.Column="2"
+                   Width="28" HorizontalAlignment="Center" Margin="8 0"
+                   Source="{Binding Server.IconImg}"
+                   RenderOptions.BitmapScalingMode="HighQuality"
+                   Opacity="0.9">
+            </Image>
 
-            <!--display name-->
-            <TextBlock Grid.Column="3" ToolTip="{Binding DisplayName}" Background="Transparent" 
+            <!--display name - Terminus style clean and prominent -->
+            <TextBlock Grid.Column="3" ToolTip="{Binding DisplayName}" Background="Transparent"
                        Style="{StaticResource TextBlockBase}"
-                       FontSize="{DynamicResource GlobalFontSizeSubtitle}" 
-                       Margin="5 0 10 0" 
-                       VerticalAlignment="Center" 
-                       TextTrimming="CharacterEllipsis" 
-                       Text="{Binding Server.DisplayName}"></TextBlock>
+                       FontSize="{DynamicResource GlobalFontSizeBody}"
+                       FontWeight="Medium"
+                       Margin="8 0 12 0"
+                       VerticalAlignment="Center"
+                       TextTrimming="CharacterEllipsis"
+                       Foreground="{DynamicResource BackgroundTextBrush}"
+                       Text="{Binding Server.DisplayName}">
+            </TextBlock>
 
-            <!--tags-->
-            <ItemsControl Grid.Column="3" 
-                          Margin="5 0 10 0" 
-                          MaxWidth="200" 
-                          VerticalAlignment="Center" HorizontalAlignment="Right" 
+            <!--tags - Terminus style minimal and compact -->
+            <ItemsControl Grid.Column="3"
+                          Margin="0 0 8 0"
+                          MaxWidth="120"
+                          VerticalAlignment="Center" HorizontalAlignment="Right"
                           ItemsSource="{Binding Tags}"
                           ItemsPanel="{StaticResource LineItemItemsTemplateWrapPanel}"
-                          ItemTemplate="{StaticResource LineItemDataTemplateTag}"
-                          >
+                          ItemTemplate="{StaticResource LineItemDataTemplateTag}">
                 <ItemsControl.ToolTip>
-                    <Label Content="&#10;" 
+                    <Label Content="&#10;"
                            ContentStringFormat="{DynamicResource tag_tooltips}"/>
                 </ItemsControl.ToolTip>
             </ItemsControl>
 
-            <!--brief note -->
-            <ContentControl Grid.Column="4" 
-                            Margin="0 0 10 0"
+            <!--brief note - Terminus style subtle -->
+            <ContentControl Grid.Column="5"
+                            Margin="0 0 8 0"
                             VerticalAlignment="Center"
-                            Content="{Binding HoverNoteDisplayControl}"></ContentControl>
+                            HorizontalAlignment="Left"
+                            MaxWidth="180"
+                            Opacity="0.7"
+                            Content="{Binding HoverNoteDisplayControl}">
+            </ContentControl>
 
-            <!--address-->
-            <TextBlock Margin="5 0" MaxWidth="500"
+            <!--address - Terminus style monospace and clean -->
+            <TextBlock Margin="12 0 8 0" MaxWidth="180"
                        Style="{StaticResource TextBlockBase}"
-                       Grid.Column="5"
+                       Grid.Column="4"
                        Background="Transparent"
                        ToolTip="{Binding Server.SubTitle}"
-                       FontSize="{DynamicResource GlobalFontSizeSubtitle}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
+                       FontFamily="{DynamicResource GlobalFontMono}"
+                       FontSize="{DynamicResource GlobalFontSizeBody}"
+                       Opacity="0.8"
+                       VerticalAlignment="Center"
+                       TextTrimming="CharacterEllipsis"
+                       Foreground="{DynamicResource PrimaryTextBrush}"
+                       Panel.ZIndex="1"
                        Text="{Binding Server.SubTitle}">
             </TextBlock>
         </Grid>
@@ -254,15 +292,19 @@
         <Popup Name="PopupCardSettingMenu"
                AllowsTransparency="True"
                PlacementTarget="{Binding ElementName=BtnSettingMenu}" StaysOpen="False">
-            <Border Padding="0 0 4 4">
+            <Border Padding="0,0,2,2">
                 <Border.Effect>
-                    <DropShadowEffect Opacity="0.5" ShadowDepth="3"></DropShadowEffect>
+                    <DropShadowEffect Opacity="0.3" ShadowDepth="2" BlurRadius="6" Color="Black"/>
                 </Border.Effect>
-                <Grid MinWidth="80" Background="{DynamicResource PrimaryDarkBrush}">
-                    <ListBox ItemsSource="{Binding Actions}" 
+                <Border MinWidth="100" Background="{DynamicResource PrimaryDarkBrush}"
+                      BorderBrush="{DynamicResource PrimaryMidBrush}"
+                      BorderThickness="1">
+                        <ListBox ItemsSource="{Binding Actions}"
                              Style="{StaticResource LineItemSettingMenuListBoxStyle}"
-                             BorderThickness="0"></ListBox>
-                </Grid>
+                             BorderThickness="0"
+                             Padding="2">
+                        </ListBox>
+                    </Border>
             </Border>
         </Popup>
 

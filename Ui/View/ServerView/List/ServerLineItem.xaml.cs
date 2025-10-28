@@ -61,7 +61,7 @@ namespace _1RM.Controls
 
         private void UIElement_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            // stop right click edit 
+            // stop right click edit
             if (e.ChangedButton == MouseButton.Right)
             {
                 e.Handled = true;

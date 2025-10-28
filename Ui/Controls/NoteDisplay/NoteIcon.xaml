@@ -8,10 +8,7 @@
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance noteDisplay:NoteIcon}"
              d:DesignHeight="450" d:DesignWidth="800">
-    <UserControl.Resources>
-        <noteDisplay:ConverterNoteToSingleLineNote x:Key="ConverterNoteToSingleLineNote" />
-    </UserControl.Resources>
-    <Grid Visibility="{Binding Server.Note, Converter={StaticResource ConverterNoteToVisibility}}">
+        <Grid Visibility="{Binding Server.Note, Converter={StaticResource ConverterNoteToVisibility}}">
         <!--icon button show note-->
         <Border Height="30" Width="30" Name="GridParent" HorizontalAlignment="Left" >
             <Grid Name="ButtonShowNote"
@@ -27,16 +24,6 @@
                       StrokeThickness="0" Stretch="Uniform" />
             </Grid>
         </Border>
-        <Grid Name="GridBriefNote" Visibility="Collapsed" MouseEnter="ButtonShowNote_OnMouseEnter">
-            <TextBlock Margin="25 5 5 5" 
-                       Style="{StaticResource TextBlockBase}"
-                       HorizontalAlignment="Left" 
-                       MaxWidth="400"
-                       Text="{Binding Server.Note, Converter={StaticResource ConverterNoteToSingleLineNote}}" 
-                       TextWrapping="NoWrap"
-                       Foreground="{DynamicResource BackgroundTextBrush}" 
-                       TextTrimming="CharacterEllipsis"></TextBlock>
-        </Grid>
 
 
 

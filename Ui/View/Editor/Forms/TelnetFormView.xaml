@@ -40,35 +40,50 @@
         <!-- 连接信息卡片 (现在包含在HostView中) -->
         <ContentControl s:View.Model="{Binding HostViewModel}"></ContentControl>
 
-        <!-- Telnet高级设置卡片 -->
+        <!-- 紧凑型Telnet高级设置卡片 -->
         <Border Background="{DynamicResource BackgroundBrush}"
                 BorderBrush="{DynamicResource DefaultBorderBrush}"
                 BorderThickness="1"
                 CornerRadius="8"
-                Margin="0 0 0 16">
+                Margin="0 0 0 12"
+                Padding="0">
             <Border.Effect>
-                <DropShadowEffect Color="Black" Opacity="0.1" ShadowDepth="2" BlurRadius="8"/>
+                <DropShadowEffect Color="Black" Opacity="0.08" ShadowDepth="1" BlurRadius="4"/>
             </Border.Effect>
-            <StackPanel Margin="20 16">
-                <!-- 卡片标题 -->
-                <Border Background="{DynamicResource PrimaryLightBrush}"
-                        CornerRadius="6"
-                        Padding="12 8 12 8"
-                        Margin="0 0 0 16">
+            <StackPanel Margin="0 0">
+                <!-- 紧凑型卡片标题 -->
+                <Border Background="{DynamicResource AccentMidBrush}"
+                        CornerRadius="8 8 0 0"
+                        Padding="16 10 16 10">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="📟"
-                                   VerticalAlignment="Center"
-                                   Margin="0 0 8 0"
-                                   FontSize="14"/>
-                        <TextBlock Text="Telnet高级设置"
-                                   FontSize="14"
-                                   FontWeight="Medium"
-                                   Foreground="{DynamicResource PrimaryTextBrush}"/>
+                        <Border Width="20" Height="20"
+                                Background="{DynamicResource AccentTextBrush}"
+                                CornerRadius="4"
+                                Margin="0 0 10 0">
+                            <Path Data="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z"
+                                  Fill="{DynamicResource AccentMidBrush}"
+                                  Stretch="Uniform"
+                                  Margin="5"/>
+                        </Border>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="Telnet高级设置"
+                                       FontSize="13"
+                                       FontWeight="SemiBold"
+                                       Foreground="{DynamicResource AccentTextBrush}"/>
+                            <TextBlock Text="Telnet连接参数"
+                                       FontSize="10"
+                                       Opacity="0.8"
+                                       Foreground="{DynamicResource AccentTextBrush}"
+                                       Margin="0 1 0 0"/>
+                        </StackPanel>
                     </StackPanel>
                 </Border>
 
                 <!-- Telnet高级设置内容 -->
-                <StackPanel>
+                <Border Background="{DynamicResource BackgroundBrush}"
+                        CornerRadius="0 0 8 8"
+                        Padding="16 12 16 14">
+                    <StackPanel>
                     <!-- 自动启动命令 -->
                     <controls:GridWith4Columns>
                         <TextBlock Grid.Column="0"
@@ -89,7 +104,8 @@
                             </TextBox.Style>
                         </TextBox>
                     </controls:GridWith4Columns>
-                </StackPanel>
+                    </StackPanel>
+                </Border>
             </StackPanel>
         </Border>
 

@@ -29,7 +29,7 @@
 
 
 
-            <system:Double x:Key="ServerItemHeight">40</system:Double>
+            <system:Double x:Key="ServerItemHeight">34</system:Double>
 
 
 
@@ -80,7 +80,9 @@
 
 
             <DataTemplate x:Key="DataTemplateForServerList" DataType="view:ProtocolBaseViewModel">
-                <Grid Name="Grid" FocusVisualStyle="{x:Null}" Background="{DynamicResource BackgroundBrush}">
+                <Grid Name="Grid" FocusVisualStyle="{x:Null}" Background="{DynamicResource BackgroundBrush}"
+                      RenderOptions.BitmapScalingMode="HighQuality"
+                      SnapsToDevicePixels="True">
                     <Grid.InputBindings>
                         <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding CmdConnServer}"></MouseBinding>
                         <MouseBinding MouseAction="RightClick" Command="{Binding CmdEditServer}"></MouseBinding>
@@ -93,8 +95,8 @@
                 </Grid>
                 <DataTemplate.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" TargetName="GridContainer" Value="{DynamicResource PrimaryTextBrush}"></Setter>
-                        <Setter Property="Opacity" Value="0.2" TargetName="GridContainer" />
+                        <Setter Property="Background" TargetName="GridContainer" Value="{DynamicResource AccentMidBrush}"></Setter>
+                        <Setter Property="Opacity" Value="0.1" TargetName="GridContainer" />
                     </Trigger>
                 </DataTemplate.Triggers>
             </DataTemplate>
@@ -148,13 +150,24 @@
 
 
 
-    <Grid Background="{DynamicResource PrimaryMidBrush}" Grid.IsSharedSizeScope="True">
-        <Grid Margin="0 21 0 0" Background="{DynamicResource BackgroundBrush}">
+    <Grid Background="{DynamicResource PrimaryDarkBrush}" Grid.IsSharedSizeScope="True"
+          RenderOptions.BitmapScalingMode="HighQuality"
+          RenderOptions.ClearTypeHint="Enabled"
+          SnapsToDevicePixels="True">
+              <Grid Margin="0 46 0 0" Background="{DynamicResource BackgroundBrush}"
+                    RenderOptions.BitmapScalingMode="HighQuality"
+                    SnapsToDevicePixels="True">
+            <!-- Modern gradient border effect -->
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="*" MinHeight="300"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
+            <Border Grid.Row="0"
+                    Background="{DynamicResource BackgroundBrush}"
+                    BorderBrush="{DynamicResource AccentMidBrush}"
+                    BorderThickness="0,0,0,1"
+                    Opacity="0.3"/>
 
             <!-- Tag indicator: popup when any selected tag which is not in the `shown tag list` -->
             <Grid Grid.Row="0" MinHeight="40">
@@ -180,9 +193,9 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="model:TagFilter">
-                            <Border Margin="3" Padding="5"
-                                    Background="{DynamicResource AccentMidBrush}" 
-                                    CornerRadius="5" 
+                            <Border Margin="3,2" Padding="6,3"
+                                    Background="{DynamicResource AccentMidBrush}"
+                                    CornerRadius="5"
                                     VerticalAlignment="Center"
                                     ToolTip="{Binding TagName}"
                                     Tag="{Binding DataContext.TagsPanelViewModel, RelativeSource={RelativeSource AncestorType=serverView:ServerViewBase}}"
@@ -215,8 +228,10 @@
                                     </ContextMenu>
                                 </Border.ContextMenu>
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding TagName}" 
-                                               Foreground="{DynamicResource AccentTextBrush}" 
+                                    <TextBlock Text="{Binding TagName}"
+                                               Foreground="{DynamicResource BackgroundTextBrush}"
+                                               FontWeight="Medium"
+                                               FontSize="{DynamicResource GlobalFontSizeBody}"
                                                Margin="0 0 3 0">
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockBase}">
@@ -277,16 +292,14 @@
                             </Style.Triggers>
                         </Style>
                     </Grid.Style>
-                    <Grid>
-                        <Grid.Margin>
+                    <!-- Compact header with clean background -->
+                    <Border Background="{DynamicResource BackgroundBrush}"
+                            BorderBrush="{DynamicResource PrimaryMidBrush}"
+                            BorderThickness="0,0,0,1">
+                        <Border.Margin>
                             <Thickness Right="{StaticResource ScrollBarWidthMouseOver}"></Thickness>
-                        </Grid.Margin>
-                        <Border Background="{DynamicResource BackgroundBrush}">
-                            <Border.Margin>
-                                <Thickness Right="{StaticResource ScrollBarWidthMouseOver}"></Thickness>
-                            </Border.Margin>
-                        </Border>
-                    </Grid>
+                        </Border.Margin>
+                    </Border>
                     <Grid VerticalAlignment="Center">
                         <Grid.Margin>
                             <Thickness Right="{StaticResource ScrollBarWidthMouseOver}"></Thickness>
@@ -308,14 +321,13 @@
                             <ColumnDefinition Width="40" SharedSizeGroup="Span"></ColumnDefinition>
                             <ColumnDefinition Width="{Binding NameWidth}" SharedSizeGroup="Name" MinWidth="50"
                                               MaxWidth="{Binding NoteWidth, Converter={StaticResource NameMaxWidthConverter}}"></ColumnDefinition>
-                            <ColumnDefinition Width="{Binding NoteWidth}" SharedSizeGroup="BriefNote" MinWidth="50"
-                                              MaxWidth="{Binding NameWidth, Converter={StaticResource NoteMaxWidthConverter}}"></ColumnDefinition>
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="Address"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Address" MinWidth="150" MaxWidth="250"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Actions" MinWidth="60" MaxWidth="80"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
 
-                        <CheckBox Margin="11 0" Width="20" Height="20" HorizontalAlignment="Left" 
+                        <CheckBox Margin="12 0" Width="18" Height="18" HorizontalAlignment="Left"
                                           IsChecked="{Binding IsSelectedAll, Mode=TwoWay}"
-                                          x:Name="CheckBoxSelectedAll" 
+                                          x:Name="CheckBoxSelectedAll"
                                           Click="ItemsCheckBox_OnClick"
                                           >
                         </CheckBox>
@@ -324,141 +336,120 @@
                         <Grid Grid.Column="1">
                             <Button HorizontalContentAlignment="Left" Style="{StaticResource ButtonBarPrimaryStyle}"
                                 Margin="0 0 10 0"
-                                attachProperty:VisionElement.BorderCornerRadius="{StaticResource DefaultCornerRadius}"
-                                Background="{DynamicResource BackgroundBrush}"
-                                Foreground="{DynamicResource BackgroundTextBrush}"
+                                attachProperty:VisionElement.BorderCornerRadius="0"
+                                Background="Transparent"
+                                Foreground="{DynamicResource PrimaryTextBrush}"
+                                FontFamily="{DynamicResource GlobalFontMono}"
+                                FontSize="{DynamicResource GlobalFontSizeBody}"
+                                FontWeight="Medium"
                                 Command="{Binding CmdReOrder}" CommandParameter="{x:Static locality:EnumServerOrderBy.ProtocolAsc}">
-                                <Grid>
-                                    <Path Data="M 7,3 L 13,3 L 10,0 L 7,3" 
+                                <DockPanel>
+                                    <TextBlock Style="{StaticResource TextBlockBase}" Margin="0,0,5,0" Text="{DynamicResource Protocol}" Foreground="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button}, Path=Foreground}" FontWeight="Medium" DockPanel.Dock="Left"></TextBlock>
+                                    <Path Data="M 7,3 L 13,3 L 10,0 L 7,3"
                                           Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button}, Path=Foreground}"
                                           Style="{StaticResource HeaderPathStyle}"
                                           Visibility="{Binding ServerOrderBy, Converter={StaticResource ConverterEqual2Visible}, ConverterParameter={x:Static locality:EnumServerOrderBy.ProtocolAsc}}"
+                                          Margin="5,0,0,0"
+                                          VerticalAlignment="Center"
                                     >
                                     </Path>
-                                    <Path Data="M 7,0 L 10,3 L 13,0 L 7,0" 
+                                    <Path Data="M 7,0 L 10,3 L 13,0 L 7,0"
                                           Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button}, Path=Foreground}"
                                           Style="{StaticResource HeaderPathStyle}"
                                           Visibility="{Binding ServerOrderBy, Converter={StaticResource ConverterEqual2Visible}, ConverterParameter={x:Static locality:EnumServerOrderBy.ProtocolDesc}}"
+                                          Margin="5,0,0,0"
+                                          VerticalAlignment="Center"
                                     >
                                     </Path>
-                                    <TextBlock Style="{StaticResource TextBlockBase}" Margin="5" HorizontalAlignment="Left" Text="{DynamicResource Protocol}" Foreground="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button}, Path=Foreground}"></TextBlock>
-                                </Grid>
+                                </DockPanel>
                             </Button>
                         </Grid>
 
                         <!--display name-->
                         <Grid Grid.Column="3" SizeChanged="ServerName_SizeChanged">
                             <Button Grid.Column="3" HorizontalContentAlignment="Left" Margin="0 0 10 0" Style="{StaticResource ButtonBarPrimaryStyle}"
-                                attachProperty:VisionElement.BorderCornerRadius="{StaticResource DefaultCornerRadius}"
-                                Background="{DynamicResource BackgroundBrush}"
-                                Foreground="{DynamicResource BackgroundTextBrush}"
+                                attachProperty:VisionElement.BorderCornerRadius="0"
+                                Background="Transparent"
+                                Foreground="{DynamicResource PrimaryTextBrush}"
+                                FontFamily="{DynamicResource GlobalFontMono}"
+                                FontSize="{DynamicResource GlobalFontSizeBody}"
+                                FontWeight="Medium"
                                 Command="{Binding CmdReOrder}" CommandParameter="{x:Static locality:EnumServerOrderBy.NameAsc}">
-                                <Grid>
-                                    <Path Data="M 7,3 L 13,3 L 10,0 L 7,3" 
+                                <DockPanel>
+                                    <TextBlock Margin="0,0,5,0" Text="{DynamicResource Name}" Foreground="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button}, Path=Foreground}" FontWeight="Medium" DockPanel.Dock="Left"></TextBlock>
+                                    <Path Data="M 7,3 L 13,3 L 10,0 L 7,3"
                                           Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button}, Path=Foreground}"
                                           Style="{StaticResource HeaderPathStyle}"
-                                          Visibility="{Binding ServerOrderBy, 
-                                                    Converter={StaticResource ConverterEqual2Visible}, 
+                                          Visibility="{Binding ServerOrderBy,
+                                                    Converter={StaticResource ConverterEqual2Visible},
                                                     ConverterParameter={x:Static locality:EnumServerOrderBy.NameAsc}}"
+                                          Margin="5,0,0,0"
+                                          VerticalAlignment="Center"
                                     >
                                     </Path>
-                                    <Path Data="M 7,0 L 10,3 L 13,0 L 7,0" 
+                                    <Path Data="M 7,0 L 10,3 L 13,0 L 7,0"
                                           Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button}, Path=Foreground}"
                                           Style="{StaticResource HeaderPathStyle}"
-                                          Visibility="{Binding ServerOrderBy, Converter={StaticResource ConverterEqual2Visible}, ConverterParameter={x:Static locality:EnumServerOrderBy.NameDesc}}">
+                                          Visibility="{Binding ServerOrderBy, Converter={StaticResource ConverterEqual2Visible}, ConverterParameter={x:Static locality:EnumServerOrderBy.NameDesc}}"
+                                          Margin="5,0,0,0"
+                                          VerticalAlignment="Center">
                                     </Path>
-                                    <TextBlock Margin="5" HorizontalAlignment="Left" Text="{DynamicResource Name}" Foreground="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button}, Path=Foreground}"></TextBlock>
-                                </Grid>
+                                </DockPanel>
                             </Button>
                         </Grid>
-                        <GridSplitter Grid.Column="3" VerticalAlignment="Stretch" HorizontalAlignment="Right" Width="3" Background="Gray"/>
-
-                        <!--brief note -->
-                        <Grid Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Stretch" SizeChanged="ServerNote_SizeChanged">
-                            <Grid Margin="0 0 10 0">
-                                <TextBlock Text="{DynamicResource Note}" 
-                                           Style="{StaticResource TextBlockBase}"
-                                           Margin="25 0 0 0" 
-                                           Visibility="{Binding BriefNoteVisibility}" 
-                                           Foreground="{DynamicResource BackgroundTextBrush}"
-                                           VerticalAlignment="Center"></TextBlock>
-                                <Grid HorizontalAlignment="Left" Margin="5 0 0 0">
-                                    <Button Width="20" Height="20"
-                                            Style="{StaticResource ButtonBarPrimaryStyle}"
-                                            Background="Transparent"
-                                            attachProperty:VisionElement.BackgroundAccent="Transparent"
-                                            attachProperty:VisionElement.BackgroundOnMouseDown="Transparent"
-                                            HorizontalAlignment="Right"
-                                            Visibility="{Binding BriefNoteVisibility}"
-                                            Foreground="{DynamicResource BackgroundTextBrush}"
-                                            attachProperty:VisionElement.ForegroundAccent="{DynamicResource BackgroundTextBrush}"
-                                            attachProperty:VisionElement.ForegroundOnMouseDown="{DynamicResource BackgroundTextBrush}"
-                                            attachProperty:VisionElement.Opacity="0.5"
-                                            attachProperty:VisionElement.OpacityAccent="0.9"
-                                            Command="{Binding CmdHideNoteField}" >
-                                        <Grid Width="18">
-                                            <Path Data="M989.866667 234.666667h-490.666667c-17.066667 0-34.133333-21.333333-34.133333-42.666667 0-25.6 12.8-42.666667 34.133333-42.666667h490.666667c17.066667 0 34.133333 17.066667 34.133333 42.666667 0 21.333333-12.8 42.666667-34.133333 42.666667z m-473.6 128h465.066666c25.6 0 46.933333 21.333333 46.933334 42.666666 0 25.6-21.333333 42.666667-46.933334 42.666667H516.266667c-25.6 0-46.933333-17.066667-46.933334-42.666667s21.333333-42.666667 46.933334-42.666666z m0 298.666666c-25.6 0-46.933333-21.333333-46.933334-42.666666 0-25.6 21.333333-42.666667 46.933334-42.666667h465.066666c25.6 0 46.933333 17.066667 46.933334 42.666667s-21.333333 42.666667-46.933334 42.666666H516.266667z m4.266666 128h452.266667c29.866667 0 51.2 17.066667 51.2 42.666667s-21.333333 42.666667-51.2 42.666667h-452.266667c-29.866667 0-51.2-17.066667-51.2-42.666667s21.333333-42.666667 51.2-42.666667z m-192 25.6c-17.066667 17.066667-46.933333 17.066667-64 0l-251.733333-273.066666c-17.066667-17.066667-17.066667-51.2 0-68.266667l251.733333-273.066667c17.066667-17.066667 46.933333-17.066667 64 0s17.066667 51.2 0 68.266667l-221.866666 238.933333 221.866666 238.933334c17.066667 21.333333 17.066667 51.2 0 68.266666z"
-                                                  Stroke="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=Button}}"
-                                                  Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=Button}}"
-                                                  StrokeThickness="0" Stretch="Uniform" />
-                                        </Grid>
-                                    </Button>
-                                    <Button Width="20" Height="20" Margin="5 0 0 0"
-                                            ToolTip="{DynamicResource Note}"
-                                            Background="Transparent"
-                                            attachProperty:VisionElement.BackgroundAccent="Transparent"
-                                            attachProperty:VisionElement.BackgroundOnMouseDown="Transparent"
-                                            HorizontalAlignment="Right"
-                                            Foreground="{DynamicResource BackgroundTextBrush}"
-                                            attachProperty:VisionElement.ForegroundAccent="{DynamicResource BackgroundTextBrush}"
-                                            attachProperty:VisionElement.ForegroundOnMouseDown="{DynamicResource BackgroundTextBrush}"
-                                            attachProperty:VisionElement.Opacity="0.5"
-                                            attachProperty:VisionElement.OpacityAccent="0.9"
-                                            Command="{Binding CmdShowNoteField}"
-                                            Style="{StaticResource ButtonBarPrimaryStyle}"
-                                            Visibility="{Binding BriefNoteVisibility, Converter={StaticResource ConverterEqual2Collapsed}, ConverterParameter={x:Static Visibility.Visible}}"
-                                            >
-                                        <Grid Width="18">
-                                            <Path Data="M8.533333 192c0-25.6 17.066667-42.666667 34.133334-42.666667h490.666666c21.333333 0 34.133333 17.066667 34.133334 42.666667 0 21.333333-17.066667 42.666667-34.133334 42.666667h-490.666666c-21.333333 0-34.133333-21.333333-34.133334-42.666667z m550.4 213.333333c0 25.6-21.333333 42.666667-46.933333 42.666667h-465.066667c-25.6 0-46.933333-17.066667-46.933333-42.666667 0-21.333333 21.333333-42.666667 46.933333-42.666666h465.066667c25.6 0 46.933333 17.066667 46.933333 42.666666z m-507.733333 256c-25.6 0-46.933333-17.066667-46.933333-42.666666s21.333333-42.666667 46.933333-42.666667h465.066667c25.6 0 46.933333 17.066667 46.933333 42.666667 0 21.333333-21.333333 42.666667-46.933333 42.666666h-465.066667z m507.733333 170.666667c0 25.6-21.333333 42.666667-51.2 42.666667h-452.266666c-29.866667 0-51.2-17.066667-51.2-42.666667s21.333333-42.666667 51.2-42.666667h452.266666c29.866667 0 51.2 17.066667 51.2 42.666667z m140.8-85.333333l221.866667-238.933334-221.866667-238.933333c-17.066667-17.066667-17.066667-51.2 0-68.266667 17.066667-17.066667 46.933333-17.066667 64 0l251.733334 273.066667c17.066667 17.066667 17.066667 51.2 0 68.266667l-251.733334 273.066666c-17.066667 17.066667-46.933333 17.066667-64 0-17.066667-17.066667-17.066667-46.933333 0-68.266666z"
-                                                  Stroke="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=Button}}"
-                                                  Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=Button}}"
-                                                  StrokeThickness="0" Stretch="Uniform" />
-                                        </Grid>
-                                    </Button>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        <GridSplitter Grid.Column="4" VerticalAlignment="Stretch" HorizontalAlignment="Right" Width="3" Background="Gray"/>
+                        <GridSplitter Grid.Column="3" VerticalAlignment="Stretch" HorizontalAlignment="Right" Width="2" Background="{DynamicResource PrimaryMidBrush}" Opacity="0.5"/>
 
                         <!--address-->
-                        <Grid Grid.Column="5">
+                        <Grid Grid.Column="4">
                             <Button HorizontalContentAlignment="Left" Style="{StaticResource ButtonBarPrimaryStyle}"
                                     Margin="0 0 10 0"
-                                    attachProperty:VisionElement.BorderCornerRadius="{StaticResource DefaultCornerRadius}"
-                                    Background="{DynamicResource BackgroundBrush}"
-                                    Foreground="{DynamicResource BackgroundTextBrush}"
+                                    attachProperty:VisionElement.BorderCornerRadius="0"
+                                    Background="Transparent"
+                                    Foreground="{DynamicResource PrimaryTextBrush}"
+                                    FontFamily="{DynamicResource GlobalFontMono}"
+                                    FontSize="{DynamicResource GlobalFontSizeBody}"
+                                    FontWeight="Medium"
                                     Command="{Binding CmdReOrder}" CommandParameter="{x:Static locality:EnumServerOrderBy.AddressAsc}">
-                                <Grid>
-                                    <Path Data="M 7,3 L 13,3 L 10,0 L 7,3" 
-                                          Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button}, Path=Foreground}"
-                                          Style="{StaticResource HeaderPathStyle}"
-                                          Visibility="{Binding ServerOrderBy, Converter={StaticResource ConverterEqual2Visible}, 
-                                                        ConverterParameter={x:Static locality:EnumServerOrderBy.AddressAsc}}"
-                                    >
-                                    </Path>
-                                    <Path Data="M 7,0 L 10,3 L 13,0 L 7,0" 
-                                          Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button}, Path=Foreground}"
-                                          Style="{StaticResource HeaderPathStyle}"
-                                          Visibility="{Binding ServerOrderBy, 
-                                                        Converter={StaticResource ConverterEqual2Visible}, 
-                                                        ConverterParameter={x:Static locality:EnumServerOrderBy.AddressDesc}}"
-                                    >
-                                    </Path>
-                                    <TextBlock Margin="5" HorizontalAlignment="Left" 
+                                <DockPanel>
+                                    <TextBlock Margin="0,0,5,0"
                                                Style="{StaticResource TextBlockBase}"
-                                               Text="{DynamicResource Target}" Foreground="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button}, Path=Foreground}"></TextBlock>
-                                </Grid>
+                                               Text="{DynamicResource Target}" Foreground="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button}, Path=Foreground}" FontWeight="Medium" DockPanel.Dock="Left"></TextBlock>
+                                    <Path Data="M 7,3 L 13,3 L 10,0 L 7,3"
+                                          Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button}, Path=Foreground}"
+                                          Style="{StaticResource HeaderPathStyle}"
+                                          Visibility="{Binding ServerOrderBy, Converter={StaticResource ConverterEqual2Visible},
+                                                        ConverterParameter={x:Static locality:EnumServerOrderBy.AddressAsc}}"
+                                          Margin="5,0,0,0"
+                                          VerticalAlignment="Center"
+                                    >
+                                    </Path>
+                                    <Path Data="M 7,0 L 10,3 L 13,0 L 7,0"
+                                          Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button}, Path=Foreground}"
+                                          Style="{StaticResource HeaderPathStyle}"
+                                          Visibility="{Binding ServerOrderBy,
+                                                        Converter={StaticResource ConverterEqual2Visible},
+                                                        ConverterParameter={x:Static locality:EnumServerOrderBy.AddressDesc}}"
+                                          Margin="5,0,0,0"
+                                          VerticalAlignment="Center"
+                                    >
+                                    </Path>
+                                </DockPanel>
                             </Button>
+                        </Grid>
+
+                        <GridSplitter Grid.Column="4" VerticalAlignment="Stretch" HorizontalAlignment="Right" Width="2" Background="{DynamicResource PrimaryMidBrush}" Opacity="0.5"/>
+
+                        
+                        <!-- Actions column header -->
+                        <Grid Grid.Column="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock Text="操作"
+                                       Style="{StaticResource TextBlockBase}"
+                                       FontFamily="{DynamicResource GlobalFontMono}"
+                                       FontSize="{DynamicResource GlobalFontSizeBody}"
+                                       FontWeight="Medium"
+                                       Foreground="{DynamicResource PrimaryTextBrush}"
+                                       Opacity="0.7"
+                                       HorizontalAlignment="Center"/>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -492,8 +483,8 @@
                                                               BorderThickness="0">
                                                         <Expander.Header>
                                                             <StackPanel Orientation="Horizontal" AllowDrop="True">
-                                                                <CheckBox Margin="6 0 0 0" Width="20" Height="20" HorizontalAlignment="Left"
-                                                                          x:Name="HeaderCheckBox" 
+                                                                <CheckBox Margin="12 0" Width="18" Height="18" HorizontalAlignment="Left"
+                                                                          x:Name="HeaderCheckBox"
                                                                           Click="ItemsCheckBox_OnClick"
                                                                 >
                                                                 </CheckBox>
@@ -744,31 +735,32 @@
 
 
             <!-- popup when any item is selected-->
-            <Grid Grid.Row="2" Background="{DynamicResource PrimaryMidBrush}" Height="40">
+            <Grid Grid.Row="2" Height="40">
                 <Grid.Style>
                     <Style TargetType="Grid">
                         <Setter Property="Visibility" Value="Visible"></Setter>
                         <Setter Property="Margin" Value="0 0 0 -50"></Setter>
+                        <Setter Property="Opacity" Value="0"></Setter>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsAnySelected}" Value="True">
                                 <Setter Property="Visibility" Value="Visible"></Setter>
                                 <DataTrigger.EnterActions>
                                     <BeginStoryboard>
                                         <Storyboard>
-                                            <ThicknessAnimationUsingKeyFrames BeginTime="0:0:0" Storyboard.TargetProperty="Margin" AccelerationRatio="0.9">
-                                                <SplineThicknessKeyFrame KeyTime="0:0:0.0" Value="0,0,0,-50" />
-                                                <SplineThicknessKeyFrame KeyTime="0:0:0.400" Value="0,0,0,0" />
-                                            </ThicknessAnimationUsingKeyFrames>
+                                            <ThicknessAnimation BeginTime="0:0:0" Storyboard.TargetProperty="Margin"
+                                                         From="0,0,0,-50" To="0,0,0,0" Duration="0:0:0.250"/>
+                                            <DoubleAnimation BeginTime="0:0:0" Storyboard.TargetProperty="Opacity"
+                                                         From="0" To="1" Duration="0:0:0.250"/>
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </DataTrigger.EnterActions>
                                 <DataTrigger.ExitActions>
                                     <BeginStoryboard>
                                         <Storyboard>
-                                            <ThicknessAnimationUsingKeyFrames BeginTime="0:0:0" Storyboard.TargetProperty="Margin">
-                                                <SplineThicknessKeyFrame KeyTime="0:0:0.0" Value="0,0,0,0" />
-                                                <SplineThicknessKeyFrame KeyTime="0:0:0.200" Value="0,0,0,-50" />
-                                            </ThicknessAnimationUsingKeyFrames>
+                                            <ThicknessAnimation BeginTime="0:0:0" Storyboard.TargetProperty="Margin"
+                                                         From="0,0,0,0" To="0,0,0,-50" Duration="0:0:0.200"/>
+                                            <DoubleAnimation BeginTime="0:0:0" Storyboard.TargetProperty="Opacity"
+                                                         From="1" To="0" Duration="0:0:0.200"/>
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </DataTrigger.ExitActions>
@@ -777,18 +769,217 @@
                     </Style>
                 </Grid.Style>
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                    <Button Height="30" MinWidth="80" Margin="5 0" Content="{DynamicResource Cancel}" Command="{Binding CmdCancelSelected}"></Button>
-                    <TextBlock Style="{StaticResource TextBlockBase}" Text="{DynamicResource server_editor_multi_selected_count}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{DynamicResource PrimaryTextBrush}"></TextBlock>
-                    <TextBlock Style="{StaticResource TextBlockBase}" Text="{Binding SelectedCount}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{DynamicResource PrimaryTextBrush}" Margin="5 0 0 0"></TextBlock>
+                <!-- Modern elevated background -->
+                <Border Background="{DynamicResource PrimaryMidBrush}"
+                        BorderBrush="{DynamicResource AccentMidBrush}"
+                        BorderThickness="0,1,0,0"
+                        CornerRadius="8,8,0,0">
+                    <Border.Effect>
+                        <DropShadowEffect Color="Black"
+                                          Direction="270"
+                                          ShadowDepth="4"
+                                          BlurRadius="12"
+                                          Opacity="0.3"/>
+                    </Border.Effect>
+                </Border>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0">
+                    <Button Height="30" MinWidth="75" Margin="0 0 10 0" Content="{DynamicResource Cancel}"
+                            Command="{Binding CmdCancelSelected}"
+                            Style="{StaticResource ButtonBarPrimaryStyle}"
+                            Background="{DynamicResource BackgroundBrush}"
+                            Foreground="{DynamicResource BackgroundTextBrush}"
+                            BorderBrush="{DynamicResource AccentMidBrush}">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="5"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource AccentMidBrush}"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource AccentTextBrush}"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource AccentDarkBrush}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                    <TextBlock Style="{StaticResource TextBlockBase}"
+                               Text="{DynamicResource server_editor_multi_selected_count}"
+                               VerticalAlignment="Center"
+                               Foreground="{DynamicResource AccentTextBrush}"
+                               FontWeight="Medium"/>
+                    <TextBlock Style="{StaticResource TextBlockBase}"
+                               Text="{Binding SelectedCount}"
+                               VerticalAlignment="Center"
+                               Foreground="{DynamicResource AccentTextBrush}"
+                               FontWeight="Bold"
+                               Margin="5 0 0 0"/>
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Height="30" MinWidth="80" Margin="5 0 0 0" Content="{DynamicResource Connect}" Command="{Binding CmdConnectSelected}"></Button>
-                    <Button Height="30" MinWidth="80" Margin="5 0 0 0" Content="{DynamicResource Edit}" Command="{Binding CmdMultiEditSelected}"></Button>
-                    <Button Height="30" MinWidth="80" Margin="5 0 0 0" Content="{DynamicResource 'Create desktop shortcut'}" Command="{Binding CmdCreateDesktopShortcut}"></Button>
-                    <Button Height="30" MinWidth="80" Margin="5 0 0 0" Content="{DynamicResource Delete}" Command="{Binding CmdDeleteSelected}"></Button>
-                    <Button Height="30" MinWidth="80" Margin="5 0" Content="{DynamicResource Export}" Command="{Binding CmdExportSelectedToJson}"></Button>
+                <!-- Modern button groups with dividers -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,12,0">
+                    <!-- Primary action: Connect -->
+                    <Button Height="30" MinWidth="80" Margin="0 0 10 0"
+                            Content="{DynamicResource Connect}"
+                            Command="{Binding CmdConnectSelected}"
+                            Style="{StaticResource ButtonAccentStyle}">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="5"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource AccentLightBrush}"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource AccentDarkBrush}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                    <!-- Divider -->
+                    <Border Width="1" Margin="0 5 10 5" Background="{DynamicResource PrimaryTextBrush}" Opacity="0.3"/>
+
+                    <!-- Edit actions group -->
+                    <Button Height="30" MinWidth="70" Margin="0 0 8 0"
+                            Content="{DynamicResource Edit}"
+                            Command="{Binding CmdMultiEditSelected}"
+                            Style="{StaticResource ButtonBarPrimaryStyle}"
+                            Background="{DynamicResource PrimaryMidBrush}"
+                            Foreground="{DynamicResource PrimaryTextBrush}">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="5"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource AccentMidBrush}"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource AccentDarkBrush}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                    <!-- Divider -->
+                    <Border Width="1" Margin="0 5 8 5" Background="{DynamicResource PrimaryTextBrush}" Opacity="0.3"/>
+
+                    <!-- Secondary actions group -->
+                    <Button Height="30" MinWidth="85" Margin="0 0 8 0"
+                            Content="{DynamicResource 'Create desktop shortcut'}"
+                            Command="{Binding CmdCreateDesktopShortcut}"
+                            Style="{StaticResource ButtonBarPrimaryStyle}"
+                            Background="{DynamicResource PrimaryMidBrush}"
+                            Foreground="{DynamicResource PrimaryTextBrush}">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="5"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource AccentMidBrush}"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource AccentDarkBrush}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                    <!-- Divider -->
+                    <Border Width="1" Margin="0 5 8 5" Background="{DynamicResource PrimaryTextBrush}" Opacity="0.3"/>
+
+                    <Button Height="30" MinWidth="70" Margin="0 0 8 0"
+                            Content="{DynamicResource Delete}"
+                            Command="{Binding CmdDeleteSelected}"
+                            Style="{StaticResource ButtonBarPrimaryStyle}"
+                            Background="{DynamicResource PrimaryMidBrush}"
+                            Foreground="{DynamicResource PrimaryTextBrush}">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="5"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource AccentMidBrush}"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource AccentDarkBrush}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                    <!-- Divider -->
+                    <Border Width="1" Margin="0 5 8 5" Background="{DynamicResource PrimaryTextBrush}" Opacity="0.3"/>
+
+                    <!-- Export action -->
+                    <Button Height="30" MinWidth="70" Margin="0 0 0 0"
+                            Content="{DynamicResource Export}"
+                            Command="{Binding CmdExportSelectedToJson}"
+                            Style="{StaticResource ButtonBarPrimaryStyle}"
+                            Background="{DynamicResource PrimaryMidBrush}"
+                            Foreground="{DynamicResource PrimaryTextBrush}">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="5"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource AccentMidBrush}"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource AccentDarkBrush}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
                 </StackPanel>
             </Grid>
         </Grid>
@@ -812,15 +1003,26 @@
 
 
 
-        <!-- tags list -->
+        <!-- Modern tags list -->
         <Grid VerticalAlignment="Top">
-            <Border BorderThickness="0 0 0 1" BorderBrush="{DynamicResource AccentMidBrush}" Background="{DynamicResource PrimaryTextBrush}" Height="20">
+            <Border BorderThickness="0,0,0,1"
+                    BorderBrush="{DynamicResource AccentMidBrush}"
+                    Background="{DynamicResource PrimaryDarkBrush}"
+                    Height="22">
                 <Border.Effect>
-                    <DropShadowEffect ShadowDepth="3" Direction="270"  Opacity="0.6" Color="Black"></DropShadowEffect>
+                    <DropShadowEffect ShadowDepth="3"
+                                      Direction="270"
+                                      Opacity="0.4"
+                                      Color="Black"
+                                      BlurRadius="8"/>
                 </Border.Effect>
             </Border>
 
-            <Border BorderThickness="0 0 0 2" BorderBrush="{DynamicResource AccentMidBrush}" Background="{DynamicResource PrimaryMidBrush}">
+            <Border BorderThickness="0,0,0,2"
+                    BorderBrush="{DynamicResource AccentMidBrush}"
+                    Background="{DynamicResource PrimaryMidBrush}"
+                    CornerRadius="0,0,8,8"
+                    Margin="0,0,0,1">
                 <Grid MinHeight="20">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"></ColumnDefinition>
@@ -828,28 +1030,36 @@
                         <ColumnDefinition Width="*"></ColumnDefinition>
                         <ColumnDefinition Width="Auto"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <Button MinWidth="80"
+                    <Button MinWidth="90"
                             Command="{Binding CmdShowMainTab}"
-                            Content="{DynamicResource All}">
+                            Content="{DynamicResource All}"
+                            Height="30"
+                            Margin="8,4,4,4">
                         <Button.Style>
                             <Style TargetType="Button" BasedOn="{StaticResource ButtonBarPrimaryStyle}">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="FontWeight" Value="Medium"/>
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="{x:Type Button}">
-                                            <Grid>
-                                                <Border Background="{TemplateBinding Background}"
-                                                        SnapsToDevicePixels="true">
-                                                </Border>
+                                            <Border Background="{TemplateBinding Background}"
+                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                                    CornerRadius="6,6,0,0"
+                                                    SnapsToDevicePixels="true">
                                                 <ContentPresenter HorizontalAlignment="Center"
                                                                   VerticalAlignment="Center"
+                                                                  Margin="12,0"
                                                                   SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                                            </Grid>
+                                            </Border>
                                         </ControlTemplate>
                                     </Setter.Value>
                                 </Setter>
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="{DynamicResource AccentLightBrush}"></Setter>
+                                        <Setter Property="Background" Value="{DynamicResource AccentMidBrush}"></Setter>
                                         <Setter Property="Foreground" Value="{DynamicResource AccentTextBrush}" />
                                     </Trigger>
                                     <MultiDataTrigger>
@@ -877,30 +1087,37 @@
                         </Button.Style>
                     </Button>
 
-                    <Button Grid.Column="1" MinWidth="80"
+                    <Button Grid.Column="1" MinWidth="90"
                             Command="{Binding CmdShowTagTab}"
-                            BorderThickness="0" Content="{DynamicResource Tags}">
+                            BorderThickness="0"
+                            Content="{DynamicResource Tags}"
+                            Height="30"
+                            Margin="4,4,8,4">
                         <Button.Style>
                             <Style TargetType="Button" BasedOn="{StaticResource ButtonBarPrimaryStyle}">
+                                <Setter Property="Background" Value="{DynamicResource AccentMidBrush}" />
+                                <Setter Property="Foreground" Value="{DynamicResource AccentTextBrush}" />
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="FontWeight" Value="Medium"/>
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="{x:Type Button}">
-                                            <Grid>
-                                                <Border Background="{TemplateBinding Background}"
-                                                        SnapsToDevicePixels="true">
-                                                </Border>
+                                            <Border Background="{TemplateBinding Background}"
+                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                                    CornerRadius="6,6,0,0"
+                                                    SnapsToDevicePixels="true">
                                                 <ContentPresenter HorizontalAlignment="Center"
                                                                   VerticalAlignment="Center"
+                                                                  Margin="12,0"
                                                                   SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                                            </Grid>
+                                            </Border>
                                         </ControlTemplate>
                                     </Setter.Value>
                                 </Setter>
-                                <Setter Property="Background" Value="{DynamicResource AccentMidBrush}" />
-                                <Setter Property="Foreground" Value="{DynamicResource AccentTextBrush}" />
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding TagListViewModel}" Value="{x:Null}">
-                                        <Setter Property="Background" Value="{DynamicResource PrimaryMidBrush}" />
+                                        <Setter Property="Background" Value="Transparent" />
                                         <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}" />
                                     </DataTrigger>
                                     <Trigger Property="IsMouseOver" Value="True">
