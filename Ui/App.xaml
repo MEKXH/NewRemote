@@ -31,14 +31,14 @@
                     </Style>
                     <Style x:Key="EditorRowGridTitle" TargetType="TextBlock" BasedOn="{StaticResource TextBlockBase}">
                         <Setter Property="Foreground" Value="{DynamicResource BackgroundTextBrush}"></Setter>
-                        <Setter Property="Width" Value="150"></Setter>
+                        <Setter Property="Width" Value="120"></Setter>
                         <Setter Property="VerticalAlignment" Value="Center"></Setter>
                         <Setter Property="HorizontalAlignment" Value="Right"></Setter>
-                        <Setter Property="TextAlignment" Value="Right"></Setter>
+                        <Setter Property="TextAlignment" Value="Left"></Setter>
                         <Setter Property="TextWrapping" Value="WrapWithOverflow"></Setter>
                         <Setter Property="Margin">
                             <Setter.Value>
-                                <Thickness Right="30"></Thickness>
+                                <Thickness Right="20"></Thickness>
                             </Setter.Value>
                         </Setter>
                     </Style>

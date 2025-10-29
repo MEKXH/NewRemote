@@ -140,8 +140,17 @@ namespace _1RM.View.ServerView
 
         public static void HeaderTag_OnClick(object DataContext, object sender, RoutedEventArgs e)
         {
-            if (sender is Grid { Tag: string name }
-                && DataContext is ServerPageViewModelBase vm)
+            string name = null;
+            if (sender is Grid { Tag: string gridName })
+            {
+                name = gridName;
+            }
+            else if (sender is Border { Tag: string borderName })
+            {
+                name = borderName;
+            }
+
+            if (!string.IsNullOrEmpty(name) && DataContext is ServerPageViewModelBase vm)
             {
                 vm.CmdTagAddIncluded.Execute(name);
             }

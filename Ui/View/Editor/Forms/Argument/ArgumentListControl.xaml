@@ -149,7 +149,7 @@
 
         <StackPanel Orientation="Horizontal" Margin="0 20 0 10">
 
-            <TextBlock Style="{StaticResource EditorGroupTextBlockTitle}" Margin="80 0 0 0" Text="{DynamicResource 'Cmd parameter'}"></TextBlock>
+            <TextBlock Style="{StaticResource EditorGroupTextBlockTitle}" Margin="0 0 0 0" Text="{DynamicResource 'Cmd parameter'}"></TextBlock>
 
             <Button Command="{Binding Path=DataContext.CmdToggleEditMode, RelativeSource={RelativeSource AncestorType={x:Type editor:ServerEditorPageView}}}"
                     Style="{StaticResource ButtonPrimaryStyle}"

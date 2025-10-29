@@ -68,22 +68,43 @@
             <!-- System Button Area -->
             <StackPanel Grid.Row="0"
                         Orientation="Horizontal" HorizontalAlignment="Right">
-                <Grid Height="35" VerticalAlignment="Top" Margin="0 0 4 0">
-                    <Border Width="150" Height="25" CornerRadius="4" Background="{DynamicResource PrimaryMidBrush}"
-                            VerticalAlignment="Center" HorizontalAlignment="Right" Opacity="0.9">
-                        <TextBox Width="146" Height="21" FontSize="12" Margin="2"
-                                 attachProperty:FocusExtension.IsFocused="{Binding MainFilterIsFocused}"
-                                 attachProperty:TextBoxAttachProperty.CaretIndex="{Binding MainFilterCaretIndex, UpdateSourceTrigger=PropertyChanged}"
-                                 Text="{Binding MainFilterString, UpdateSourceTrigger=PropertyChanged}"
-                                 Tag="{DynamicResource 'Search (Ctrl+F)'}"
-                                 KeyUp="MainFilter_OnKeyUp"
-                                 VerticalAlignment="Center" HorizontalContentAlignment="Left"
-                                 BorderThickness="0"
-                                 Background="Transparent">
-                            <TextBox.Style>
-                                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBoxBaseStyle}">
+                <Grid Height="40" VerticalAlignment="Center" Margin="0 0 4 0">
+                    <TextBox Width="180" Height="30" FontSize="13"
+                             attachProperty:FocusExtension.IsFocused="{Binding MainFilterIsFocused}"
+                             attachProperty:TextBoxAttachProperty.CaretIndex="{Binding MainFilterCaretIndex, UpdateSourceTrigger=PropertyChanged}"
+                             Text="{Binding MainFilterString, UpdateSourceTrigger=PropertyChanged}"
+                             Tag="{DynamicResource 'Search (Ctrl+F)'}"
+                             KeyUp="MainFilter_OnKeyUp"
+                             VerticalAlignment="Center"
+                             HorizontalAlignment="Right"
+                             HorizontalContentAlignment="Left"
+                             VerticalContentAlignment="Center"
+                             Padding="8,0"
+                             Background="{DynamicResource BackgroundBrush}"
+                             BorderBrush="{DynamicResource PrimaryMidBrush}"
+                             BorderThickness="1">
+                        <TextBox.Style>
+                                <Style TargetType="{x:Type TextBox}">
                                     <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"></Setter>
                                     <Setter Property="CaretBrush" Value="{DynamicResource PrimaryTextBrush}"></Setter>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="TextBox">
+                                                <Border x:Name="border"
+                                                        Background="{TemplateBinding Background}"
+                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                                        CornerRadius="8,8,8,8"
+                                                        SnapsToDevicePixels="True">
+                                                    <ScrollViewer x:Name="PART_ContentHost"
+                                                                  Focusable="false"
+                                                                  HorizontalScrollBarVisibility="Hidden"
+                                                                  VerticalScrollBarVisibility="Hidden"
+                                                                  Margin="{TemplateBinding Padding}"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
                                     <Setter Property="IsEnabled" Value="False"></Setter>
                                     <Setter Property="Visibility" Value="Collapsed"></Setter>
                                 <Style.Triggers>
@@ -119,8 +140,7 @@
                                 </Style.Triggers>
                             </Style>
                         </TextBox.Style>
-                        </TextBox>
-                    </Border>
+                    </TextBox>
                 </Grid>
 
                 <Grid Width="45" Height="35" Margin="0" VerticalAlignment="Top">

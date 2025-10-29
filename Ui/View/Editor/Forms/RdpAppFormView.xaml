@@ -89,8 +89,8 @@
                                                ShowLineNumbers="True"
                                                Text="{Binding New.RdpFileAdditionalSettings}"
                                                FontSize="12"
-                                               Height="120"
-                                               MinHeight="120">
+                                               Height="40"
+                                               MinHeight="40">
                                 <controls1:BindableAvalonEditor.Resources>
                                     <VisualBrush x:Key="HelpBrush" TileMode="None" Opacity="0.3" Stretch="None" AlignmentX="Left">
                                         <VisualBrush.Visual>

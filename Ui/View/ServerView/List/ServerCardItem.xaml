@@ -13,7 +13,7 @@
              d:DesignHeight="450" d:DesignWidth="800" >
     <UserControl.Resources>
         <s:Double x:Key="CardWidth">144</s:Double>
-        <RectangleGeometry x:Key="CardClip" RadiusX="5" RadiusY="5" Rect="0 0 144 144"></RectangleGeometry>
+        <RectangleGeometry x:Key="CardClip" RadiusX="8" RadiusY="8" Rect="0 0 144 144"></RectangleGeometry>
 
         <Style x:Key="PathSourceStatusStyle" TargetType="Path">
             <Setter Property="Data" Value="{StaticResource GeometryCloudDisconnected}"></Setter>
@@ -39,19 +39,29 @@
 
         <Style x:Key="ButtonLayerStyle" TargetType="Border">
             <Setter Property="Background" Value="Transparent"></Setter>
-            <Setter Property="BorderBrush" Value="Transparent"></Setter>
+            <Setter Property="BorderBrush" Value="{DynamicResource PrimaryMidBrush}"></Setter>
+            <Setter Property="BorderThickness" Value="1"></Setter>
+            <Setter Property="Opacity" Value="0.8"></Setter>
             <Style.Triggers>
                 <DataTrigger Binding="{Binding ElementName=CardNameBarMask,Path=IsMouseOver}" Value="True">
                     <Setter Property="BorderBrush" Value="{DynamicResource AccentMidBrush}"></Setter>
+                    <Setter Property="BorderThickness" Value="2"></Setter>
+                    <Setter Property="Opacity" Value="1"></Setter>
                 </DataTrigger>
                 <DataTrigger Binding="{Binding ElementName=PopupCardSettingMenu,Path=IsOpen}" Value="True">
                     <Setter Property="BorderBrush" Value="{DynamicResource AccentMidBrush}"></Setter>
+                    <Setter Property="BorderThickness" Value="2"></Setter>
+                    <Setter Property="Opacity" Value="1"></Setter>
                 </DataTrigger>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="BorderBrush" Value="{DynamicResource AccentMidBrush}"></Setter>
+                    <Setter Property="BorderThickness" Value="2"></Setter>
+                    <Setter Property="Opacity" Value="1"></Setter>
                 </Trigger>
                 <DataTrigger Binding="{Binding IsSelected}" Value="True">
                     <Setter Property="BorderBrush" Value="{DynamicResource AccentMidBrush}"></Setter>
+                    <Setter Property="BorderThickness" Value="2"></Setter>
+                    <Setter Property="Opacity" Value="1"></Setter>
                 </DataTrigger>
             </Style.Triggers>
         </Style>
@@ -235,7 +245,7 @@
         </Grid>
 
         <!-- Card Border: Hover Button Layer -->
-        <Border Name="CardRealBorder" CornerRadius="4" BorderThickness="2" Style="{StaticResource ButtonLayerStyle}">
+        <Border Name="CardRealBorder" CornerRadius="8" BorderThickness="1" Style="{StaticResource ButtonLayerStyle}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"></RowDefinition>

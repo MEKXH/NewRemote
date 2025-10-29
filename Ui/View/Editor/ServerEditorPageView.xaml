@@ -18,12 +18,12 @@
              xmlns:forms="clr-namespace:_1RM.View.Editor.Forms"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance editor:ServerEditorPageViewModel}"
-             Background="White"
+             Background="{DynamicResource BackgroundBrush}"
              d:DesignHeight="1000" d:DesignWidth="800">
 
     <Grid Background="{DynamicResource BackgroundBrush}" ClipToBounds="True">
         <Grid.Resources>
-            <system:Double x:Key="TopHeight">40</system:Double>
+            <system:Double x:Key="TopHeight">30</system:Double>
             <system:Double x:Key="BottomHeight">40</system:Double>
 
             <!-- 转换器 -->
@@ -39,7 +39,7 @@
         </Grid.Resources>
 
         <!-- 主要内容区域：左侧边栏 + 右侧主体 -->
-        <Grid Margin="0 40 0 40">
+        <Grid Margin="0 40 0 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200"/>
                 <ColumnDefinition Width="*"/>
@@ -87,7 +87,7 @@
                                                     Margin="{TemplateBinding Margin}">
                                                 <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                                                   VerticalAlignment="Center"
-                                                                  Margin="10,0"/>
+                                                                  Margin="55,10,10,10"/>
                                             </Border>
                                         </ControlTemplate>
                                     </Setter.Value>
@@ -190,7 +190,7 @@
                                                        VerticalAlignment="Center"
                                                        FontSize="13" FontWeight="Medium"
                                                        Foreground="{DynamicResource PrimaryTextBrush}"
-                                                       MinHeight="30"/>
+                                                       MinHeight="20"/>
 
                                             <controls:AutoCompleteComboBox Grid.Column="1"
                                                                            Text="{Binding Server.DisplayName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True, ValidatesOnNotifyDataErrors=True}"
@@ -240,7 +240,7 @@
                                                             </Style>
                                                         </Border.Style>
                                                         <Grid>
-                                                            <Image Height="56" Width="56" Source="{Binding Server.IconImg}" ></Image>
+                                                            <Image Height="48" Width="48" Source="{Binding Server.IconImg}" ></Image>
                                                             <Button Background="Transparent" Opacity="0.8"
                                                                     Command="{Binding CmdSelectImage}"
                                                                     BorderThickness="0">
@@ -535,7 +535,7 @@
 
         <!-- 顶部协议选择器 -->
         <Grid VerticalAlignment="Top">
-            <Border BorderThickness="1" BorderBrush="{DynamicResource AccentMidBrush}" Background="{DynamicResource PrimaryMidBrush}" CornerRadius="12,12,0,0">
+            <Border BorderThickness="1" BorderBrush="{DynamicResource AccentMidBrush}" Background="{DynamicResource PrimaryMidBrush}" CornerRadius="8,8,8,8">
                 <Border.Effect>
                     <DropShadowEffect ShadowDepth="3" Direction="270"  Opacity="0.6" Color="Black"></DropShadowEffect>
                 </Border.Effect>
@@ -706,7 +706,7 @@
 
         <!-- 底部按钮区域 - 保持原有的保存和取消按钮 -->
         <Grid VerticalAlignment="Bottom">
-            <Border BorderThickness="0 2 0 0" BorderBrush="{DynamicResource AccentMidBrush}" Background="{DynamicResource PrimaryMidBrush}">
+            <Border BorderThickness="0 2 0 0" BorderBrush="{DynamicResource AccentMidBrush}" Background="{DynamicResource PrimaryMidBrush}" CornerRadius="8,8,0,0">
                 <Grid Height="{StaticResource BottomHeight}">
                     <Grid Width="300">
                         <Button Name="ButtonSave" MinWidth="80" MinHeight="25"

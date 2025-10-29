@@ -25,6 +25,25 @@
                                 <ControlTemplate TargetType="ListBoxItem">
                                     <Grid>
                                         <Border x:Name="GridContainer">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="BorderThickness" Value="0,1,0,0"/>
+                                                    <Setter Property="BorderBrush" Value="{DynamicResource PrimaryMidBrush}" />
+                                                    <Setter Property="Opacity" Value="0.3"/>
+                                                    <Setter Property="Margin" Value="0"/>
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Background" Value="{DynamicResource AccentMidBrush}" />
+                                                            <Setter Property="BorderBrush" Value="{DynamicResource AccentLightBrush}" />
+                                                            <Setter Property="Opacity" Value="1"/>
+                                                        </Trigger>
+                                                        <!-- No top border for first item -->
+                                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource PreviousData}}" Value="{x:Null}">
+                                                            <Setter Property="BorderThickness" Value="0"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
                                         </Border>
                                         <ContentPresenter x:Name="ContentPresenter"/>
                                     </Grid>
@@ -222,8 +241,9 @@
                     Style="{StaticResource LineItemSettingMenuStyle}"
                     Click="BtnSettingMenu_OnClick" Opacity="1">
                 <Path Name="Symbol" Margin="2"
-                      Data="M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z"
-                      Fill="{DynamicResource PrimaryTextBrush}"
+                      Data="M2,4 L22,4 M2,12 L22,12 M2,20 L22,20"
+                      Stroke="{DynamicResource PrimaryTextBrush}"
+                      StrokeThickness="2"
                       Stretch="Uniform" />
             </Button>
 
@@ -292,17 +312,18 @@
         <Popup Name="PopupCardSettingMenu"
                AllowsTransparency="True"
                PlacementTarget="{Binding ElementName=BtnSettingMenu}" StaysOpen="False">
-            <Border Padding="0,0,2,2">
+            <Border Padding="0,0,4,4">
                 <Border.Effect>
-                    <DropShadowEffect Opacity="0.3" ShadowDepth="2" BlurRadius="6" Color="Black"/>
+                    <DropShadowEffect Opacity="0.4" ShadowDepth="4" BlurRadius="8" Color="Black"/>
                 </Border.Effect>
-                <Border MinWidth="100" Background="{DynamicResource PrimaryDarkBrush}"
-                      BorderBrush="{DynamicResource PrimaryMidBrush}"
-                      BorderThickness="1">
+                <Border MinWidth="120" Background="{DynamicResource BackgroundBrush}"
+                      BorderBrush="{DynamicResource AccentMidBrush}"
+                      BorderThickness="2"
+                      CornerRadius="8,8,8,8">
                         <ListBox ItemsSource="{Binding Actions}"
                              Style="{StaticResource LineItemSettingMenuListBoxStyle}"
                              BorderThickness="0"
-                             Padding="2">
+                             Padding="4">
                         </ListBox>
                     </Border>
             </Border>

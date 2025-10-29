@@ -97,7 +97,7 @@
 
             <!-- 警告信息 -->
             <Border Margin="0,0,0,12"
-                    Background="{DynamicResource AccentLightBrush}"
+                    Background="{DynamicResource PrimaryLightBrush}"
                     CornerRadius="4"
                     Padding="12,8"
                     BorderThickness="1"

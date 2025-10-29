@@ -260,8 +260,8 @@ namespace _1RM.View.ServerView
             {
                 return _cmdAdd ??= new RelayCommand((o) =>
                 {
-                    if (View is ServerListPageView view)
-                        view.CbPopForInExport.IsChecked = false;
+                    // Close the add popup menu if it's open
+                    CloseAddPopupMenu();
                     GlobalEventHelper.OnGoToServerAddPage?.Invoke(TagFilters.Where<TagFilter>(x => x.IsIncluded == true).Select(x => x.TagName).ToList(), o as DataSourceBase);
                 });
             }
@@ -286,7 +286,7 @@ namespace _1RM.View.ServerView
                                 try
                                 {
                                     MaskLayerController.ShowProcessingRing(IoC.Translate("Caution: Your data will be saved unencrypted!"));
-                                    view.CbPopForInExport.IsChecked = false;
+                                    CloseAddPopupMenu();
                                     var path = SelectFileHelper.SaveFile(
                                         title: IoC.Translate("Caution: Your data will be saved unencrypted!"),
                                         filter: "json|*.json",
@@ -332,8 +332,7 @@ namespace _1RM.View.ServerView
                 return new Tuple<DataSourceBase?, string?>(null, null);
             }
             // select file with filter
-            if (this.View is ServerListPageView view)
-                view.CbPopForInExport.IsChecked = false;
+            CloseAddPopupMenu();
             var path = SelectFileHelper.OpenFile(title: IoC.Translate("import_server_dialog_title"), filter: filter);
             return path == null ? new Tuple<DataSourceBase?, string?>(null, null) : new Tuple<DataSourceBase?, string?>(source, path);
         }
@@ -354,8 +353,7 @@ namespace _1RM.View.ServerView
             }
 
             // select file with filter
-            if (this.View is ServerListPageView view)
-                view.CbPopForInExport.IsChecked = false;
+            CloseAddPopupMenu();
             var path = SelectFileHelper.OpenFile(title: IoC.Translate("import_server_dialog_title"), filter: filter);
             return path == null ? new Tuple<DataSourceBase?, string?>(null, null) : new Tuple<DataSourceBase?, string?>(source, path);
         }
@@ -671,6 +669,37 @@ namespace _1RM.View.ServerView
                         { "matchResults.Count", matchResults.Count.ToString() },
                     });
                 }
+            }
+        }
+
+        /// <summary>
+        /// Close the add popup menu if it's open in any view
+        /// </summary>
+        private void CloseAddPopupMenu()
+        {
+            try
+            {
+                Execute.OnUIThreadSync(() =>
+                {
+                    if (View is System.Windows.Controls.UserControl userControl)
+                    {
+                        // Try to find the CbPopForInExport control in the visual tree
+                        var checkBoxes = MyVisualTreeHelper.FindVisualChilds<System.Windows.Controls.CheckBox>(userControl);
+                        var checkBox = checkBoxes.FirstOrDefault(cb => cb.Name == "CbPopForInExport");
+                        if (checkBox != null)
+                        {
+                            checkBox.IsChecked = false;
+                        }
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                // Log error but don't crash - this is a non-critical operation
+                UnifyTracing.Error(ex, new Dictionary<string, string>()
+                {
+                    { "Operation", "CloseAddPopupMenu" }
+                });
             }
         }
     }

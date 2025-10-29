@@ -27,7 +27,7 @@
 
         <Grid Row="1" Margin="5">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                <TextBlock Text="{Binding GlobalData.TagList.Count, StringFormat={}{0}tags}" 
+                <TextBlock Text="{Binding GlobalData.TagList.Count, StringFormat= {} {0} Tags}" 
                            Foreground="{DynamicResource BackgroundTextBrush}"
                            FontSize="18"
                            ></TextBlock>
