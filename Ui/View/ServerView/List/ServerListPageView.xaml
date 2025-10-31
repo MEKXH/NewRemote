@@ -322,6 +322,7 @@
                             <ColumnDefinition Width="{Binding NameWidth}" SharedSizeGroup="Name" MinWidth="50"
                                               MaxWidth="{Binding NoteWidth, Converter={StaticResource NameMaxWidthConverter}}"></ColumnDefinition>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Address" MinWidth="150" MaxWidth="250"></ColumnDefinition>
+                            <ColumnDefinition Width="{Binding NoteWidth}" SharedSizeGroup="BriefNote" MinWidth="50" MaxWidth="200"></ColumnDefinition>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Actions" MinWidth="60" MaxWidth="80"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
 
@@ -400,7 +401,7 @@
                         <GridSplitter Grid.Column="3" VerticalAlignment="Stretch" HorizontalAlignment="Right" Width="2" Background="{DynamicResource PrimaryMidBrush}" Opacity="0.5"/>
 
                         <!--address-->
-                        <Grid Grid.Column="4">
+                        <Grid Grid.Column="4" SizeChanged="ServerAddress_SizeChanged">
                             <Button HorizontalContentAlignment="Left" Style="{StaticResource ButtonBarPrimaryStyle}"
                                     Margin="0 0 10 0"
                                     attachProperty:VisionElement.BorderCornerRadius="0"
@@ -439,9 +440,30 @@
 
                         <GridSplitter Grid.Column="4" VerticalAlignment="Stretch" HorizontalAlignment="Right" Width="2" Background="{DynamicResource PrimaryMidBrush}" Opacity="0.5"/>
 
-                        
+                        <!--brief note column header-->
+                        <Grid Grid.Column="5" SizeChanged="ServerNote_SizeChanged">
+                            <Button HorizontalContentAlignment="Left" Style="{StaticResource ButtonBarPrimaryStyle}"
+                                    Margin="0 0 10 0"
+                                    attachProperty:VisionElement.BorderCornerRadius="0"
+                                    Background="Transparent"
+                                    Foreground="{DynamicResource PrimaryTextBrush}"
+                                    FontFamily="{DynamicResource GlobalFontMono}"
+                                    FontSize="{DynamicResource GlobalFontSizeBody}"
+                                    FontWeight="Medium"
+                                    Command="{Binding CmdReOrder}" CommandParameter="{x:Static locality:EnumServerOrderBy.NameAsc}">
+                                <DockPanel>
+                                    <TextBlock Margin="0,0,5,0"
+                                               Style="{StaticResource TextBlockBase}"
+                                               Text="{DynamicResource Note}" Foreground="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button}, Path=Foreground}" FontWeight="Medium" DockPanel.Dock="Left"></TextBlock>
+                                </DockPanel>
+                            </Button>
+                        </Grid>
+
+                        <GridSplitter Grid.Column="5" VerticalAlignment="Stretch" HorizontalAlignment="Right" Width="2" Background="{DynamicResource PrimaryMidBrush}" Opacity="0.5"/>
+
+
                         <!-- Actions column header -->
-                        <Grid Grid.Column="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Grid Grid.Column="6" HorizontalAlignment="Center" VerticalAlignment="Center">
                             <TextBlock Text="操作"
                                        Style="{StaticResource TextBlockBase}"
                                        FontFamily="{DynamicResource GlobalFontMono}"

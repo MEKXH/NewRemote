@@ -307,25 +307,34 @@
                        StaysOpen="False"
                        AllowsTransparency="True"
                        PlacementTarget="{Binding ElementName=CbPopForInExport}">
-                    <Border CornerRadius="5" Background="{DynamicResource PrimaryDarkBrush}">
-                        <StackPanel Orientation="Vertical">
-                            <MenuItem Header="{DynamicResource Add}" Command="{Binding CmdAdd}">
-                                <MenuItem.Icon>
-                                    <Path Data="{StaticResource GeometryCross}"
-                                          Stretch="Uniform" Name="Path"
-                                          Margin="2" Fill="{DynamicResource PrimaryTextBrush}"></Path>
-                                </MenuItem.Icon>
-                            </MenuItem>
-                            <Separator Style="{StaticResource SeparatorBaseStyle}"/>
-                            <MenuItem Header="{DynamicResource import_from_json}" Command="{Binding CmdImportFromJson}">
-                                <MenuItem.Icon>
-                                    <Path UseLayoutRounding="True" Data="{StaticResource GeometryCopy}" Fill="{DynamicResource PrimaryTextBrush}" Stretch="Uniform"/>
-                                </MenuItem.Icon>
-                            </MenuItem>
-                            <MenuItem Header="{DynamicResource import_from_mremoteng_csv}" Command="{Binding CmdImportFromCsv}"></MenuItem>
-                            <MenuItem Header="{DynamicResource import_from_rdp_file}" Command="{Binding CmdImportFromRdp}"></MenuItem>
-                            <MenuItem Header="{DynamicResource import_from_sqlite_db}" Command="{Binding CmdImportFromDatabase}"></MenuItem>
-                        </StackPanel>
+                    <Border Background="{DynamicResource PrimaryDarkBrush}" CornerRadius="5">
+                        <Border BorderBrush="{DynamicResource AccentMidBrush}" BorderThickness="1" CornerRadius="5">
+                            <Border.Resources>
+                                <Style TargetType="MenuItem" BasedOn="{StaticResource MenuItemBaseStyle}">
+                                    <Setter Property="Padding" Value="10,6"/>
+                                    <Setter Property="Margin" Value="0"/>
+                                    <Setter Property="Background" Value="Transparent"/>
+                                </Style>
+                            </Border.Resources>
+                            <StackPanel Orientation="Vertical">
+                                <MenuItem Header="{DynamicResource Add}" Command="{Binding CmdAdd}" Style="{StaticResource MenuItemBaseStyle}">
+                                    <MenuItem.Icon>
+                                        <Path Data="{StaticResource GeometryCross}"
+                                              Stretch="Uniform" Name="Path"
+                                              Margin="2" Fill="{DynamicResource PrimaryTextBrush}"></Path>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <Separator Style="{StaticResource SeparatorBaseStyle}"/>
+                                <MenuItem Header="{DynamicResource import_from_json}" Command="{Binding CmdImportFromJson}" Style="{StaticResource MenuItemBaseStyle}">
+                                    <MenuItem.Icon>
+                                        <Path UseLayoutRounding="True" Data="{StaticResource GeometryCopy}" Fill="{DynamicResource PrimaryTextBrush}" Stretch="Uniform"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Header="{DynamicResource import_from_mremoteng_csv}" Command="{Binding CmdImportFromCsv}" Style="{StaticResource MenuItemBaseStyle}"></MenuItem>
+                                <MenuItem Header="{DynamicResource import_from_rdp_file}" Command="{Binding CmdImportFromRdp}" Style="{StaticResource MenuItemBaseStyle}"></MenuItem>
+                                <MenuItem Header="{DynamicResource import_from_sqlite_db}" Command="{Binding CmdImportFromDatabase}" Style="{StaticResource MenuItemBaseStyle}"></MenuItem>
+                            </StackPanel>
+                        </Border>
                     </Border>
                 </Popup>
             </Grid>

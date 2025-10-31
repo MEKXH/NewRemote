@@ -172,7 +172,7 @@
                             <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
                             <Setter Property="Foreground" Value="{DynamicResource BackgroundTextBrush}"/>
                             <Setter Property="Focusable" Value="False" />
-                            <Setter Property="Padding" Value="2,1"/>
+                            <Setter Property="Padding" Value="2,0"/>
                             <Setter Property="Margin" Value="0"/>
                             <Setter Property="AllowDrop" Value="True"/>
                             <!--<Setter Property="KeyboardNavigation.TabNavigation" Value="Continue"/>-->
@@ -181,11 +181,11 @@
                             <Style.Triggers>
                                 <!-- Add bottom margin for folder items to create spacing -->
                                 <DataTrigger Binding="{Binding IsFolder}" Value="True">
-                                    <Setter Property="Margin" Value="0,0,0,12"/>
+                                    <Setter Property="Margin" Value="0,0,0,1"/>
                                 </DataTrigger>
                                 <!-- Add extra spacing for root folders -->
                                 <DataTrigger Binding="{Binding IsRootFolder}" Value="True">
-                                    <Setter Property="Margin" Value="0,0,0,16"/>
+                                    <Setter Property="Margin" Value="0,0,0,2"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -217,15 +217,15 @@
                     </TreeView.ContextMenu>
                     <TreeView.ItemTemplate>
                         <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                            <Grid Margin="0"
-                                  Name="GridNode" 
+                            <Grid Margin="0,20,2,0"
+                                  Name="GridNode"
                                   MouseDown="MainTreeViewItem_OnMouseDown"
                                   Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=serverTree:ServerTreeView} }"
                             >
                                 <Grid.Style>
                                     <Style TargetType="Grid">
                                         <Setter Property="Background" Value="Transparent"/>
-                                        <Setter Property="Margin" Value="0,1"/>
+                                        <Setter Property="Margin" Value="0"/>
                                         <Style.Triggers>
                                             <!-- highlight when mouseover -->
                                             <Trigger Property="IsMouseOver" Value="True">
@@ -347,7 +347,7 @@
                                     </ContextMenu>
                                 </Grid.ContextMenu>
 
-                                <Grid Margin="0 3 20 3" MinWidth="200" MinHeight="20"
+                                <Grid Margin="0 1 20 0" MinWidth="200" MinHeight="18"
                                       Background="Transparent"
                                       MouseLeftButtonDown="TreeViewItemGrid_OnMouseLeftButtonDown">
                                     <Grid.ColumnDefinitions>

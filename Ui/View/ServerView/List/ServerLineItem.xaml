@@ -234,13 +234,13 @@
             <!-- Action button column - modern menu button -->
             <Button Grid.Column="6"
                     x:Name="BtnSettingMenu"
-                    Margin="8 0 12 0"
+                    Margin="8 0 8 0"
                     Width="24" Height="24"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Style="{StaticResource LineItemSettingMenuStyle}"
                     Click="BtnSettingMenu_OnClick" Opacity="1">
-                <Path Name="Symbol" Margin="2"
+                <Path Name="Symbol" Margin="0"
                       Data="M2,4 L22,4 M2,12 L22,12 M2,20 L22,20"
                       Stroke="{DynamicResource PrimaryTextBrush}"
                       StrokeThickness="2"
@@ -264,6 +264,7 @@
                        VerticalAlignment="Center"
                        TextTrimming="CharacterEllipsis"
                        Foreground="{DynamicResource BackgroundTextBrush}"
+                       MaxWidth="300"
                        Text="{Binding Server.DisplayName}">
             </TextBlock>
 
@@ -292,7 +293,7 @@
             </ContentControl>
 
             <!--address - Terminus style monospace and clean -->
-            <TextBlock Margin="12 0 8 0" MaxWidth="180"
+            <TextBlock Margin="12 0 8 0" MaxWidth="240"
                        Style="{StaticResource TextBlockBase}"
                        Grid.Column="4"
                        Background="Transparent"
@@ -317,14 +318,67 @@
                     <DropShadowEffect Opacity="0.4" ShadowDepth="4" BlurRadius="8" Color="Black"/>
                 </Border.Effect>
                 <Border MinWidth="120" Background="{DynamicResource BackgroundBrush}"
-                      BorderBrush="{DynamicResource AccentMidBrush}"
-                      BorderThickness="2"
                       CornerRadius="8,8,8,8">
-                        <ListBox ItemsSource="{Binding Actions}"
-                             Style="{StaticResource LineItemSettingMenuListBoxStyle}"
-                             BorderThickness="0"
-                             Padding="4">
-                        </ListBox>
+                        <Border BorderBrush="{DynamicResource AccentMidBrush}"
+                                BorderThickness="2"
+                                CornerRadius="8,8,8,8">
+                            <ListBox ItemsSource="{Binding Actions}"
+                                 Style="{StaticResource LineItemSettingMenuListBoxStyle}"
+                                 BorderThickness="0"
+                                 Padding="0"
+                                 Background="Transparent">
+                                <ListBox.Resources>
+                                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource ControlBase}">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="ListBoxItem">
+                                                    <Grid>
+                                                        <Border x:Name="GridContainer"
+                                                                Background="Transparent">
+                                                            <Border.Style>
+                                                                <Style TargetType="Border">
+                                                                    <Setter Property="BorderThickness" Value="0,1,0,0"/>
+                                                                    <Setter Property="BorderBrush" Value="{DynamicResource PrimaryMidBrush}" />
+                                                                    <Setter Property="Opacity" Value="0.3"/>
+                                                                    <Setter Property="Margin" Value="0"/>
+                                                                    <Style.Triggers>
+                                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                                            <Setter Property="Background" Value="{DynamicResource AccentMidBrush}" />
+                                                                            <Setter Property="BorderBrush" Value="{DynamicResource AccentLightBrush}" />
+                                                                            <Setter Property="Opacity" Value="1"/>
+                                                                        </Trigger>
+                                                                        <!-- No top border for first item -->
+                                                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource PreviousData}}" Value="{x:Null}">
+                                                                            <Setter Property="BorderThickness" Value="0"/>
+                                                                            <!-- First item gets top-left and top-right corners rounded -->
+                                                                            <Setter Property="CornerRadius" Value="6,6,0,0"/>
+                                                                        </DataTrigger>
+                                                                        <!-- Last item gets bottom-left and bottom-right corners rounded -->
+                                                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource NextData}}" Value="{x:Null}">
+                                                                            <Setter Property="CornerRadius" Value="0,0,6,6"/>
+                                                                        </DataTrigger>
+                                                                        <!-- Single item gets all corners rounded -->
+                                                                        <MultiDataTrigger>
+                                                                            <MultiDataTrigger.Conditions>
+                                                                                <Condition Binding="{Binding RelativeSource={RelativeSource PreviousData}}" Value="{x:Null}"/>
+                                                                                <Condition Binding="{Binding RelativeSource={RelativeSource NextData}}" Value="{x:Null}"/>
+                                                                            </MultiDataTrigger.Conditions>
+                                                                            <Setter Property="CornerRadius" Value="6,6,6,6"/>
+                                                                        </MultiDataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Border.Style>
+                                                        </Border>
+                                                        <ContentPresenter x:Name="ContentPresenter"
+                                                                          Margin="8,4"/>
+                                                    </Grid>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </ListBox.Resources>
+                            </ListBox>
+                        </Border>
                     </Border>
             </Border>
         </Popup>

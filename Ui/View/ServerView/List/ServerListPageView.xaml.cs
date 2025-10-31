@@ -411,6 +411,12 @@ namespace _1RM.View.ServerView
                 vm.NoteWidth = e.NewSize.Width;
             }
         }
+
+        private void ServerAddress_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            // Address column width is currently not saved
+            // Can be implemented later if needed
+        }
     }
 
     public class NameMaxWidthConverter : IValueConverter

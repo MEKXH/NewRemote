@@ -17,9 +17,12 @@
                          KeyDown="MainWindow_OnKeyDown"
                          d:DataContext="{d:DesignInstance view:MainWindowViewModel}"
                          Style="{StaticResource WindowChromeBaseBaseStyle}"
-                         Title="{x:Static Rm:Assert.APP_NAME}" 
-                         Height="560" Width="900" 
-                         MinWidth="300" MinHeight="300">
+                         Title="{x:Static Rm:Assert.APP_NAME}"
+                         Height="560" Width="900"
+                         MinWidth="300" MinHeight="300"
+                         TextOptions.TextFormattingMode="Display"
+                         UseLayoutRounding="True"
+                         SnapsToDevicePixels="True">
     <styles:WindowChromeBase.Resources>
         <ResourceDictionary>
             <RoutedUICommand x:Key="CommandFocusFilter" Text="Focus on filter" />
@@ -34,17 +37,18 @@
     </styles:WindowChromeBase.InputBindings>
 
     <Grid Background="{DynamicResource PrimaryMidBrush}">
+        <!-- 移除BlurEffect以解决UI模糊问题，只在需要时应用轻微效果 -->
         <Grid CacheMode="BitmapCache">
             <Grid.Style>
                 <Style TargetType="Grid">
-                    <Setter Property="Effect">
-                        <Setter.Value>
-                            <BlurEffect Radius="1" KernelType="Box" RenderingBias="Performance"></BlurEffect>
-                        </Setter.Value>
-                    </Setter>
                     <Style.Triggers>
+                        <!-- 只在特定条件下（如启动画面）应用模糊效果，平时保持清晰 -->
                         <DataTrigger Binding="{Binding Path=TopLevelViewModel, Mode=OneWay}" Value="{x:Null}">
-                            <Setter Property="Effect" Value="{x:Null}"></Setter>
+                            <Setter Property="Effect">
+                                <Setter.Value>
+                                    <BlurEffect Radius="0.5" KernelType="Box" RenderingBias="Quality"></BlurEffect>
+                                </Setter.Value>
+                            </Setter>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
@@ -116,7 +120,7 @@
                                         <MultiDataTrigger.EnterActions>
                                             <BeginStoryboard>
                                                 <Storyboard>
-                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" AccelerationRatio="0.9" To="1" Duration="0:0:0.5"/>
+                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" AccelerationRatio="0.9" To="1" Duration="0:0:0.3"/>
                                                     <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
                                                         <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{x:Static Visibility.Visible}"/>
                                                     </ObjectAnimationUsingKeyFrames>
@@ -126,9 +130,9 @@
                                         <MultiDataTrigger.ExitActions>
                                             <BeginStoryboard>
                                                 <Storyboard>
-                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" AccelerationRatio="0.9" To="0" Duration="0:0:0.5"/>
+                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" AccelerationRatio="0.9" To="0" Duration="0:0:0.3"/>
                                                     <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
-                                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="{x:Static Visibility.Collapsed}"/>
+                                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Visibility.Collapsed}"/>
                                                     </ObjectAnimationUsingKeyFrames>
                                                 </Storyboard>
                                             </BeginStoryboard>
@@ -579,16 +583,16 @@
                                                 <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
                                                     <DiscreteObjectKeyFrame KeyTime="00:00:0.0" Value="{x:Static Visibility.Visible}"/>
                                                 </ObjectAnimationUsingKeyFrames>
-                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.25"></DoubleAnimation>
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.15"></DoubleAnimation>
                                             </Storyboard>
                                         </BeginStoryboard>
                                     </DataTrigger.EnterActions>
                                     <DataTrigger.ExitActions>
                                         <BeginStoryboard>
                                             <Storyboard>
-                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0" Duration="0:0:0.15"></DoubleAnimation>
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0" Duration="0:0:0.1"></DoubleAnimation>
                                                 <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
-                                                    <DiscreteObjectKeyFrame KeyTime="00:00:0.15" Value="{x:Static Visibility.Collapsed}"/>
+                                                    <DiscreteObjectKeyFrame KeyTime="00:00:0.1" Value="{x:Static Visibility.Collapsed}"/>
                                                 </ObjectAnimationUsingKeyFrames>
                                             </Storyboard>
                                         </BeginStoryboard>
@@ -607,9 +611,9 @@
                                     <DataTrigger.EnterActions>
                                         <BeginStoryboard>
                                             <Storyboard>
-                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0" Duration="0:0:0.15"></DoubleAnimation>
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0" Duration="0:0:0.1"></DoubleAnimation>
                                                 <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
-                                                    <DiscreteObjectKeyFrame KeyTime="00:00:0.15" Value="{x:Static Visibility.Collapsed}"/>
+                                                    <DiscreteObjectKeyFrame KeyTime="00:00:0.1" Value="{x:Static Visibility.Collapsed}"/>
                                                 </ObjectAnimationUsingKeyFrames>
                                             </Storyboard>
                                         </BeginStoryboard>
@@ -620,7 +624,7 @@
                                                 <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
                                                     <DiscreteObjectKeyFrame KeyTime="00:00:0.0" Value="{x:Static Visibility.Visible}"/>
                                                 </ObjectAnimationUsingKeyFrames>
-                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.25"></DoubleAnimation>
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.15"></DoubleAnimation>
                                             </Storyboard>
                                         </BeginStoryboard>
                                     </DataTrigger.ExitActions>

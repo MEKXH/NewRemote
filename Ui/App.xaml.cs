@@ -22,6 +22,9 @@ namespace _1RM
         [STAThread]
         public static void Main(string[] args)
         {
+            // 设置高DPI感知，提升高分屏显示效果
+            System.Windows.Forms.Application.SetHighDpiMode(System.Windows.Forms.HighDpiMode.PerMonitorV2);
+
             var argss = args.ToList();
             AppInitHelper.Init();
 #if FOR_MICROSOFT_STORE_ONLY
